@@ -25,6 +25,7 @@ public class T2_01_zadaca_3 {
         ArgumentValidator av = new ArgumentValidator(args);
         if (!av.Validate()) {
             System.err.println("Some of the arguments are not valid, restart the program!");
+            System.exit(0);
         }
 
         int rowNum = Integer.parseInt(args[0]);
