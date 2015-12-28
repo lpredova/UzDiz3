@@ -2,7 +2,6 @@
 Repo for group task for third homework
 
 
-
 Naziv: nadzor promjena strukture direktorija u VT100 terminalu
 
 Naziv projekta: T{i}_{n}_zadaca_3 -> i=seminarska grupa (1,2), n=broj tima u seminarskoj grupi (01,10). Broj tima mora imati vodeću 0 ako je broj manji od 10 (01, 02, ..., 09, 10).
@@ -41,7 +40,7 @@ Prilikom učitavanja strukture u 1. prozoru prikazuju se elementi kako se učita
 Za prolaženje po strukturi treba koristiti isključivo GOF uzorak Iterator.
 Nakon toga program čeka komandu koja se unosi tipkovnicom u okviru za unos podataka. Ukoliko je dretva u stanju izvršavanja tada se unos obavlja u zelenoj boji. A ako je dretva u stanju prekida tada se unos obavlja u žutoj boji. 
 
-Komanda može biti:
+## Komanda može biti:
 
 -1 - ispis ukupnog broja direktorija i datoteka u strukturi (prikaz u 1. prozoru)
 
