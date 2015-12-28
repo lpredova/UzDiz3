@@ -57,6 +57,7 @@ public class T2_01_zadaca_3 {
 
             Scanner in = new Scanner(System.in);
 
+            System.out.print("Odaberi opciju: ");
             choice = in.nextLine();
 
             switch (choice) {
