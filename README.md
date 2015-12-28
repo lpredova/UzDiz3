@@ -2,6 +2,7 @@
 Repo for group task for third homework
 
 
+
 Naziv: nadzor promjena strukture direktorija u VT100 terminalu
 
 Naziv projekta: T{i}_{n}_zadaca_3 -> i=seminarska grupa (1,2), n=broj tima u seminarskoj grupi (01,10). Broj tima mora imati vodeću 0 ako je broj manji od 10 (01, 02, ..., 09, 10).
