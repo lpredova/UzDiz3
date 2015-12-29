@@ -5,6 +5,9 @@
  */
 package t2_01_zadaca_3;
 
+import MenuMVC.MenuController;
+import MenuMVC.MenuModel;
+import MenuMVC.MenuView;
 import argumentValidation.ArgumentValidator;
 import java.util.Scanner;
 
@@ -22,8 +25,11 @@ public class T2_01_zadaca_3 {
     public static void main(String[] args) {
         // TODO code application logic here
 
+        System.out.println(ANSI_ESC + "0m");
+
         ArgumentValidator av = new ArgumentValidator(args);
         if (!av.Validate()) {
+            System.out.println(ANSI_ESC + "31m");
             System.err.println("Some of the arguments are not valid, restart the program!");
             System.exit(0);
         }
@@ -39,21 +45,18 @@ public class T2_01_zadaca_3 {
         // ...
         // TODO load directory structure
         // ...
+        
+        MenuView mv = new MenuView();
+        MenuModel mm = new MenuModel();
+        MenuController mc = new MenuController(mm, mv);
+        mm.saveToList();
+
         String choice = "1337";
         do {
-            System.out.println("-------------------------------------------------");
-            System.out.println("MAIN MENU");
-            System.err.println("-------------------------------------------------");
-            System.out.println("1 - ispis ukupnog broja direktorija i datoteka u strukturi (prikaz u 1. prozoru)");
-            System.out.println("2 - ispis sadržaja strukture direktorija i datoteka uz prikaz naziva, vremena (formatiranog u HR obliku), veličina (u formatu 999.999.999 B) (prikaz u 1. prozoru)");
-            System.out.println("3 - izvršavanje dretve (prikaz u 1. prozoru)");
-            System.out.println("4 - prekid izvršavanja dretve (prikaz u 1. prozoru)");
-            System.out.println("5 - ispis informacija o svim spremljenim stanjima (redni broj i vrijeme spremljenja) (prikaz u 1. prozoru)");
-            System.out.println("6 n - postavljanje stanja strukture na promjenu s rednim brojem n čime ono postaje novo trenutno stanje strukture (prikaz u 1. prozoru)");
-            System.out.println("7 m - uspoređivanje trenutnog stanja strukture i promjene s rednim brojem m (prikaz u 1. prozoru)");
-            System.out.println("8 - ponovno učitavanje strukture uz poništavanje svih spremljenih stanja strukture (prikaz kao i kod inicijalnog učitavanja strukture)");
-            System.out.println("9 - dodana vlastita funkcionalnost (prikaz u 1. prozoru)");
-            System.out.println("Q - prekid rada programa");
+
+            System.out.println("");
+            System.out.println("");
+            mc.updateMenuView();
 
             Scanner in = new Scanner(System.in);
 
@@ -62,40 +65,40 @@ public class T2_01_zadaca_3 {
 
             switch (choice) {
                 case "1":
-                    System.out.println("ispis ukupnog broja direktorija i datoteka u strukturi (prikaz u 1.                             prozoru)");
+                    mc.updateOptioniew(Integer.parseInt(choice));
                     break;
 
                 case "2":
-                    System.out.println("ispis sadržaja strukture direktorija i datoteka uz prikaz naziva,                               vremena (formatiranog u HR obliku), veličina (u formatu 999.999.999 B) (prikaz u 1.                             prozoru)");
+                    mc.updateOptioniew(Integer.parseInt(choice));
                     break;
 
                 case "3":
-                    System.out.println("izvršavanje dretve (prikaz u 1. prozoru)");
+                    mc.updateOptioniew(Integer.parseInt(choice));
                     break;
 
                 case "4":
-                    System.out.println("prekid izvršavanja dretve (prikaz u 1. prozoru)");
+                    mc.updateOptioniew(Integer.parseInt(choice));
                     break;
 
                 case "5":
-                    System.out.println("ispis informacija o svim spremljenim stanjima (redni broj i vrijeme                             spremljenja) (prikaz u 1. prozoru)");
+                    mc.updateOptioniew(Integer.parseInt(choice));
                     break;
 
                 case "6":
-                    System.out.println("postavljanje stanja strukture na promjenu s rednim brojem n čime ono                            postaje novo trenutno stanje strukture (prikaz u 1. prozoru)");
+                    mc.updateOptioniew(Integer.parseInt(choice));
                     break;
 
                 case "7":
-                    System.out.println("uspoređivanje trenutnog stanja strukture i promjene s rednim brojem m (                         prikaz u 1. prozoru)");
+                    mc.updateOptioniew(Integer.parseInt(choice));
                     break;
 
                 case "8":
-                    System.out.println("ponovno učitavanje strukture uz poništavanje svih spremljenih stanja                            strukture (prikaz kao i kod inicijalnog učitavanja strukture)");
+                    mc.updateOptioniew(Integer.parseInt(choice));
                     break;
 
                 case "9":
-                    System.out.println("dodana vlastita funkcionalnost (prikaz u 1. prozoru)");
-                    break;          
+                    mc.updateOptioniew(Integer.parseInt(choice));
+                    break;
             }
         } while (!choice.equalsIgnoreCase("Q"));
     }
@@ -117,9 +120,9 @@ public class T2_01_zadaca_3 {
         for (j = 80; j > 1; j = j - 2) {
             prikazi(i, j, 37, "#");
         }
-        System.out.print(ANSI_ESC + "41;1f");
+        System.out.print(ANSI_ESC + "41;1f");//Print on bottom of the screen
         System.out.print(ANSI_ESC + "31m" + "Crvena " + ANSI_ESC + "33m" + "Zelena " + ANSI_ESC + "32m" + "Plava " + ANSI_ESC + "35m" + "Magenta"
-                + ANSI_ESC + "0m");
+                + ANSI_ESC + "0m");//Reset colors
         for (int k = 30; k < 38; k++) {
             prikazi(42, k - 29, k, "@");
         }
