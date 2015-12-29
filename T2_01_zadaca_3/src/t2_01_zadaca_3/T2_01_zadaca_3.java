@@ -118,7 +118,7 @@ public class T2_01_zadaca_3 {
             prikazi(i, j, 37, "#");
         }
         System.out.print(ANSI_ESC + "41;1f");
-        System.out.print(ANSI_ESC + "31m" + "Crvena " + ANSI_ESC + "33m" + "Zelena " + ANSI_ESC + "32m" + "Plava"
+        System.out.print(ANSI_ESC + "31m" + "Crvena " + ANSI_ESC + "33m" + "Zelena " + ANSI_ESC + "32m" + "Plava " + ANSI_ESC + "35m" + "Magenta"
                 + ANSI_ESC + "0m");
         for (int k = 30; k < 38; k++) {
             prikazi(42, k - 29, k, "@");
