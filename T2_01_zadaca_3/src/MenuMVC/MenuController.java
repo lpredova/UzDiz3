@@ -49,7 +49,7 @@ public class MenuController {
         }
     }
 
-    public void updateOptioniew(int index) {
+    public void updateOptionview(int index) {
         view.printOption(model.getMenuOptions().get(index));
     }
 

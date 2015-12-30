@@ -65,39 +65,39 @@ public class T2_01_zadaca_3 {
 
             switch (choice) {
                 case "1":
-                    mc.updateOptioniew(Integer.parseInt(choice));
+                    mc.updateOptionview(Integer.parseInt(choice));
                     break;
 
                 case "2":
-                    mc.updateOptioniew(Integer.parseInt(choice));
+                    mc.updateOptionview(Integer.parseInt(choice));
                     break;
 
                 case "3":
-                    mc.updateOptioniew(Integer.parseInt(choice));
+                    mc.updateOptionview(Integer.parseInt(choice));
                     break;
 
                 case "4":
-                    mc.updateOptioniew(Integer.parseInt(choice));
+                    mc.updateOptionview(Integer.parseInt(choice));
                     break;
 
                 case "5":
-                    mc.updateOptioniew(Integer.parseInt(choice));
+                    mc.updateOptionview(Integer.parseInt(choice));
                     break;
 
                 case "6":
-                    mc.updateOptioniew(Integer.parseInt(choice));
+                    mc.updateOptionview(Integer.parseInt(choice));
                     break;
 
                 case "7":
-                    mc.updateOptioniew(Integer.parseInt(choice));
+                    mc.updateOptionview(Integer.parseInt(choice));
                     break;
 
                 case "8":
-                    mc.updateOptioniew(Integer.parseInt(choice));
+                    mc.updateOptionview(Integer.parseInt(choice));
                     break;
 
                 case "9":
-                    mc.updateOptioniew(Integer.parseInt(choice));
+                    mc.updateOptionview(Integer.parseInt(choice));
                     break;
             }
         } while (!choice.equalsIgnoreCase("Q"));
