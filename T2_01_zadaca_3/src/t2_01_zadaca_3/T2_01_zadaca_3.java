@@ -21,7 +21,8 @@ import java.util.Scanner;
 public class T2_01_zadaca_3 {
 
     public static final String ANSI_ESC = "\033[";
-    public static FileRepository shapeTree;
+    public static FileRepository fileTree;
+    public static String rootDirectory;
 
     /**
      * @param args the command line arguments
@@ -42,6 +43,7 @@ public class T2_01_zadaca_3 {
         int columnNum = Integer.parseInt(args[1]);
         String screenSeparation = args[2];
         int secondsNum = Integer.parseInt(args[0]);
+        rootDirectory = args[3];
 
         // OOH DO IT BABY FANCY
         //KermekMetoda();
@@ -58,8 +60,7 @@ public class T2_01_zadaca_3 {
         String choice = "1337";
         
         //Reading initial file structure
-        System.out.println("Arguments:" + args[3]);
-        for (Iterator iterator = shapeTree.getIterator(); iterator.hasNext(); ) {
+        for (Iterator iterator = fileTree.getIterator(); iterator.hasNext(); ) {
             iterator.next();
         }
         
