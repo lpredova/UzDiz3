@@ -1,4 +1,4 @@
-package FileReaderComposite;
+package FileStructureComposite;
 
 import java.util.List;
 

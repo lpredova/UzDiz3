@@ -1,4 +1,4 @@
-package FileReaderComposite;
+package FileStructureComposite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,58 +6,56 @@ import java.util.List;
 /**
  * Created by lovro
  */
-public class Parent implements File {
+public class Leaf implements File {
 
     private String name;
     private List<File> parentFiles = new ArrayList<File>();
     private List<File> files = new ArrayList<File>();
 
-    public Parent(String name) {
+
+    public Leaf(String name) {
         this.name = name;
     }
 
     @Override
-    public void add(File file) {
-        files.add(file);
+    public void add(File shape) {
     }
 
     @Override
     public List<File> getFiles() {
-        return this.files;
+        return files;
     }
 
     @Override
     public void remove(File shape) {
-        files.remove(shape);
     }
 
     @Override
     public File getChild(int i) {
-        return files.get(i);
-    }
- 
-    @Override
-    public void addChild(File file) {
-        files.add(file);
+        return null;
     }
 
     @Override
-    public List<File> getChildren() {
-        return this.files;
-    }
+    public void addChild(File shape) {}
 
     @Override
-    public void addParent(File file) {
-        parentFiles.add(file);
+    public void addParent(File parent) {
+        parentFiles.add(parent);
     }
 
     @Override
     public List<File> getParents() {
-        return this.parentFiles;
+        return null;
+    }
+
+    @Override
+    public List<File> getChildren() {
+        return null;
     }
 
     @Override
     public void print() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 }
