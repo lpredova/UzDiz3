@@ -10,5 +10,6 @@ package FileIterator.InitialStructure;
  * @author lovro
  */
 public interface Iterator {
-    
+   public boolean hasNext();
+   public Object next(); 
 }

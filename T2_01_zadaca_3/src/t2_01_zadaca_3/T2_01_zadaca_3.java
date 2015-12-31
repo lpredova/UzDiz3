@@ -9,6 +9,8 @@ import AppMVC.MenuController;
 import AppMVC.MenuModel;
 import AppMVC.MenuView;
 import CheckStructureThread.DirectoryCheck;
+import FileIterator.InitialStructure.FileRepository;
+import FileIterator.InitialStructure.Iterator;
 import argumentValidation.ArgumentValidator;
 import java.util.Scanner;
 
@@ -19,6 +21,7 @@ import java.util.Scanner;
 public class T2_01_zadaca_3 {
 
     public static final String ANSI_ESC = "\033[";
+    public static FileRepository shapeTree;
 
     /**
      * @param args the command line arguments
@@ -53,6 +56,13 @@ public class T2_01_zadaca_3 {
         DirectoryCheck thread = new DirectoryCheck(Integer.parseInt(args[4]));
 
         String choice = "1337";
+        
+        //Reading initial file structure
+        System.out.println("Arguments:" + args[3]);
+        for (Iterator iterator = shapeTree.getIterator(); iterator.hasNext(); ) {
+            iterator.next();
+        }
+        
         do {
 
             System.out.println("");

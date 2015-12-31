@@ -6,50 +6,58 @@ import java.util.List;
 /**
  * Created by lovro
  */
-public class Leaf implements File {
+public class Leaf implements AppFile {
 
     private String name;
-    private List<File> parentFiles = new ArrayList<File>();
-    private List<File> files = new ArrayList<File>();
+    private String type;
+    private String createdAt;
+    private String updatedAt;
+    private int size;
+    
+    private List<AppFile> parentFiles = new ArrayList<AppFile>();
+    private List<AppFile> files = new ArrayList<AppFile>();
 
-
-    public Leaf(String name) {
+    public Leaf(String name,String type,String createdAt,String updatedAt,int size) {
         this.name = name;
+        this.type = type;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.size = size;
     }
 
     @Override
-    public void add(File shape) {
+    public void add(AppFile shape) {
     }
 
     @Override
-    public List<File> getFiles() {
+    public List<AppFile> getFiles() {
         return files;
     }
 
     @Override
-    public void remove(File shape) {
+    public void remove(AppFile shape) {
     }
 
     @Override
-    public File getChild(int i) {
+    public AppFile getChild(int i) {
         return null;
     }
 
     @Override
-    public void addChild(File shape) {}
+    public void addChild(AppFile shape) {}
 
     @Override
-    public void addParent(File parent) {
+    public void addParent(AppFile parent) {
         parentFiles.add(parent);
     }
 
     @Override
-    public List<File> getParents() {
+    public List<AppFile> getParents() {
         return null;
     }
 
     @Override
-    public List<File> getChildren() {
+    public List<AppFile> getChildren() {
         return null;
     }
 

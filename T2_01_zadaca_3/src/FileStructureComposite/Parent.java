@@ -6,52 +6,61 @@ import java.util.List;
 /**
  * Created by lovro
  */
-public class Parent implements File {
+public class Parent implements AppFile {
 
     private String name;
-    private List<File> parentFiles = new ArrayList<File>();
-    private List<File> files = new ArrayList<File>();
+    private String type;
+    private String createdAt;
+    private String updatedAt;
+    private int size;
+    
+    private List<AppFile> parentFiles = new ArrayList<AppFile>();
+    private List<AppFile> files = new ArrayList<AppFile>();
 
-    public Parent(String name) {
+    public Parent(String name,String type,String createdAt,String updatedAt,int size) {
         this.name = name;
+        this.type = type;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.size = size;
     }
 
     @Override
-    public void add(File file) {
+    public void add(AppFile file) {
         files.add(file);
     }
 
     @Override
-    public List<File> getFiles() {
+    public List<AppFile> getFiles() {
         return this.files;
     }
 
     @Override
-    public void remove(File shape) {
+    public void remove(AppFile shape) {
     }
 
     @Override
-    public File getChild(int i) {
+    public AppFile getChild(int i) {
         return files.get(i);
     }
  
     @Override
-    public void addChild(File file) {
+    public void addChild(AppFile file) {
         files.add(file);
     }
 
     @Override
-    public List<File> getChildren() {
+    public List<AppFile> getChildren() {
         return this.files;
     }
 
     @Override
-    public void addParent(File file) {
+    public void addParent(AppFile file) {
         parentFiles.add(file);
     }
 
     @Override
-    public List<File> getParents() {
+    public List<AppFile> getParents() {
         return this.parentFiles;
     }
 
