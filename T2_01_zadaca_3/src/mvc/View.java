@@ -39,10 +39,10 @@ public class View {
     
     private void VDivision() {
         for (int i = 1; i <= rows - 1; i++) {
-            prikazi(i, halfCols + 1, 33, "*");
+            show(i, halfCols + 1, 33, "*");
         }
         for (int j = 1; j <= cols + 1; j++) {
-            prikazi(rows, j, 33, "*");
+            show(rows, j, 33, "*");
         }
         System.out.print(ANSI_ESC + (rows + 1) + ";1f");
         System.out.print("Choose option: ");
@@ -50,17 +50,17 @@ public class View {
 
     private void ODivision() {
         for (int i = 1; i <= cols; i++) {
-            prikazi(halfRows + 1, i, 33, "*");
+            show(halfRows + 1, i, 33, "*");
         }
         if (rows % 2 == 0) {
             for (int j = 1; j <= cols; j++) {
-                prikazi(rows, j, 33, "*");
+                show(rows, j, 33, "*");
             }
             System.out.print(ANSI_ESC + (rows + 1) + ";1f");
             System.out.print("Choose option: ");
         } else {
             for (int j = 1; j <= cols; j++) {
-                prikazi(rows + 1, j, 33, "*");
+                show(rows + 1, j, 33, "*");
             }
             System.out.print(ANSI_ESC + (rows + 2) + ";1f");
             System.out.print("Choose option: ");
@@ -68,12 +68,12 @@ public class View {
 
     }
     
-    private void postavi(int x, int y) {
+    private void set(int x, int y) {
         System.out.print(ANSI_ESC + x + ";" + y + "f");
     }
 
-    private void prikazi(int x, int y, int color, String text) {
-        postavi(x, y);
+    private void show(int x, int y, int color, String text) {
+        set(x, y);
         System.out.print(ANSI_ESC + color + "m");
         System.out.print(text);
         try {
