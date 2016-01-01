@@ -18,7 +18,7 @@ public class View {
     public String division;
     public int halfRows;
     public int halfCols;
-    
+
     public View(int rows, int cols, String division) {
         this.rows = rows;
         this.cols = cols;
@@ -26,7 +26,7 @@ public class View {
         this.halfCols = (cols / 2);
         this.division = division;
     }
-    
+
     public void printScreen() {
         System.out.print(ANSI_ESC + "2J");
         if (this.division.equalsIgnoreCase("v")) {
@@ -36,7 +36,7 @@ public class View {
         }
         //printMenu();
     }
-    
+
     private void VDivision() {
         for (int i = 1; i <= rows - 1; i++) {
             show(i, halfCols + 1, 33, "*");
@@ -67,7 +67,54 @@ public class View {
         }
 
     }
+
+    private void eraseFirstScreen() {
+        if (this.division.equalsIgnoreCase("v")) {
+            for (int i = 1; i <= rows - 1; i++) {
+                System.out.print(ANSI_ESC + i + ";" + halfCols + "f");
+                System.out.print(ANSI_ESC + "1K");
+                try {
+                    Thread.sleep(80);
+                } catch (InterruptedException ex) {
+                }
+            }
+        } else if (this.division.equalsIgnoreCase("o")) {
+            for (int i = 1; i <= halfRows; i++) {
+                System.out.print(ANSI_ESC + i + ";" + cols + "f");
+                System.out.print(ANSI_ESC + "1K");
+                try {
+                    Thread.sleep(80);
+                } catch (InterruptedException ex) {
+                }
+            }
+
+        }
+    }
     
+    private void eraseSecondScreen() {
+        if (this.division.equalsIgnoreCase("v")) {
+            for (int i = 1; i <= rows - 1; i++) {
+                System.out.print(ANSI_ESC + i + ";" + (halfCols + 2) + "f");
+                System.out.print(ANSI_ESC + "K");
+                try {
+                    Thread.sleep(80);
+                } catch (InterruptedException ex) {
+                }
+            }
+        } else if (this.division.equalsIgnoreCase("o")) {
+            for (int i = halfRows + 2; i <= (halfRows * 2 + 1); i++) {
+                System.out.print(ANSI_ESC + i + ";" + cols + "f");
+                System.out.print(ANSI_ESC + "1K");
+                try {
+                    Thread.sleep(80);
+                } catch (InterruptedException ex) {
+                }
+            }
+
+        }
+
+    }
+
     private void set(int x, int y) {
         System.out.print(ANSI_ESC + x + ";" + y + "f");
     }
