@@ -5,6 +5,8 @@
  */
 package mvc;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Josip
@@ -68,6 +70,147 @@ public class View {
 
     }
 
+    public void updateFirstScreen(ArrayList<String> data) {
+        this.eraseFirstScreen();
+        int counter = 0;
+        if (this.division.equalsIgnoreCase("v")) {
+            for (int i = 1; i <= rows - 1; i++) {
+                System.out.print(ANSI_ESC + i + ";1f");
+                if (counter < data.size()) {
+                    if (data.get(counter).length() > halfCols) {
+                        System.out.print(data.get(counter).substring(0, halfCols));
+                        for (int k = halfCols; k < data.get(counter).length(); k = k + halfCols) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException ex) {
+                            }
+                            if (halfCols < data.get(counter).substring(k).length()) {
+                                System.out.print("\n" + data.get(counter).substring(k, k + halfCols));
+                            } else {
+                                System.out.print("\n" + data.get(counter).substring(k));
+                            }
+
+                            i++;
+                        }
+
+                    } else {
+                        System.out.print(data.get(counter));
+                    }
+
+                    counter++;
+                    if (i == rows - 1) {
+                        this.eraseFirstScreen();
+                        i = 0;
+                    }
+                } else {
+                    i = rows;
+                }
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                }
+            }
+            //this.eraseFirstScreen();
+        } else if (this.division.equalsIgnoreCase("o")) {
+            for (int i = 1; i <= halfRows; i++) {
+                System.out.print(ANSI_ESC + i + ";1f");
+                if (counter < data.size()) {
+                    if (data.get(counter).length() > cols) {
+                        System.out.print(data.get(counter).substring(0, cols));
+                        for (int k = cols; k < data.get(counter).length(); k = k + cols) {
+                            if (cols < data.get(counter).substring(k).length()) {
+                                System.out.print("\n" + data.get(counter).substring(k, k + cols));
+                            } else {
+                                System.out.print("\n" + data.get(counter).substring(k));
+                            }
+
+                            i++;
+                        }
+
+                    } else {
+                        System.out.print(data.get(counter));
+                    }
+
+                    counter++;
+                }
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                }
+            }
+            //this.eraseFirstScreen();
+        }
+
+    }
+
+    public void updateFirstScreen(String text) {
+
+        if (this.division.equalsIgnoreCase("v")) {
+            for (; currentRow <= rows - 1; currentRow++) {
+                System.out.print(ANSI_ESC + currentRow + ";1f");
+
+                if (text.length() > halfCols) {
+                    System.out.print(text.substring(0, halfCols));
+                    for (int k = halfCols; k < text.length(); k = k + halfCols) {
+                        if (halfCols < text.substring(k).length()) {
+                            System.out.print("\n" + text.substring(k, k + halfCols));
+                        } else {
+                            System.out.print("\n" + text.substring(k));
+                        }
+
+                        currentRow++;
+                    }
+
+                } else {
+                    System.out.print(text);
+                }
+
+                currentRow = rows;
+
+                if (currentRow == rows - 1) {
+                    this.eraseFirstScreen();
+                    currentRow = 1;
+                }
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                }
+            }
+            //this.eraseFirstScreen();
+        }
+
+    }
+
+    public void updateSecondScreen() {
+        if (this.division.equalsIgnoreCase("v")) {
+            for (int i = 1; i <= rows - 1; i++) {
+                System.out.print(ANSI_ESC + i + ";" + (halfCols + 2) + "f");
+                System.out.print("Ispis: " + i);
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                }
+            }
+            this.eraseSecondScreen();
+        } else if (this.division.equalsIgnoreCase("o")) {
+            for (int i = halfRows + 2; i <= (halfRows * 2 + 1); i++) {
+                System.out.print(ANSI_ESC + i + ";1f");
+                System.out.print("Ispis: " + i);
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                }
+            }
+            this.eraseSecondScreen();
+        }
+
+    }
+
     private void eraseFirstScreen() {
         if (this.division.equalsIgnoreCase("v")) {
             for (int i = 1; i <= rows - 1; i++) {
@@ -90,7 +233,7 @@ public class View {
 
         }
     }
-    
+
     private void eraseSecondScreen() {
         if (this.division.equalsIgnoreCase("v")) {
             for (int i = 1; i <= rows - 1; i++) {
