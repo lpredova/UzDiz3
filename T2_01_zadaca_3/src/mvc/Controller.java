@@ -5,23 +5,33 @@
  */
 package mvc;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import t2_01_zadaca_3.T2_01_zadaca_3;
 import utils.Constants;
 
 /**
  * Class for receiving user inputs and returning response
+ *
  * @author Josip
  */
 public class Controller {
+
     private View view;
     private Model model;
+    public static int numDir = 0;
+    public static int numFile = 0;
+    public static int overallSize = 0;
 
     public Controller(View view, Model model) {
         this.view = view;
         this.model = model;
     }
-    
+
     public void showScreen() {
         view.printScreen();
     }
@@ -86,7 +96,8 @@ public class Controller {
                     break;
 
                 case "5":
-                    view.updateFirstScreen("I usually don't do this. Heya ho. Happy new year everyone!");
+                    view.updateFirstScreenByString("I usually don't do this.", "32");
+                    view.updateFirstScreenByString("I hate Java", "32");
                     break;
 
                 case "6":
@@ -94,7 +105,7 @@ public class Controller {
                     System.out.print(Constants.ERASE_END_OF_LINE);
                     System.out.print("Odaberi n: ");
                     in.nextLine();
-                    
+
                     break;
 
                 case "7":
@@ -104,16 +115,58 @@ public class Controller {
                     in.nextLine();
                     break;
 
-                case "8":
-                    break;
+                case "8": {
+                    try {
+                        showDir(0, new File(T2_01_zadaca_3.rootDirectory));
+                    } catch (IOException ex) {
+                        Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;
 
                 case "9":
                     break;
             }
             System.out.print(Constants.CURSOS_RESTORE);
             System.out.print(Constants.ERASE_END_OF_LINE);
+            System.out.print(Constants.ANSI_ESC + "33m");
         } while (!choice.equalsIgnoreCase("Q"));
 
         System.out.print(Constants.ERASE_END_OF_LINE);
+    }
+
+    private void showDir(int indent, File file) throws IOException {
+        String text = "";
+        for (int i = 0; i < indent; i++) {
+            text += "-";
+        }
+        text += file.getName();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        overallSize += file.length();
+        if (file.isDirectory()) {
+            numDir++;
+            view.updateFirstScreenByString(text, "31");
+            
+        } else {
+            numFile++;
+            view.updateFirstScreenByString(text, "36");
+            
+        }
+        view.updateSecondScreenByString("Ukupan broj direktorija: " + numDir, "33", true);
+        view.updateSecondScreenByString("Ukupan broj datoteka: " + numFile, "33", false);
+        view.updateSecondScreenByString("Ukupna veličina: " + overallSize, "33", false);
+
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            for (int i = 0; i < files.length; i++) {
+
+                showDir(indent + 2, files[i]);
+
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ import utils.Constants;
 public class View {
 
     public static int currentRow = 1;
+    public static int currentRow1 = 1;
     public int rows;
     public int cols;
     public String division;
@@ -37,6 +38,7 @@ public class View {
             this.ODivision();
         }
         //printMenu();
+        System.out.print(Constants.CURSOS_RESTORE);
     }
 
     private void VDivision() {
@@ -48,6 +50,7 @@ public class View {
         }
         System.out.print(Constants.ANSI_ESC + (rows + 1) + ";1f");
         System.out.print("Choose option: ");
+        System.out.print(Constants.CURSOR_SAVE);
     }
 
     private void ODivision() {
@@ -107,7 +110,7 @@ public class View {
                 }
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch (InterruptedException ex) {
                 }
             }
@@ -145,46 +148,83 @@ public class View {
 
     }
 
-    public void updateFirstScreen(String text) {
+    public void updateFirstScreenByString(String text, String color) {
 
         if (this.division.equalsIgnoreCase("v")) {
-            for (; currentRow <= rows - 1; currentRow++) {
-                System.out.print(Constants.ANSI_ESC + currentRow + ";1f");
-
-                if (text.length() > halfCols) {
-                    System.out.print(text.substring(0, halfCols));
-                    for (int k = halfCols; k < text.length(); k = k + halfCols) {
-                        if (halfCols < text.substring(k).length()) {
-                            System.out.print("\n" + text.substring(k, k + halfCols));
-                        } else {
-                            System.out.print("\n" + text.substring(k));
-                        }
-
-                        currentRow++;
+            System.out.print(Constants.ANSI_ESC + currentRow + ";1f");
+            System.out.print(Constants.ANSI_ESC + color + "m");
+            if (text.length() > halfCols) {
+                System.out.print(text.substring(0, halfCols));
+                for (int k = halfCols; k < text.length(); k = k + halfCols) {
+                    if (cols < text.substring(k).length()) {
+                        System.out.print("\n" + text.substring(k, k + halfCols));
+                    } else {
+                        System.out.print("\n" + text.substring(k));
                     }
-
-                } else {
-                    System.out.print(text);
+                    currentRow++;
                 }
 
-                currentRow = rows;
-
-                if (currentRow == rows - 1) {
-                    this.eraseFirstScreen();
-                    currentRow = 1;
-                }
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                }
+            } else {
+                System.out.print(text);
             }
-            //this.eraseFirstScreen();
+
+            if (currentRow == rows - 1) {
+                this.eraseFirstScreen();
+                currentRow = 1;
+            } else {
+                currentRow++;
+            }
+
+        }
+
+    }
+
+    public void updateSecondScreenByString(String text, String color, boolean erase) {
+        if(erase) {
+            this.eraseSecondScreen();
+            currentRow1 = 1;
+        }
+        if (this.division.equalsIgnoreCase("v")) {
+            System.out.print(Constants.ANSI_ESC + currentRow1 + ";" + (halfCols + 2) + "f");
+            System.out.print(Constants.ANSI_ESC + color + "m");
+
+            if (text.length() > (cols - halfCols)) {
+                System.out.print(text.substring(0, cols - halfCols));
+
+                for (int k = cols - halfCols; k < text.length(); k = k + cols - halfCols) {
+                    System.out.print(Constants.ANSI_ESC + "1B");
+                    System.out.print(Constants.ANSI_ESC + (halfCols) + "D");
+                    if (currentRow1 == rows - 1) {
+                        this.eraseSecondScreen();
+                        currentRow1 = 1;
+                        System.out.print(Constants.ANSI_ESC + currentRow1 + ";" + (halfCols + 2) + "f");
+                    }
+                    
+                    if (cols < text.substring(k).length()) {
+                        System.out.print(text.substring(k, k + cols - halfCols));
+                    } else {
+                        System.out.print(text.substring(k));
+                    }
+                    currentRow1++;
+                }
+
+            } else {
+                System.out.print(text);
+            }
+
+            if (currentRow1 == rows - 1) {
+                this.eraseSecondScreen();
+                currentRow1 = 1;
+            } else {
+                currentRow1++;
+            }
+
         }
 
     }
 
     public void updateSecondScreen() {
+        this.eraseSecondScreen();
         if (this.division.equalsIgnoreCase("v")) {
             for (int i = 1; i <= rows - 1; i++) {
                 System.out.print(Constants.ANSI_ESC + i + ";" + (halfCols + 2) + "f");
@@ -238,7 +278,7 @@ public class View {
         if (this.division.equalsIgnoreCase("v")) {
             for (int i = 1; i <= rows - 1; i++) {
                 System.out.print(Constants.ANSI_ESC + i + ";" + (halfCols + 2) + "f");
-                System.out.print(Constants.ERASE_START_OF_LINE);
+                System.out.print(Constants.ERASE_END_OF_LINE);
                 try {
                     Thread.sleep(80);
                 } catch (InterruptedException ex) {
@@ -249,7 +289,7 @@ public class View {
                 System.out.print(Constants.ANSI_ESC + i + ";" + cols + "f");
                 System.out.print(Constants.ERASE_END_OF_LINE);
                 try {
-                    Thread.sleep(80);
+                    Thread.sleep(20);
                 } catch (InterruptedException ex) {
                 }
             }
@@ -257,9 +297,9 @@ public class View {
         }
 
     }
-    
+
     private void printMenu() {
-        System.out.println("\n");
+        System.out.println("");
         System.out.println("-------------------------------------------------");
         System.out.println("\t\tMAIN MENU");
         System.out.println("-------------------------------------------------");
