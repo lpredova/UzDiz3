@@ -257,6 +257,23 @@ public class View {
         }
 
     }
+    
+    private void printMenu() {
+        System.out.println("\n");
+        System.out.println("-------------------------------------------------");
+        System.out.println("\t\tMAIN MENU");
+        System.out.println("-------------------------------------------------");
+        System.out.println("1 - ispis ukupnog broja direktorija i datoteka u strukturi (prikaz u 1. prozoru)");
+        System.out.println("2 - ispis sadržaja strukture direktorija i datoteka uz prikaz naziva, vremena (formatiranog u HR obliku), veličina (u formatu 999.999.999 B) (prikaz u 1. prozoru)");
+        System.out.println("3 - izvršavanje dretve (prikaz u 1. prozoru)");
+        System.out.println("4 - prekid izvršavanja dretve (prikaz u 1. prozoru)");
+        System.out.println("5 - ispis informacija o svim spremljenim stanjima (redni broj i vrijeme spremljenja) (prikaz u 1. prozoru)");
+        System.out.println("6 n - postavljanje stanja strukture na promjenu s rednim brojem n čime ono postaje novo trenutno stanje strukture (prikaz u 1. prozoru)");
+        System.out.println("7 m - uspoređivanje trenutnog stanja strukture i promjene s rednim brojem m (prikaz u 1. prozoru)");
+        System.out.println("8 - ponovno učitavanje strukture uz poništavanje svih spremljenih stanja strukture (prikaz kao i kod inicijalnog učitavanja strukture)");
+        System.out.println("9 - dodana vlastita funkcionalnost (prikaz u 1. prozoru)");
+        System.out.println("Q - prekid rada programa");
+    }
 
     private void set(int x, int y) {
         System.out.print(ANSI_ESC + x + ";" + y + "f");
