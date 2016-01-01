@@ -7,7 +7,7 @@ package mvc;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import static mvc.View.ANSI_ESC;
+import utils.Constants;
 
 /**
  * Class for receiving user inputs and returning response
@@ -29,7 +29,7 @@ public class Controller {
     public void processOption() {
         String choice = "";
         do {
-            System.out.print(ANSI_ESC + "s");
+            System.out.print(Constants.CURSOR_SAVE);
             Scanner in = new Scanner(System.in);
             choice = in.nextLine();
             switch (choice) {
@@ -90,16 +90,16 @@ public class Controller {
                     break;
 
                 case "6":
-                    System.out.print(ANSI_ESC + "u");
-                    System.out.print(ANSI_ESC + "K");
+                    System.out.print(Constants.CURSOS_RESTORE);
+                    System.out.print(Constants.ERASE_END_OF_LINE);
                     System.out.print("Odaberi n: ");
                     in.nextLine();
                     
                     break;
 
                 case "7":
-                    System.out.print(ANSI_ESC + "u");
-                    System.out.print(ANSI_ESC + "K");
+                    System.out.print(Constants.CURSOS_RESTORE);
+                    System.out.print(Constants.ERASE_END_OF_LINE);
                     System.out.print("Odaberi m: ");
                     in.nextLine();
                     break;
@@ -110,10 +110,10 @@ public class Controller {
                 case "9":
                     break;
             }
-            System.out.print(ANSI_ESC + "u");
-            System.out.print(ANSI_ESC + "K");
+            System.out.print(Constants.CURSOS_RESTORE);
+            System.out.print(Constants.ERASE_END_OF_LINE);
         } while (!choice.equalsIgnoreCase("Q"));
 
-        System.out.print(ANSI_ESC + "K");
+        System.out.print(Constants.ERASE_END_OF_LINE);
     }
 }

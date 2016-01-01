@@ -59,7 +59,7 @@ public class ArgumentValidator {
                 
         // Number of seconds validation
         try {
-            int secondsNum = Integer.parseInt(arguments[0]);
+            int secondsNum = Integer.parseInt(arguments[4]);
             if (secondsNum < 1 || secondsNum > 120) {
                 System.err.println("The number of seconds is out of bounds! (1 - 120)");
                 isValid = false;
