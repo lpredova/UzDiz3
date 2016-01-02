@@ -37,7 +37,7 @@ public class View {
         } else if (this.division.equalsIgnoreCase("o")) {
             this.ODivision();
         }
-        //printMenu();
+//        printMenu();
         System.out.print(Constants.CURSOS_RESTORE);
     }
 
@@ -313,6 +313,7 @@ public class View {
         System.out.println("8 - ponovno učitavanje strukture uz poništavanje svih spremljenih stanja strukture (prikaz kao i kod inicijalnog učitavanja strukture)");
         System.out.println("9 - dodana vlastita funkcionalnost (prikaz u 1. prozoru)");
         System.out.println("Q - prekid rada programa");
+        System.out.println("-------------------------------------------------");
     }
 
     private void set(int x, int y) {
