@@ -9,6 +9,8 @@ import AppMVC.MenuController;
 import AppMVC.MenuModel;
 import AppMVC.MenuView;
 import CheckStructureThread.DirectoryCheck;
+import FileIterator.InitialStructure.FileRepository;
+import FileIterator.InitialStructure.Iterator;
 import argumentValidation.ArgumentValidator;
 import java.util.Scanner;
 
@@ -53,6 +55,17 @@ public class T2_01_zadaca_3 {
         DirectoryCheck thread = new DirectoryCheck(Integer.parseInt(args[4]));
 
         String choice = "1337";
+        
+        //Reading initial file structure - creational iterator, has only one iteration and creates dir 
+        FileRepository filesRepository = new FileRepository();
+        for (Iterator iterator = filesRepository.getIterator(args[3]); iterator.hasNext(); ) {
+            iterator.next();
+        }
+        
+        System.out.println("Directory tree created" + FileRepository.directoryTree + filesRepository);
+        
+
+        
         do {
 
             System.out.println("");
