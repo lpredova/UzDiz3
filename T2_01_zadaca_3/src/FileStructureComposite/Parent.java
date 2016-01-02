@@ -12,17 +12,19 @@ public class Parent implements AppFile {
     private String type;
     private String createdAt;
     private String updatedAt;
-    private String size;
-    
+    private String formattedSize;
+    private long rawSize;
+
     private final List<AppFile> parentFiles = new ArrayList<>();
     private final List<AppFile> files = new ArrayList<>();
 
-    public Parent(String name,String type,String createdAt,String updatedAt,String size) {
+    public Parent(String name, String type, String createdAt, String updatedAt, String size, long rawSize) {
         this.name = name;
         this.type = type;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.size = size;
+        this.formattedSize = size;
+        this.rawSize = rawSize;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class Parent implements AppFile {
     public AppFile getChild(int i) {
         return files.get(i);
     }
- 
+
     @Override
     public void addChild(AppFile file) {
         files.add(file);
@@ -64,7 +66,7 @@ public class Parent implements AppFile {
         return this.parentFiles;
     }
 
-     @Override
+    @Override
     public String getName() {
         return this.name;
     }
@@ -85,8 +87,13 @@ public class Parent implements AppFile {
     }
 
     @Override
-    public String getSize() {
-        return this.size;
+    public String getFormattedSize() {
+        return this.formattedSize;
+    }
+
+    @Override
+    public long getRawSize() {
+        return this.rawSize;
     }
 
     @Override
@@ -110,8 +117,13 @@ public class Parent implements AppFile {
     }
 
     @Override
-    public void setSize(String size) {
-        this.size = size;
+    public void setFormattedSize(String size) {
+        this.formattedSize = size;
+    }
+
+    @Override
+    public void setRawSize(long rawSize) {
+        this.rawSize = rawSize;
     }
 
     @Override
@@ -121,7 +133,7 @@ public class Parent implements AppFile {
         System.out.println("Type:" + this.getType());
         System.out.println("Created at:" + this.getCreatedAt());
         System.out.println("Updated at:" + this.getUpdatedAt());
-        System.out.println("Size:" + this.getSize());
+        System.out.println("Size:" + this.getFormattedSize());
 
         System.out.println("------------------------------------");
     }

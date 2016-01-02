@@ -65,10 +65,10 @@ public class FileHelper {
      * @param path
      * @return
      */
-    public static String getFileSizeFromPath(String path) {
+    public static String getFileSizeFormattedFromPath(String path) {
         File f = new File(path);
 
-        return Helpers.FileHelper.getFileFormattedSize(f);
+        return Helpers.FileHelper.getFileSizeFormat(f);
     }
 
     /**
@@ -104,6 +104,17 @@ public class FileHelper {
 
         return FileHelper.getCreatedTime(filePath);
     }
+    
+    /**
+     * Method for getting file(directory) size from path
+     * @param path
+     * @return 
+     */
+    public static long getFileRawSizeFromPath(String path){
+        File file = new File(path);
+        return file.length();
+    }
+    
 
     /**
      * Method for getting last updated time of the file
@@ -135,9 +146,20 @@ public class FileHelper {
      * @param file
      * @return
      */
-    public static String getFileSize(File file) {
-        return Helpers.FileHelper.getFileFormattedSize(file);
+    public static String getFileFormattedSize(File file) {
+        return Helpers.FileHelper.getFileSizeFormat(file);
     }
+    
+
+    /**
+     * Method that returns file size in bytes long format
+     * @param file
+     * @return 
+     */
+    public static long getFileRawSize(File file){
+        return file.length();
+    }
+
 
     /**
      * Method for getting file type, returns directory if file is directory or
@@ -214,7 +236,7 @@ public class FileHelper {
         return "1.1.2016";
     }
 
-    private static String getFileFormattedSize(File file) {
+    private static String getFileSizeFormat(File file) {
         String pattern = "###,###.###";
         DecimalFormat myFormatter = new DecimalFormat(pattern);
         String output = myFormatter.format(file.length()).replace(',', '.') + " B";

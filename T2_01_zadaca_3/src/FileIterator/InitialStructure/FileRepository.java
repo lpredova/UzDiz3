@@ -61,9 +61,14 @@ public class FileRepository implements Container {
                         //root element is directory
                         this.elementPath = path;
 
-                        AppFile rootDirectoryElement = new Parent(Helpers.FileHelper.getFileNameFromPath(path),
-                                Helpers.FileHelper.getFileTypeFromPath(path), Helpers.FileHelper.getFileCreatedAtTimeFromPath(path),
-                                Helpers.FileHelper.getFileUpdatedAtTimeFromPath(path), Helpers.FileHelper.getFileSizeFromPath(path));
+                        AppFile rootDirectoryElement = new Parent(
+                                Helpers.FileHelper.getFileNameFromPath(path),
+                                Helpers.FileHelper.getFileTypeFromPath(path), 
+                                Helpers.FileHelper.getFileCreatedAtTimeFromPath(path),
+                                Helpers.FileHelper.getFileUpdatedAtTimeFromPath(path), 
+                                Helpers.FileHelper.getFileSizeFormattedFromPath(path),
+                                Helpers.FileHelper.getFileRawSizeFromPath(path)
+                        );
                         rootDirectoryElement.addParent(null);
                         directoryTree.add(rootDirectoryElement);
 
@@ -91,9 +96,13 @@ public class FileRepository implements Container {
          */
         private void saveDirectoryInfo(File directory) {
 
-            AppFile directoryElement = new Parent(Helpers.FileHelper.getFileName(directory),
-                    "directory", Helpers.FileHelper.getFileCreatedAtTime(directory),
-                    Helpers.FileHelper.getFileUpdatedAtTime(directory), Helpers.FileHelper.getFileSize(directory));
+            AppFile directoryElement = new Parent(
+                    Helpers.FileHelper.getFileName(directory),
+                    "directory", 
+                    Helpers.FileHelper.getFileCreatedAtTime(directory),
+                    Helpers.FileHelper.getFileUpdatedAtTime(directory), 
+                    Helpers.FileHelper.getFileFormattedSize(directory),
+                    Helpers.FileHelper.getFileRawSize(directory));
 
             AppFile parentElement = findParent(directory);
             directoryElement.addParent(findParent(directory));
@@ -108,9 +117,13 @@ public class FileRepository implements Container {
          */
         private void saveFileInfo(File file) {
 
-            AppFile fileElement = new Leaf(Helpers.FileHelper.getFileName(file),
-                    Helpers.FileHelper.getFileType(file), Helpers.FileHelper.getFileCreatedAtTime(file),
-                    Helpers.FileHelper.getFileUpdatedAtTime(file), Helpers.FileHelper.getFileSize(file));
+            AppFile fileElement = new Leaf(
+                    Helpers.FileHelper.getFileName(file),
+                    Helpers.FileHelper.getFileType(file), 
+                    Helpers.FileHelper.getFileCreatedAtTime(file),
+                    Helpers.FileHelper.getFileUpdatedAtTime(file), 
+                    Helpers.FileHelper.getFileFormattedSize(file), 
+                    Helpers.FileHelper.getFileRawSize(file));
 
             AppFile parentElement = findParent(file);
             fileElement.addParent(parentElement);

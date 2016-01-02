@@ -15,13 +15,15 @@ public interface AppFile {
     String getType();
     String getCreatedAt();
     String getUpdatedAt();
-    String getSize();
+    String getFormattedSize();
+    long getRawSize();
     
     void setName(String name);
     void setType(String type);
     void setCreatedAt(String createdAt);
     void setUpdatedAt(String updatedAt);
-    void setSize(String size);
+    void setFormattedSize(String size);
+    void setRawSize(long rawSize);
     
     
     /**
