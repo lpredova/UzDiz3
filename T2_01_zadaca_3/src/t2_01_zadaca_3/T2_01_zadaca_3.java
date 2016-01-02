@@ -62,10 +62,10 @@ public class T2_01_zadaca_3 {
        
         FileRepository filesRepository = new FileRepository();
         for (Iterator iterator = filesRepository.getIterator(args[3]); iterator.hasNext(); ) {
-            //iterator.next();
+            iterator.next();
         }
         
-        System.out.println("Directory tree created");
+        System.out.println("Directory tree created" + FileRepository.directoryTree);
 
         
         do {
