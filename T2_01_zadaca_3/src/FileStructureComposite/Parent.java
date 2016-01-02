@@ -12,12 +12,12 @@ public class Parent implements AppFile {
     private String type;
     private String createdAt;
     private String updatedAt;
-    private int size;
+    private long size;
     
     private List<AppFile> parentFiles = new ArrayList<AppFile>();
     private List<AppFile> files = new ArrayList<AppFile>();
 
-    public Parent(String name,String type,String createdAt,String updatedAt,int size) {
+    public Parent(String name,String type,String createdAt,String updatedAt,long size) {
         this.name = name;
         this.type = type;
         this.createdAt = createdAt;

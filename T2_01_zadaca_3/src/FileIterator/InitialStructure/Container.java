@@ -10,5 +10,5 @@ package FileIterator.InitialStructure;
  * @author lovro
  */
 public interface Container {
-    public Iterator getIterator();
+    public Iterator getIterator(String root);
 }
