@@ -7,6 +7,8 @@ package mvc;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -140,7 +142,14 @@ public class Controller {
         for (int i = 0; i < indent; i++) {
             text += "-";
         }
-        text += file.getName();
+        SimpleDateFormat formatedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String dateModified = formatedDate.format(file.lastModified());
+        DecimalFormat df = new DecimalFormat("#,##0");
+        if (file.isDirectory()) {
+            text += file.getName() + " " + dateModified + " " + df.format(getFolderSize(file)) + "B";
+        } else {
+            text += file.getName() + " " + dateModified + " " + df.format(file.length()) + "B";
+        }
         try {
             Thread.sleep(500);
         } catch (InterruptedException ex) {
@@ -150,15 +159,15 @@ public class Controller {
         if (file.isDirectory()) {
             numDir++;
             view.updateFirstScreenByString(text, "31");
-            
+
         } else {
             numFile++;
             view.updateFirstScreenByString(text, "36");
-            
+
         }
         view.updateSecondScreenByString("Ukupan broj direktorija: " + numDir, "33", true);
         view.updateSecondScreenByString("Ukupan broj datoteka: " + numFile, "33", false);
-        view.updateSecondScreenByString("Ukupna veličina: " + overallSize, "33", false);
+        view.updateSecondScreenByString("Ukupna veličina: " + df.format(overallSize) + "B", "33", false);
 
         if (file.isDirectory()) {
             File[] files = file.listFiles();
@@ -168,5 +177,19 @@ public class Controller {
 
             }
         }
+    }
+
+    private long getFolderSize(File directory) {
+        long size = 0;
+
+        for (File file : directory.listFiles()) {
+            if (file.isFile()) {
+                size += file.length();
+            } else {
+                size += getFolderSize(file);
+            }
+        }
+
+        return size;
     }
 }
