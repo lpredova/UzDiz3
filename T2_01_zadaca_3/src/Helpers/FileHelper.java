@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -41,8 +44,6 @@ public class FileHelper {
      * @return
      */
     public static boolean isDirectory(String path) {
-        System.out.println("PATH CHECK: " + path);
-        
         File f = new File(path);
         return f.isDirectory();
     }
@@ -64,9 +65,10 @@ public class FileHelper {
      * @param path
      * @return
      */
-    public  static long getFileSizeFromPath(String path) {
+    public static String getFileSizeFromPath(String path) {
         File f = new File(path);
-        return f.length();
+
+        return Helpers.FileHelper.getFileFormattedSize(f);
     }
 
     /**
@@ -113,10 +115,9 @@ public class FileHelper {
 
         File file = new File(path);
         Path filePath = file.toPath();
-        
+
         return FileHelper.getUpdatedTime(filePath);
     }
-    
 
     /**
      * Method for getting file name from file
@@ -134,8 +135,8 @@ public class FileHelper {
      * @param file
      * @return
      */
-    public  static long getFileSize(File file) {
-        return file.length();
+    public static String getFileSize(File file) {
+        return Helpers.FileHelper.getFileFormattedSize(file);
     }
 
     /**
@@ -146,12 +147,12 @@ public class FileHelper {
      * @return
      */
     public static String getFileType(File file) {
- 
+
         String name = file.getName();
         try {
-            return name.substring(name.lastIndexOf(".") + 1) + " file";
+            return "." + name.substring(name.lastIndexOf(".") + 1);
         } catch (Exception e) {
-            return "file";
+            return "unknown file format";
         }
     }
 
@@ -165,11 +166,12 @@ public class FileHelper {
 
         Path filePath = file.toPath();
         return FileHelper.getCreatedTime(filePath);
-       
+
     }
 
     /**
      * Method for getting last updated time of the file
+     *
      * @param file
      * @return
      */
@@ -178,15 +180,15 @@ public class FileHelper {
         Path filePath = file.toPath();
         return FileHelper.getUpdatedTime(filePath);
     }
-    
-    private static String getCreatedTime(Path filePath){
-         try {
+
+    private static String getCreatedTime(Path filePath) {
+        try {
             BasicFileAttributes fileAttributes = Files.readAttributes(filePath, BasicFileAttributes.class);
 
             long milliseconds = fileAttributes.creationTime().to(TimeUnit.MILLISECONDS);
             if ((milliseconds > Long.MIN_VALUE) && (milliseconds < Long.MAX_VALUE)) {
                 Date creationDate = new Date(fileAttributes.creationTime().to(TimeUnit.MILLISECONDS));
-                return creationDate.getDate() + "." + (creationDate.getMonth() + 1) + "." + (creationDate.getYear() + 1900);
+                return creationDate.getDate() + "." + (creationDate.getMonth() + 1) + "." + (creationDate.getYear() + 1900) + " " + (creationDate.getHours()) + ":" + (creationDate.getMinutes()) + ":" + (creationDate.getSeconds());
             }
 
         } catch (IOException ex) {
@@ -195,21 +197,27 @@ public class FileHelper {
         }
         return "1.1.2016";
     }
-    
-    
-    private static String getUpdatedTime(Path filePath){
-         try {
+
+    private static String getUpdatedTime(Path filePath) {
+        try {
             BasicFileAttributes fileAttributes = Files.readAttributes(filePath, BasicFileAttributes.class);
 
             long milliseconds = fileAttributes.creationTime().to(TimeUnit.MILLISECONDS);
             if ((milliseconds > Long.MIN_VALUE) && (milliseconds < Long.MAX_VALUE)) {
                 Date updatedDate = new Date(fileAttributes.lastModifiedTime().to(TimeUnit.MILLISECONDS));
-                return updatedDate.getDate() + "." + (updatedDate.getMonth() + 1) + "." + (updatedDate.getYear() + 1900);
+                return updatedDate.getDate() + "." + (updatedDate.getMonth() + 1) + "." + (updatedDate.getYear() + 1900) + " " + (updatedDate.getHours()) + ":" + (updatedDate.getMinutes()) + ":" + (updatedDate.getSeconds());
             }
         } catch (IOException ex) {
             Logger.getLogger(FileRepository.class.getName()).log(Level.SEVERE, null, ex);
             return "Unable to fetch time";
         }
         return "1.1.2016";
-    }   
+    }
+
+    private static String getFileFormattedSize(File file) {
+        String pattern = "###,###.###";
+        DecimalFormat myFormatter = new DecimalFormat(pattern);
+        String output = myFormatter.format(file.length()).replace(',', '.') + " B";
+        return output;
+    }
 }

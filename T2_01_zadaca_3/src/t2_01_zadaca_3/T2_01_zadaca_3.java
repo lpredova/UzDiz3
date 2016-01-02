@@ -58,14 +58,13 @@ public class T2_01_zadaca_3 {
         String choice = "1337";
         
         //Reading initial file structure
-        
-       
         FileRepository filesRepository = new FileRepository();
         for (Iterator iterator = filesRepository.getIterator(args[3]); iterator.hasNext(); ) {
             iterator.next();
         }
         
-        System.out.println("Directory tree created" + FileRepository.directoryTree);
+        System.out.println("Directory tree created" + FileRepository.directoryTree + filesRepository);
+        
 
         
         do {

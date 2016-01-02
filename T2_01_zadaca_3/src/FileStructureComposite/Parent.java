@@ -12,12 +12,12 @@ public class Parent implements AppFile {
     private String type;
     private String createdAt;
     private String updatedAt;
-    private long size;
+    private String size;
     
     private List<AppFile> parentFiles = new ArrayList<AppFile>();
     private List<AppFile> files = new ArrayList<AppFile>();
 
-    public Parent(String name,String type,String createdAt,String updatedAt,long size) {
+    public Parent(String name,String type,String createdAt,String updatedAt,String size) {
         this.name = name;
         this.type = type;
         this.createdAt = createdAt;
@@ -85,7 +85,7 @@ public class Parent implements AppFile {
     }
 
     @Override
-    public long getSize() {
+    public String getSize() {
         return this.size;
     }
 
@@ -110,7 +110,7 @@ public class Parent implements AppFile {
     }
 
     @Override
-    public void setSize(long size) {
+    public void setSize(String size) {
         this.size = size;
     }
 

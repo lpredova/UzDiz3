@@ -91,7 +91,6 @@ public class FileRepository implements Container {
          */
         private void saveDirectoryInfo(File directory) {
 
-            String name = Helpers.FileHelper.getFileName(directory);
             AppFile directoryElement = new Parent(Helpers.FileHelper.getFileName(directory),
                     "directory", Helpers.FileHelper.getFileCreatedAtTime(directory),
                     Helpers.FileHelper.getFileUpdatedAtTime(directory), Helpers.FileHelper.getFileSize(directory));
@@ -108,8 +107,6 @@ public class FileRepository implements Container {
          * @param path
          */
         private void saveFileInfo(File file) {
-
-            String name = Helpers.FileHelper.getFileName(file);
 
             AppFile fileElement = new Leaf(Helpers.FileHelper.getFileName(file),
                     Helpers.FileHelper.getFileType(file), Helpers.FileHelper.getFileCreatedAtTime(file),
@@ -128,7 +125,6 @@ public class FileRepository implements Container {
          * @return
          */
         private boolean nextElementExists() {
-
             return false;
         }
 
@@ -146,21 +142,14 @@ public class FileRepository implements Container {
         private AppFile findParent(File file) {
 
             String parentName = file.getParentFile().getName();
-
             for (AppFile appFile : directoryTree) {
-
-                System.out.println("Parent dir for file " + file.getName() + ": " + parentName + "");
-
-
                 if (appFile.getName().equals(parentName)) {
                     return appFile;
                 } else {
-                    System.out.println("NOT equal\n");
                     return getParentElement(appFile, parentName);
                 }
             }
             return null;
-
         }
 
         private AppFile getParentElement(AppFile file, String parentName) {
@@ -178,6 +167,5 @@ public class FileRepository implements Container {
             }
             return null;
         }
-
     }
 }

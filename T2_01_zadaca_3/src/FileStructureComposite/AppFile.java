@@ -14,13 +14,13 @@ public interface AppFile {
     String getType();
     String getCreatedAt();
     String getUpdatedAt();
-    long getSize();
+    String getSize();
     
     void setName(String name);
     void setType(String type);
     void setCreatedAt(String createdAt);
     void setUpdatedAt(String updatedAt);
-    void setSize(long size);
+    void setSize(String size);
     
     
     /**
