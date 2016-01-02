@@ -104,8 +104,10 @@ public class FileRepository implements Container {
                     Helpers.FileHelper.getFileFormattedSize(directory),
                     Helpers.FileHelper.getFileRawSize(directory));
 
-            AppFile parentElement = findParent(directory);
-            directoryElement.addParent(findParent(directory));
+            long elementSize = Helpers.FileHelper.getFileRawSize(directory);
+            
+            AppFile parentElement = findParent(directory,elementSize);
+            directoryElement.addParent(parentElement);
             parentElement.addChild(directoryElement);
             directoryTree.add(directoryElement);
         }
@@ -124,8 +126,9 @@ public class FileRepository implements Container {
                     Helpers.FileHelper.getFileUpdatedAtTime(file), 
                     Helpers.FileHelper.getFileFormattedSize(file), 
                     Helpers.FileHelper.getFileRawSize(file));
-
-            AppFile parentElement = findParent(file);
+            long fileSize = Helpers.FileHelper.getFileRawSize(file);        
+            
+            AppFile parentElement = findParent(file,fileSize);
             fileElement.addParent(parentElement);
             parentElement.addChild(fileElement);
             directoryTree.add(fileElement);
@@ -141,6 +144,10 @@ public class FileRepository implements Container {
             return false;
         }
 
+        /**
+         * Recursion that iterates trough elements in file structure
+         * @param files 
+         */
         private void showFiles(File[] files) {
             for (File file : files) {
                 if (file.isDirectory()) {
@@ -152,30 +159,39 @@ public class FileRepository implements Container {
             }
         }
 
-        private AppFile findParent(File file) {
+        /**
+         * Recursion for finding element parent
+         * @param file
+         * @return 
+         */
+        private AppFile findParent(File file,long size) {
 
             String parentName = file.getParentFile().getName();
             for (AppFile appFile : directoryTree) {
                 if (appFile.getName().equals(parentName)) {
+                   appFile.increaseSize(size);
                     return appFile;
                 } else {
-                    return getParentElement(appFile, parentName);
+                    appFile.increaseSize(size);
+                    return getParentElement(appFile, parentName,size);
                 }
             }
             return null;
         }
 
-        private AppFile getParentElement(AppFile file, String parentName) {
+        private AppFile getParentElement(AppFile file, String parentName,long size) {
 
             for (AppFile child : file.getChildren()) {
                 //Anchor
                 if (child.getName().equals(parentName)) {
+                    child.increaseSize(size);
                     return child;
                 }
                 //ok, not on this level, maybe below?
                 //element is container
                 if (child.getType().equals("directory")) {
-                    return this.getParentElement(child, parentName);
+                    child.increaseSize(size);
+                    return this.getParentElement(child, parentName,size);
                 }
             }
             return null;

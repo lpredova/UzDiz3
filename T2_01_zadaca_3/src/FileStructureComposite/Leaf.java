@@ -135,4 +135,13 @@ public class Leaf implements AppFile {
 
         System.out.println("------------------------------------");
     }
+    
+    /**
+     * Method that we use for updating parents size, 
+     * not really necessary with child nodes
+     * @param size 
+     */
+    @Override
+    public void increaseSize(long size){
+    }
 }

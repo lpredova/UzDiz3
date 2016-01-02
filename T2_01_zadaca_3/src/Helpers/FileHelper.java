@@ -236,10 +236,24 @@ public class FileHelper {
         return "1.1.2016";
     }
 
+    /**
+     * Method that gets initial file size on creation tree
+     * @param file
+     * @return 
+     */
     private static String getFileSizeFormat(File file) {
+        return formatSize(file.length());
+    }
+    
+    /**
+     * Method that converts raw size in long and formats it to string
+     * @param size
+     * @return 
+     */
+    public static String formatSize(long size){
         String pattern = "###,###.###";
         DecimalFormat myFormatter = new DecimalFormat(pattern);
-        String output = myFormatter.format(file.length()).replace(',', '.') + " B";
-        return output;
-    }
+        String formattedSize = myFormatter.format(size).replace(',', '.') + " B";
+        return formattedSize;
+    }  
 }

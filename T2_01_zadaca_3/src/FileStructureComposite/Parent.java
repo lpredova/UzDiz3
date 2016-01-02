@@ -137,4 +137,14 @@ public class Parent implements AppFile {
 
         System.out.println("------------------------------------");
     }
+    
+    /**
+     * Method that we use for updating parents size
+     * @param size 
+     */
+    @Override
+    public void increaseSize(long size){
+        this.rawSize += size;
+        this.formattedSize = Helpers.FileHelper.formatSize(this.rawSize);
+    }
 }

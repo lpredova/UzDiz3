@@ -46,5 +46,11 @@ public interface AppFile {
 
     List<AppFile> getParent();
 
+    /**
+     * Helper functions to manipulate structure
+     */
     void print();
+    
+    void increaseSize(long size);
+    
 }
