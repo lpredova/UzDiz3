@@ -5,6 +5,15 @@
  */
 package t2_01_zadaca_3;
 
+<<<<<<< HEAD
+import AppMVC.MenuController;
+import AppMVC.MenuModel;
+import AppMVC.MenuView;
+import CheckStructureThread.DirectoryCheck;
+import FileIterator.InitialStructure.FileRepository;
+import FileIterator.InitialStructure.Iterator;
+=======
+>>>>>>> master
 import argumentValidation.ArgumentValidator;
 import java.util.Scanner;
 
@@ -22,8 +31,16 @@ public class T2_01_zadaca_3 {
     public static void main(String[] args) {
         // TODO code application logic here
 
+<<<<<<< HEAD
+        System.out.println(ANSI_ESC + "0m");
+
         ArgumentValidator av = new ArgumentValidator(args);
         if (!av.Validate()) {
+            System.out.println(ANSI_ESC + "31m");
+=======
+        ArgumentValidator av = new ArgumentValidator(args);
+        if (!av.Validate()) {
+>>>>>>> master
             System.err.println("Some of the arguments are not valid, restart the program!");
             System.exit(0);
         }
@@ -39,6 +56,31 @@ public class T2_01_zadaca_3 {
         // ...
         // TODO load directory structure
         // ...
+<<<<<<< HEAD
+        MenuView mv = new MenuView();
+        MenuModel mm = new MenuModel();
+        MenuController mc = new MenuController(mm, mv);
+        mm.saveToList();
+        DirectoryCheck thread = new DirectoryCheck(Integer.parseInt(args[4]));
+
+        String choice = "1337";
+        
+        //Reading initial file structure - creational iterator, has only one iteration and creates dir 
+        FileRepository filesRepository = new FileRepository();
+        for (Iterator iterator = filesRepository.getIterator(args[3]); iterator.hasNext(); ) {
+            iterator.next();
+        }
+        
+        System.out.println("Directory tree created" + FileRepository.directoryTree + filesRepository);
+        
+
+        
+        do {
+
+            System.out.println("");
+            System.out.println("");
+            mc.updateMenuView();
+=======
         String choice = "1337";
         do {
             System.out.println("-------------------------------------------------");
@@ -54,6 +96,7 @@ public class T2_01_zadaca_3 {
             System.out.println("8 - ponovno učitavanje strukture uz poništavanje svih spremljenih stanja strukture (prikaz kao i kod inicijalnog učitavanja strukture)");
             System.out.println("9 - dodana vlastita funkcionalnost (prikaz u 1. prozoru)");
             System.out.println("Q - prekid rada programa");
+>>>>>>> master
 
             Scanner in = new Scanner(System.in);
 
@@ -62,6 +105,58 @@ public class T2_01_zadaca_3 {
 
             switch (choice) {
                 case "1":
+<<<<<<< HEAD
+                    mc.updateOptionview(Integer.parseInt(choice));
+                    break;
+
+                case "2":
+                    mc.updateOptionview(Integer.parseInt(choice));
+                    break;
+
+                case "3":
+                    mc.updateOptionview(Integer.parseInt(choice));
+                    thread.setRunning(true);
+                    if (thread.getState() == Thread.State.NEW) {
+                        thread.start();
+                        System.out.println(ANSI_ESC + "32m");
+                        System.out.println("Dretva pokrenuta");
+                    } else {
+                        System.out.println("Dretva se već izvršava.");
+                    }
+                    break;
+
+                case "4":
+                    mc.updateOptionview(Integer.parseInt(choice));
+                    thread.setRunning(false);
+                    if (thread.isAlive() && thread.isActive() == false) {
+                        System.out.println(ANSI_ESC + "33m");
+                        System.out.println("Zaustavljam dretvu...");
+                        thread.interrupt();
+                    } else {
+                        System.out.println("Dretva je već zaustavljena ili nije pokrenuta.");
+                    }
+                    break;
+
+                case "5":
+                    mc.updateOptionview(Integer.parseInt(choice));
+                    break;
+
+                case "6":
+                    mc.updateOptionview(Integer.parseInt(choice));
+                    break;
+
+                case "7":
+                    mc.updateOptionview(Integer.parseInt(choice));
+                    break;
+
+                case "8":
+                    mc.updateOptionview(Integer.parseInt(choice));
+                    break;
+
+                case "9":
+                    mc.updateOptionview(Integer.parseInt(choice));
+                    break;
+=======
                     System.out.println("ispis ukupnog broja direktorija i datoteka u strukturi (prikaz u 1.                             prozoru)");
                     break;
 
@@ -96,6 +191,7 @@ public class T2_01_zadaca_3 {
                 case "9":
                     System.out.println("dodana vlastita funkcionalnost (prikaz u 1. prozoru)");
                     break;          
+>>>>>>> master
             }
         } while (!choice.equalsIgnoreCase("Q"));
     }
@@ -117,9 +213,15 @@ public class T2_01_zadaca_3 {
         for (j = 80; j > 1; j = j - 2) {
             prikazi(i, j, 37, "#");
         }
+<<<<<<< HEAD
+        System.out.print(ANSI_ESC + "41;1f");//Print on bottom of the screen
+        System.out.print(ANSI_ESC + "31m" + "Crvena " + ANSI_ESC + "33m" + "Zelena " + ANSI_ESC + "32m" + "Plava " + ANSI_ESC + "35m" + "Magenta"
+                + ANSI_ESC + "0m");//Reset colors
+=======
         System.out.print(ANSI_ESC + "41;1f");
         System.out.print(ANSI_ESC + "31m" + "Crvena " + ANSI_ESC + "33m" + "Zelena " + ANSI_ESC + "32m" + "Plava " + ANSI_ESC + "35m" + "Magenta"
                 + ANSI_ESC + "0m");
+>>>>>>> master
         for (int k = 30; k < 38; k++) {
             prikazi(42, k - 29, k, "@");
         }
