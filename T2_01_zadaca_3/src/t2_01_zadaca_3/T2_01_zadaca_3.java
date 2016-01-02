@@ -57,7 +57,7 @@ public class T2_01_zadaca_3 {
 
         String choice = "1337";
         
-        //Reading initial file structure
+        //Reading initial file structure - creational iterator, has only one iteration and creates dir tree
         FileRepository filesRepository = new FileRepository();
         for (Iterator iterator = filesRepository.getIterator(args[3]); iterator.hasNext(); ) {
             iterator.next();

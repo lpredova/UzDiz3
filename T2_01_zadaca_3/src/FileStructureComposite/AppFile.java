@@ -9,6 +9,7 @@ public interface AppFile {
       
     /**
      * Getters and setters for file elements
+     * @return 
      */
     String getName();
     String getType();
@@ -25,6 +26,7 @@ public interface AppFile {
     
     /**
      * File basic operations 
+     * @param file
      */
     void add(AppFile file);
 
