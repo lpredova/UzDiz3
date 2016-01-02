@@ -6,13 +6,7 @@ import java.util.List;
  * Created by lovro
  */
 public interface AppFile {
-    
-    /** private String name;
-    private String type;
-    private String createdAt;
-    private String updatedAt;
-    private long size;**/
-    
+      
     /**
      * Getters and setters for file elements
      */

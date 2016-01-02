@@ -65,6 +65,9 @@ public class T2_01_zadaca_3 {
             //iterator.next();
         }
         
+        System.out.println("Directory tree created");
+
+        
         do {
 
             System.out.println("");

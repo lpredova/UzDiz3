@@ -95,14 +95,11 @@ public class FileRepository implements Container {
          */
         private void saveDirectoryInfo(String path) {
             AppFile rootElement = new Parent(getFileName(path), getFileType(path), getFileCreatedAtTime(path), getFileUpdatedAtTime(path), getFileSize(path));
-            directoryTree.add(rootElement);
-            
-            System.out.println("Saved element to structure");
-            
+            directoryTree.add(rootElement);            
         }
 
         private boolean nextElementExists() {
-            return true;
+            return false;
         }
 
         /**
