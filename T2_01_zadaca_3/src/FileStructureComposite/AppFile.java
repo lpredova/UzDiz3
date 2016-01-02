@@ -42,7 +42,7 @@ public interface AppFile {
 
     void addParent(AppFile file);
 
-    List<AppFile> getParents();
+    List<AppFile> getParent();
 
     void print();
 }

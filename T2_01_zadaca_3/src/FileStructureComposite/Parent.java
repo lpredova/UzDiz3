@@ -14,8 +14,8 @@ public class Parent implements AppFile {
     private String updatedAt;
     private String size;
     
-    private List<AppFile> parentFiles = new ArrayList<AppFile>();
-    private List<AppFile> files = new ArrayList<AppFile>();
+    private final List<AppFile> parentFiles = new ArrayList<>();
+    private final List<AppFile> files = new ArrayList<>();
 
     public Parent(String name,String type,String createdAt,String updatedAt,String size) {
         this.name = name;
@@ -60,7 +60,7 @@ public class Parent implements AppFile {
     }
 
     @Override
-    public List<AppFile> getParents() {
+    public List<AppFile> getParent() {
         return this.parentFiles;
     }
 
