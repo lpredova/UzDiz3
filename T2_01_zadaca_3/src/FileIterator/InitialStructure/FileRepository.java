@@ -36,14 +36,18 @@ public class FileRepository implements Container {
         }
 
         @Override
+         /**
+         * This method is false by default because there is only one element
+         * in root, we add that element and recursions do the rest,
+         * In fact we don't need separator for this but let it be
+         */
         public boolean hasNext() {
-            boolean var = nextElementExists();
-            return var;
+            return false;
         }
 
         @Override
         public Object next() {
-            return directoryTree.get(index++);
+            return null;
         }
 
         /**
@@ -72,10 +76,11 @@ public class FileRepository implements Container {
                         rootDirectoryElement.addParent(null);
                         directoryTree.add(rootDirectoryElement);
 
+                        /**
+                         * Recursion that created directory tree
+                         */
                         File[] files = new File(path).listFiles();
                         showFiles(files);
-
-                        System.out.println("Created tree root");
                     } else {
                         //root element is file
                         System.out.println("Root element HAS TO BE DIRECTORY!");

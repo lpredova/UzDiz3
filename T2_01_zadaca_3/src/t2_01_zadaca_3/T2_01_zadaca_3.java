@@ -21,7 +21,6 @@ import java.util.Scanner;
 public class T2_01_zadaca_3 {
 
     public static final String ANSI_ESC = "\033[";
-    public static String rootDirectory;
 
     /**
      * @param args the command line arguments
@@ -57,7 +56,7 @@ public class T2_01_zadaca_3 {
 
         String choice = "1337";
         
-        //Reading initial file structure - creational iterator, has only one iteration and creates dir tree
+        //Reading initial file structure - creational iterator, has only one iteration and creates dir 
         FileRepository filesRepository = new FileRepository();
         for (Iterator iterator = filesRepository.getIterator(args[3]); iterator.hasNext(); ) {
             iterator.next();
