@@ -12,8 +12,8 @@ package CheckStructureThread;
 public class DirectoryCheck extends Thread {
 
     private int secondsNum;
-    private boolean running;
-    private boolean active;
+    private volatile boolean running;
+    private volatile boolean active;
 
     public DirectoryCheck(int secondsNum) {
         this.secondsNum = secondsNum;
