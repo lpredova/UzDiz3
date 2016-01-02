@@ -41,6 +41,8 @@ public class FileHelper {
      * @return
      */
     public static boolean isDirectory(String path) {
+        System.out.println("PATH CHECK: " + path);
+        
         File f = new File(path);
         return f.isDirectory();
     }
@@ -75,7 +77,7 @@ public class FileHelper {
      * @return
      */
     public static String getFileTypeFromPath(String path) {
-        if (isDirectory(path)) {
+        if (Helpers.FileHelper.isDirectory(path)) {
             return "directory";
         }
         File f = new File(path);

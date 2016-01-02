@@ -38,7 +38,6 @@ public class FileRepository implements Container {
         @Override
         public boolean hasNext() {
             boolean var = nextElementExists();
-            System.out.println(var);
             return var;
         }
 
@@ -61,15 +60,16 @@ public class FileRepository implements Container {
                     if (Helpers.FileHelper.isDirectory(path)) {
                         //root element is directory
                         this.elementPath = path;
-                        
-                        AppFile rootDirectoryElement = new Parent(Helpers.FileHelper.getFileNameFromPath(path),
-                    Helpers.FileHelper.getFileTypeFromPath(path), Helpers.FileHelper.getFileCreatedAtTimeFromPath(path),
-                    Helpers.FileHelper.getFileUpdatedAtTimeFromPath(path), Helpers.FileHelper.getFileSizeFromPath(path));
 
-            directoryTree.add(rootDirectoryElement);
-                        
-                        
-                        
+                        AppFile rootDirectoryElement = new Parent(Helpers.FileHelper.getFileNameFromPath(path),
+                                Helpers.FileHelper.getFileTypeFromPath(path), Helpers.FileHelper.getFileCreatedAtTimeFromPath(path),
+                                Helpers.FileHelper.getFileUpdatedAtTimeFromPath(path), Helpers.FileHelper.getFileSizeFromPath(path));
+                        rootDirectoryElement.addParent(null);
+                        directoryTree.add(rootDirectoryElement);
+
+                        File[] files = new File(path).listFiles();
+                        showFiles(files);
+
                         System.out.println("Created tree root");
                     } else {
                         //root element is file
@@ -90,10 +90,15 @@ public class FileRepository implements Container {
          * @param path
          */
         private void saveDirectoryInfo(File directory) {
+
+            String name = Helpers.FileHelper.getFileName(directory);
             AppFile directoryElement = new Parent(Helpers.FileHelper.getFileName(directory),
-                    Helpers.FileHelper.getFileType(directory), Helpers.FileHelper.getFileCreatedAtTime(directory),
+                    "directory", Helpers.FileHelper.getFileCreatedAtTime(directory),
                     Helpers.FileHelper.getFileUpdatedAtTime(directory), Helpers.FileHelper.getFileSize(directory));
 
+            AppFile parentElement = findParent(directory);
+            directoryElement.addParent(findParent(directory));
+            parentElement.addChild(directoryElement);
             directoryTree.add(directoryElement);
         }
 
@@ -103,10 +108,16 @@ public class FileRepository implements Container {
          * @param path
          */
         private void saveFileInfo(File file) {
+
+            String name = Helpers.FileHelper.getFileName(file);
+
             AppFile fileElement = new Leaf(Helpers.FileHelper.getFileName(file),
                     Helpers.FileHelper.getFileType(file), Helpers.FileHelper.getFileCreatedAtTime(file),
                     Helpers.FileHelper.getFileUpdatedAtTime(file), Helpers.FileHelper.getFileSize(file));
 
+            AppFile parentElement = findParent(file);
+            fileElement.addParent(parentElement);
+            parentElement.addChild(fileElement);
             directoryTree.add(fileElement);
         }
 
@@ -118,22 +129,55 @@ public class FileRepository implements Container {
          */
         private boolean nextElementExists() {
 
-            File[] files = new File(this.elementPath).listFiles();
-            showFiles(files);
             return false;
         }
 
-        public void showFiles(File[] files) {
+        private void showFiles(File[] files) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    System.out.println("Directory: " + file.getName());
                     this.saveDirectoryInfo(file);
                     showFiles(file.listFiles());
                 } else {
                     this.saveFileInfo(file);
-                    System.out.println("File: " + file.getName());
                 }
             }
         }
+
+        private AppFile findParent(File file) {
+
+            String parentName = file.getParentFile().getName();
+
+            for (AppFile appFile : directoryTree) {
+
+                System.out.println("Parent dir for file " + file.getName() + ": " + parentName + "");
+
+
+                if (appFile.getName().equals(parentName)) {
+                    return appFile;
+                } else {
+                    System.out.println("NOT equal\n");
+                    return getParentElement(appFile, parentName);
+                }
+            }
+            return null;
+
+        }
+
+        private AppFile getParentElement(AppFile file, String parentName) {
+
+            for (AppFile child : file.getChildren()) {
+                //Anchor
+                if (child.getName().equals(parentName)) {
+                    return child;
+                }
+                //ok, not on this level, maybe below?
+                //element is container
+                if (child.getType().equals("directory")) {
+                    return this.getParentElement(child, parentName);
+                }
+            }
+            return null;
+        }
+
     }
 }
