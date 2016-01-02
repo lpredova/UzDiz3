@@ -6,7 +6,32 @@ import java.util.List;
  * Created by lovro
  */
 public interface AppFile {
-
+    
+    /** private String name;
+    private String type;
+    private String createdAt;
+    private String updatedAt;
+    private long size;**/
+    
+    /**
+     * Getters and setters for file elements
+     */
+    String getName();
+    String getType();
+    String getCreatedAt();
+    String getUpdatedAt();
+    long getSize();
+    
+    void setName(String name);
+    void setType(String type);
+    void setCreatedAt(String createdAt);
+    void setUpdatedAt(String updatedAt);
+    void setSize(long size);
+    
+    
+    /**
+     * File basic operations 
+     */
     void add(AppFile file);
 
     List<AppFile> getFiles();

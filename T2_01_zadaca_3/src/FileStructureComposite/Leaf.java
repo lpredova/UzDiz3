@@ -13,11 +13,11 @@ public class Leaf implements AppFile {
     private String createdAt;
     private String updatedAt;
     private long size;
-    
+
     private List<AppFile> parentFiles = new ArrayList<AppFile>();
     private List<AppFile> files = new ArrayList<AppFile>();
 
-    public Leaf(String name,String type,String createdAt,String updatedAt,long size) {
+    public Leaf(String name, String type, String createdAt, String updatedAt, long size) {
         this.name = name;
         this.type = type;
         this.createdAt = createdAt;
@@ -44,7 +44,8 @@ public class Leaf implements AppFile {
     }
 
     @Override
-    public void addChild(AppFile shape) {}
+    public void addChild(AppFile shape) {
+    }
 
     @Override
     public void addParent(AppFile parent) {
@@ -62,8 +63,65 @@ public class Leaf implements AppFile {
     }
 
     @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public String getType() {
+        return this.type;
+    }
+
+    @Override
+    public String getCreatedAt() {
+        return this.createdAt;
+    }
+
+    @Override
+    public String getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    @Override
+    public long getSize() {
+        return this.size;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Override
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public void setSize(long size) {
+        this.size = size;
+    }
+
+    @Override
     public void print() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        System.out.println("Name:" + this.getName());
+        System.out.println("Type:" + this.getType());
+        System.out.println("Created at:" + this.getCreatedAt());
+        System.out.println("Updated at:" + this.getUpdatedAt());
+        System.out.println("Size:" + this.getSize());
+
+        System.out.println("------------------------------------");
     }
 
 }

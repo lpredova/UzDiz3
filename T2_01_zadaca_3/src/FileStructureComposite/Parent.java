@@ -64,8 +64,65 @@ public class Parent implements AppFile {
         return this.parentFiles;
     }
 
+     @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public String getType() {
+        return this.type;
+    }
+
+    @Override
+    public String getCreatedAt() {
+        return this.createdAt;
+    }
+
+    @Override
+    public String getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    @Override
+    public long getSize() {
+        return this.size;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Override
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public void setSize(long size) {
+        this.size = size;
+    }
+
     @Override
     public void print() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        System.out.println("Name:" + this.getName());
+        System.out.println("Type:" + this.getType());
+        System.out.println("Created at:" + this.getCreatedAt());
+        System.out.println("Updated at:" + this.getUpdatedAt());
+        System.out.println("Size:" + this.getSize());
+
+        System.out.println("------------------------------------");
     }
 }

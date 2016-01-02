@@ -64,18 +64,23 @@ public class FileRepository implements Container {
             return f.isDirectory();
         }
 
+        /**
+         * Method for creating root of directory tree, root must be directory,
+         * otherwise we print out error and stop the program
+         * @param path 
+         */
         private void createTree(String path) {
 
             //creating tree only in first run
             if (directoryTree.isEmpty()) {
                 if (this.fileExists(path)) {
-
                     if (this.isDirectory(path)) {
                         //root element is directory
                         this.saveDirectoryInfo(path);
                     } else {
                         //root element is file
                         System.out.println("Root element HAS TO BE DIRECTORY!");
+                        System.exit(0);
                     }
                 } else {
                     System.out.println("Error getting tree element");
@@ -83,20 +88,20 @@ public class FileRepository implements Container {
             }
         }
 
+        /**
+         * Method that gets basic info of current element, creates object and 
+         * saves it to structure
+         * @param path 
+         */
         private void saveDirectoryInfo(String path) {
-            //root element is visible by default, and doesn't overlap with anyone
-
             AppFile rootElement = new Parent(getFileName(path), getFileType(path), getFileCreatedAtTime(path), getFileUpdatedAtTime(path), getFileSize(path));
-
-            //TODO make saving root element to structure
-            System.out.println("treee");
-        }
-
-        private void saveFileInfo(String path) {
+            directoryTree.add(rootElement);
+            
+            System.out.println("Saved element to structure");
+            
         }
 
         private boolean nextElementExists() {
-
             return true;
         }
 
