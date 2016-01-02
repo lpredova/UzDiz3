@@ -91,6 +91,7 @@ public class T2_01_zadaca_3 {
                     thread.setRunning(true);
                     if (thread.getState() == Thread.State.NEW) {
                         thread.start();
+                        System.out.println(ANSI_ESC + "32m");
                         System.out.println("Dretva pokrenuta");
                     } else {
                         System.out.println("Dretva se već izvršava.");
@@ -101,8 +102,9 @@ public class T2_01_zadaca_3 {
                     mc.updateOptionview(Integer.parseInt(choice));
                     thread.setRunning(false);
                     if (thread.isAlive() && thread.isActive() == false) {
-                        thread.interrupt();
+                        System.out.println(ANSI_ESC + "33m");
                         System.out.println("Zaustavljam dretvu...");
+                        thread.interrupt();
                     } else {
                         System.out.println("Dretva je već zaustavljena ili nije pokrenuta.");
                     }
