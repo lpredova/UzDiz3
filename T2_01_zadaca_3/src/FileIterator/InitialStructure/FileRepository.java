@@ -6,12 +6,13 @@
 package FileIterator.InitialStructure;
 
 import FileStructureComposite.AppFile;
+import FileStructureComposite.Leaf;
+import FileStructureComposite.Parent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author lovro
  */
 public class FileRepository implements Container {
@@ -19,70 +20,186 @@ public class FileRepository implements Container {
     public static List<AppFile> directoryTree = new ArrayList<AppFile>();
 
     @Override
-    public Iterator getIterator() {
-        return new InitialFileIterator();
+    public Iterator getIterator(String root) {
+        return new InitialFileIterator(root);
     }
 
     private class InitialFileIterator implements Iterator {
 
-        public InitialFileIterator() {
+        String elementPath;
+        int index = 0;
+
+        public InitialFileIterator(String root) {
             if (directoryTree.isEmpty()) {
-                this.createTree(t2_01_zadaca_3.T2_01_zadaca_3.rootDirectory);
+                this.createTree(root);
             }
         }
 
         @Override
+         /**
+         * This method is false by default because there is only one element
+         * in root, we add that element and recursions do the rest,
+         * In fact we don't need separator for this but let it be
+         */
         public boolean hasNext() {
-            return true; //To change body of generated methods, choose Tools | Templates.
+            return false;
         }
 
         @Override
         public Object next() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            return null;
         }
 
-        private boolean fileExists(String path) {
-            File f = new File(path);
-            return f.exists();
-        }
-
-        private boolean isDirectory(String path) {
-            File f = new File(path);
-            return f.isDirectory();
-        }
-
+        /**
+         * Method for creating root of directory tree, root must be directory,
+         * otherwise we print out error and stop the program
+         *
+         * @param path
+         */
         private void createTree(String path) {
 
             //creating tree only in first run
             if (directoryTree.isEmpty()) {
-                if (this.fileExists(path)) {
-
-                    if (this.isDirectory(path)) {
+                if (Helpers.FileHelper.fileExists(path)) {
+                    if (Helpers.FileHelper.isDirectory(path)) {
                         //root element is directory
-                        this.saveDirectoryInfo(path);
+                        this.elementPath = path;
+
+                        AppFile rootDirectoryElement = new Parent(
+                                Helpers.FileHelper.getFileNameFromPath(path),
+                                Helpers.FileHelper.getFileTypeFromPath(path), 
+                                Helpers.FileHelper.getFileCreatedAtTimeFromPath(path),
+                                Helpers.FileHelper.getFileUpdatedAtTimeFromPath(path), 
+                                Helpers.FileHelper.getFileSizeFormattedFromPath(path),
+                                Helpers.FileHelper.getFileRawSizeFromPath(path)
+                        );
+                        rootDirectoryElement.addParent(null);
+                        directoryTree.add(rootDirectoryElement);
+
+                        /**
+                         * Recursion that created directory tree
+                         */
+                        File[] files = new File(path).listFiles();
+                        showFiles(files);
                     } else {
                         //root element is file
                         System.out.println("Root element HAS TO BE DIRECTORY!");
-
+                        System.exit(0);
                     }
-
                 } else {
                     System.out.println("Error getting tree element");
                 }
             }
         }
 
-        private void saveDirectoryInfo(String path) {
-             //root element is visible by default, and doesn't overlap with anyone
-            //AppFile rootElement = new Parent();  
+        /**
+         * Method that gets basic info of current element, creates object and
+         * saves it to structure, every directory can contain another directory
+         * creating the tree so it is parent element
+         *
+         * @param path
+         */
+        private void saveDirectoryInfo(File directory) {
 
-            //TODO make saving root element to structure
+            AppFile directoryElement = new Parent(
+                    Helpers.FileHelper.getFileName(directory),
+                    "directory", 
+                    Helpers.FileHelper.getFileCreatedAtTime(directory),
+                    Helpers.FileHelper.getFileUpdatedAtTime(directory), 
+                    Helpers.FileHelper.getFileFormattedSize(directory),
+                    Helpers.FileHelper.getFileRawSize(directory));
+
+            long elementSize = Helpers.FileHelper.getFileRawSize(directory);
             
-            System.out.println("treee");
+            AppFile parentElement = findParent(directory,elementSize);
+            directoryElement.addParent(parentElement);
+            parentElement.addChild(directoryElement);
+            directoryTree.add(directoryElement);
         }
 
-        private void saveFileInfo(String path) {
+        /**
+         * Child elements are always leafs
+         *
+         * @param path
+         */
+        private void saveFileInfo(File file) {
+
+            AppFile fileElement = new Leaf(
+                    Helpers.FileHelper.getFileName(file),
+                    Helpers.FileHelper.getFileType(file), 
+                    Helpers.FileHelper.getFileCreatedAtTime(file),
+                    Helpers.FileHelper.getFileUpdatedAtTime(file), 
+                    Helpers.FileHelper.getFileFormattedSize(file), 
+                    Helpers.FileHelper.getFileRawSize(file));
+            long fileSize = Helpers.FileHelper.getFileRawSize(file);        
+            
+            AppFile parentElement = findParent(file,fileSize);
+            fileElement.addParent(parentElement);
+            parentElement.addChild(fileElement);
+            directoryTree.add(fileElement);
         }
 
+        /**
+         * Method that checks if next element in current structure exists
+         * regardless if element is directory or file
+         *
+         * @return
+         */
+        private boolean nextElementExists() {
+            return false;
+        }
+
+        /**
+         * Recursion that iterates trough elements in file structure
+         * @param files 
+         */
+        private void showFiles(File[] files) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    this.saveDirectoryInfo(file);
+                    showFiles(file.listFiles());
+                } else {
+                    this.saveFileInfo(file);
+                }
+            }
+        }
+
+        /**
+         * Recursion for finding element parent
+         * @param file
+         * @return 
+         */
+        private AppFile findParent(File file,long size) {
+
+            String parentName = file.getParentFile().getName();
+            for (AppFile appFile : directoryTree) {
+                if (appFile.getName().equals(parentName)) {
+                   appFile.increaseSize(size);
+                    return appFile;
+                } else {
+                    appFile.increaseSize(size);
+                    return getParentElement(appFile, parentName,size);
+                }
+            }
+            return null;
+        }
+
+        private AppFile getParentElement(AppFile file, String parentName,long size) {
+
+            for (AppFile child : file.getChildren()) {
+                //Anchor
+                if (child.getName().equals(parentName)) {
+                    child.increaseSize(size);
+                    return child;
+                }
+                //ok, not on this level, maybe below?
+                //element is container
+                if (child.getType().equals("directory")) {
+                    child.increaseSize(size);
+                    return this.getParentElement(child, parentName,size);
+                }
+            }
+            return null;
+        }
     }
 }

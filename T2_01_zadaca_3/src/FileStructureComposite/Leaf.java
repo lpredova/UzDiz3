@@ -12,17 +12,19 @@ public class Leaf implements AppFile {
     private String type;
     private String createdAt;
     private String updatedAt;
-    private int size;
-    
-    private List<AppFile> parentFiles = new ArrayList<AppFile>();
-    private List<AppFile> files = new ArrayList<AppFile>();
+    private String formattedSize;
+    private long rawSize;
 
-    public Leaf(String name,String type,String createdAt,String updatedAt,int size) {
+    private List<AppFile> parentFiles = new ArrayList<>();
+    private List<AppFile> files = new ArrayList<>();
+
+    public Leaf(String name, String type, String createdAt, String updatedAt, String size,long rawSize) {
         this.name = name;
         this.type = type;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.size = size;
+        this.formattedSize = size;
+        this.rawSize = rawSize;
     }
 
     @Override
@@ -44,7 +46,8 @@ public class Leaf implements AppFile {
     }
 
     @Override
-    public void addChild(AppFile shape) {}
+    public void addChild(AppFile shape) {
+    }
 
     @Override
     public void addParent(AppFile parent) {
@@ -52,7 +55,7 @@ public class Leaf implements AppFile {
     }
 
     @Override
-    public List<AppFile> getParents() {
+    public List<AppFile> getParent() {
         return null;
     }
 
@@ -62,8 +65,83 @@ public class Leaf implements AppFile {
     }
 
     @Override
-    public void print() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getName() {
+        return this.name;
     }
 
+    @Override
+    public String getType() {
+        return this.type;
+    }
+
+    @Override
+    public String getCreatedAt() {
+        return this.createdAt;
+    }
+
+    @Override
+    public String getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    @Override
+    public String getFormattedSize() {
+        return this.formattedSize;
+    }
+
+    @Override
+    public long getRawSize() {
+        return this.rawSize;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Override
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public void setFormattedSize(String size) {
+        this.formattedSize = size;
+    }
+
+    @Override
+    public void setRawSize(long rawSize) {
+        this.rawSize = rawSize;
+    }
+
+    @Override
+    public void print() {
+
+        System.out.println("Name:" + this.getName());
+        System.out.println("Type:" + this.getType());
+        System.out.println("Created at:" + this.getCreatedAt());
+        System.out.println("Updated at:" + this.getUpdatedAt());
+        System.out.println("Size:" + this.getFormattedSize());
+
+        System.out.println("------------------------------------");
+    }
+    
+    /**
+     * Method that we use for updating parents size, 
+     * not really necessary with child nodes
+     * @param size 
+     */
+    @Override
+    public void increaseSize(long size){
+    }
 }
