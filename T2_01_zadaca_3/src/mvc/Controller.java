@@ -144,11 +144,11 @@ public class Controller {
         }
         SimpleDateFormat formatedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String dateModified = formatedDate.format(file.lastModified());
-        DecimalFormat df = new DecimalFormat("#,##0");
+        DecimalFormat df = new DecimalFormat("###,###.###");
         if (file.isDirectory()) {
-            text += file.getName() + " " + dateModified + " " + df.format(getFolderSize(file)) + "B";
+            text += file.getName() + " " + dateModified + " " + df.format(getFolderSize(file)).replace(",", ".") + "B";
         } else {
-            text += file.getName() + " " + dateModified + " " + df.format(file.length()) + "B";
+            text += file.getName() + " " + dateModified + " " + df.format(file.length()).replace(",", ".") + "B";
         }
         try {
             Thread.sleep(500);
@@ -167,7 +167,7 @@ public class Controller {
         }
         view.updateSecondScreenByString("Ukupan broj direktorija: " + numDir, "33", true);
         view.updateSecondScreenByString("Ukupan broj datoteka: " + numFile, "33", false);
-        view.updateSecondScreenByString("Ukupna veličina: " + df.format(overallSize) + "B", "33", false);
+        view.updateSecondScreenByString("Ukupna veličina: " + df.format(overallSize).replace(",", ".") + "B", "33", false);
 
         if (file.isDirectory()) {
             File[] files = file.listFiles();
