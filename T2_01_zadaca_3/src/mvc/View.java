@@ -206,9 +206,12 @@ public class View {
     }
 
     public void updateSecondScreenByString(String text, String color, boolean erase) {
-        if(erase) {
+        if(erase && this.division.equalsIgnoreCase("v")) {
             this.eraseSecondScreen();
             currentRowScreenTwo = 1;
+        } else if(erase && this.division.equalsIgnoreCase("o")) {
+            this.eraseSecondScreen();
+            currentRowScreenTwo = (halfRows + 2);
         }
         if (this.division.equalsIgnoreCase("v")) {
             System.out.print(Constants.ANSI_ESC + currentRowScreenTwo + ";" + (halfCols + 2) + "f");
@@ -245,6 +248,30 @@ public class View {
                 currentRowScreenTwo++;
             }
 
+        } else if(this.division.equalsIgnoreCase("o")) {
+            System.out.print(Constants.ANSI_ESC + currentRowScreenTwo + ";1f");
+            System.out.print(Constants.ANSI_ESC + color + "m");
+            if (text.length() > cols) {
+                System.out.print(text.substring(0, cols));
+                for (int k = cols; k < text.length(); k = k + cols) {
+                    if (cols < text.substring(k).length()) {
+                        System.out.print("\n" + text.substring(k, k + cols));
+                    } else {
+                        System.out.print("\n" + text.substring(k));
+                    }
+                    currentRowScreenTwo++;
+                }
+
+            } else {
+                System.out.print(text);
+            }
+            
+            if (currentRowScreenTwo == rows - 1) {
+                this.eraseFirstScreen();
+                currentRowScreenTwo = (halfCols + 1);
+            } else {
+                currentRowScreenTwo++;
+            }
         }
 
     }
