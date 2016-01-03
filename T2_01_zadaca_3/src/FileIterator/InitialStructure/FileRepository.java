@@ -176,9 +176,16 @@ public class FileRepository implements Container {
                 if (appFile.getName().equals(parentName)) {
                    appFile.increaseSize(size);
                     return appFile;
-                } else {
+                }
+
+                //if dir name is not the same and element is dir, enter recursion
+                if(appFile.getType().equals("directory")){    
                     appFile.increaseSize(size);
-                    return getParentElement(appFile, parentName,size);
+                    
+                    AppFile result = getParentElement(appFile, parentName,size);
+                    if(result!=null){
+                        return result;
+                    }
                 }
             }
             return null;
