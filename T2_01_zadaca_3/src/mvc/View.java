@@ -16,6 +16,7 @@ public class View {
 
     public static int currentRowScreenOne = 1;
     public static int currentRowScreenTwo = 1;
+    
     public int rows;
     public int cols;
     public String division;
@@ -30,6 +31,9 @@ public class View {
         this.division = division;
     }
 
+    /**
+     * Method which draws screen on terminal according to type of division
+     */
     public void printScreen() {
         System.out.print(Constants.ERASE_SCREEN);
         if (this.division.equalsIgnoreCase("v")) {
@@ -37,7 +41,7 @@ public class View {
         } else if (this.division.equalsIgnoreCase("o")) {
             this.ODivision();
         }
-//        printMenu();
+        //printMenu();
         System.out.print(Constants.CURSOS_RESTORE);
     }
 
@@ -48,7 +52,7 @@ public class View {
         for (int j = 1; j <= cols + 1; j++) {
             show(rows, j, 33, "*");
         }
-        System.out.print(Constants.ANSI_ESC + (rows + 1) + ";1f");
+        this.setCursor(rows + 1, 1);
         System.out.print("Choose option: ");
         System.out.print(Constants.CURSOR_SAVE);
     }
@@ -61,17 +65,17 @@ public class View {
             for (int j = 1; j <= cols; j++) {
                 show(rows, j, 33, "*");
             }
-            System.out.print(Constants.ANSI_ESC + (rows + 1) + ";1f");
-            System.out.print("Choose option: ");
-            System.out.print(Constants.CURSOR_SAVE);
+            this.setCursor(rows + 1, 1);
+
         } else {
             for (int j = 1; j <= cols; j++) {
                 show(rows + 1, j, 33, "*");
             }
-            System.out.print(Constants.ANSI_ESC + (rows + 2) + ";1f");
-            System.out.print("Choose option: ");
-            System.out.print(Constants.CURSOR_SAVE);
+            this.setCursor(rows + 2, 1);
+
         }
+        System.out.print("Choose option: ");
+        System.out.print(Constants.CURSOR_SAVE);
 
     }
 
@@ -80,7 +84,7 @@ public class View {
         int counter = 0;
         if (this.division.equalsIgnoreCase("v")) {
             for (int i = 1; i <= rows - 1; i++) {
-                System.out.print(Constants.ANSI_ESC + i + ";1f");
+                this.setCursor(i, 1);
                 if (counter < data.size()) {
                     if (data.get(counter).length() > halfCols) {
                         System.out.print(data.get(counter).substring(0, halfCols));
@@ -177,7 +181,7 @@ public class View {
                 currentRowScreenOne++;
             }
 
-        } else if(this.division.equalsIgnoreCase("o")) {
+        } else if (this.division.equalsIgnoreCase("o")) {
             System.out.print(Constants.ANSI_ESC + currentRowScreenOne + ";1f");
             System.out.print(Constants.ANSI_ESC + color + "m");
             if (text.length() > cols) {
@@ -194,7 +198,7 @@ public class View {
             } else {
                 System.out.print(text);
             }
-            
+
             if (currentRowScreenOne == halfRows) {
                 this.eraseFirstScreen();
                 currentRowScreenOne = 1;
@@ -206,10 +210,10 @@ public class View {
     }
 
     public void updateSecondScreenByString(String text, String color, boolean erase) {
-        if(erase && this.division.equalsIgnoreCase("v")) {
+        if (erase && this.division.equalsIgnoreCase("v")) {
             this.eraseSecondScreen();
             currentRowScreenTwo = 1;
-        } else if(erase && this.division.equalsIgnoreCase("o")) {
+        } else if (erase && this.division.equalsIgnoreCase("o")) {
             this.eraseSecondScreen();
             currentRowScreenTwo = (halfRows + 2);
         }
@@ -228,7 +232,7 @@ public class View {
                         currentRowScreenTwo = 1;
                         System.out.print(Constants.ANSI_ESC + currentRowScreenTwo + ";" + (halfCols + 2) + "f");
                     }
-                    
+
                     if (cols < text.substring(k).length()) {
                         System.out.print(text.substring(k, k + cols - halfCols));
                     } else {
@@ -248,7 +252,7 @@ public class View {
                 currentRowScreenTwo++;
             }
 
-        } else if(this.division.equalsIgnoreCase("o")) {
+        } else if (this.division.equalsIgnoreCase("o")) {
             System.out.print(Constants.ANSI_ESC + currentRowScreenTwo + ";1f");
             System.out.print(Constants.ANSI_ESC + color + "m");
             if (text.length() > cols) {
@@ -265,7 +269,7 @@ public class View {
             } else {
                 System.out.print(text);
             }
-            
+
             if (currentRowScreenTwo == rows - 1) {
                 this.eraseFirstScreen();
                 currentRowScreenTwo = (halfCols + 1);
@@ -303,7 +307,7 @@ public class View {
         }
 
     }
-    
+
     /**
      * Method for clearing first screen regardless of V or O division
      */
@@ -356,6 +360,12 @@ public class View {
         }
 
     }
+    
+    public void enterInput() {
+        System.out.print(Constants.CURSOS_RESTORE);
+        System.out.print(Constants.ERASE_END_OF_LINE);
+        System.out.print(Constants.ANSI_ESC + "33m");
+    }
 
     private void printMenu() {
         System.out.println("");
@@ -376,17 +386,17 @@ public class View {
     }
 
     /**
-     * Method for setting cursor position 
+     * Method for setting cursor position
      */
-    private void set(int x, int y) {
+    private void setCursor(int x, int y) {
         System.out.print(Constants.ANSI_ESC + x + ";" + y + "f");
     }
 
     /**
-     * Method for showing text with certain color from certain cursor position 
+     * Method for showing text with certain color from certain cursor position
      */
     private void show(int x, int y, int color, String text) {
-        set(x, y);
+        setCursor(x, y);
         System.out.print(Constants.ANSI_ESC + color + "m");
         System.out.print(text);
         try {

@@ -7,6 +7,10 @@ package t2_01_zadaca_3;
 
 import FileIterator.InitialStructure.FileRepository;
 import argumentValidation.ArgumentValidator;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mvc.Controller;
 import mvc.Model;
 import mvc.View;
@@ -45,6 +49,12 @@ public class T2_01_zadaca_3 {
         Model m = new Model();
         Controller c = new Controller(v, m);
         c.showScreen();
+        try {
+            c.showDir(0, new File(T2_01_zadaca_3.rootDirectory));
+        } catch (IOException ex) {
+            Logger.getLogger(T2_01_zadaca_3.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        c.setForEntry();
         c.processOption();
 
     }
