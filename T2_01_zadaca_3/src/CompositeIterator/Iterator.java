@@ -5,13 +5,15 @@
  */
 package CompositeIterator;
 
+import FileStructureComposite.AppFile;
+
 /**
  *
  * @author tonovosel
  */
 public interface Iterator {
 
-    public boolean hasNext();
+    public boolean hasNext(AppFile parent);
 
-    public Object next();
+    public Object getNextChild();
 }
