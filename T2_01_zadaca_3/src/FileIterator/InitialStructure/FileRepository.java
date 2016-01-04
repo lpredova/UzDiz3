@@ -74,7 +74,7 @@ public class FileRepository implements Container {
                                 Helpers.FileHelper.getFileRawSizeFromPath(path)
                         );
                         rootDirectoryElement.setIsRoot(true);
-                        rootDirectoryElement.setRootAbsouluteAddress(Helpers.FileHelper.getAbsoluteAddress(path));
+                        rootDirectoryElement.setRootAbsouluteAddress(Helpers.FileHelper.getAbsoluteAddressFromPath(path));
                         rootDirectoryElement.addParent(null);
                         directoryTree.add(rootDirectoryElement);
 
@@ -110,7 +110,7 @@ public class FileRepository implements Container {
                     Helpers.FileHelper.getFileUpdatedAtTime(directory),
                     Helpers.FileHelper.getFileFormattedSize(directory),
                     Helpers.FileHelper.getFileRawSize(directory));
-
+            directoryElement.setParentName(Helpers.FileHelper.getParentNameFromPath(directory));
             long elementSize = Helpers.FileHelper.getFileRawSize(directory);
 
             AppFile parentElement = findParent(directory, elementSize);
@@ -133,6 +133,7 @@ public class FileRepository implements Container {
                     Helpers.FileHelper.getFileUpdatedAtTime(file),
                     Helpers.FileHelper.getFileFormattedSize(file),
                     Helpers.FileHelper.getFileRawSize(file));
+            fileElement.setParentName(Helpers.FileHelper.getParentNameFromPath(file));
             long fileSize = Helpers.FileHelper.getFileRawSize(file);
 
             AppFile parentElement = findParent(file, fileSize);

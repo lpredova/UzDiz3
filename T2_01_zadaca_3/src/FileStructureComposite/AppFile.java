@@ -19,6 +19,7 @@ public interface AppFile {
     long getRawSize();
     boolean getIsRoot();
     String getRootAbsoluteAddress();
+    String getParentName();
     
     void setName(String name);
     void setType(String type);
@@ -28,6 +29,7 @@ public interface AppFile {
     void setRawSize(long rawSize);
     void setIsRoot(boolean isRoot);
     void setRootAbsouluteAddress(String absAddress);
+    void setParentName(String parentName);
     
     
     /**

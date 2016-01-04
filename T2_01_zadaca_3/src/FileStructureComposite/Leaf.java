@@ -14,6 +14,7 @@ public class Leaf implements AppFile {
     private String updatedAt;
     private String formattedSize;
     private long rawSize;
+    private String parentName;
 
     private List<AppFile> parentFiles = new ArrayList<>();
     private List<AppFile> files = new ArrayList<>();
@@ -188,5 +189,15 @@ public class Leaf implements AppFile {
     @Override
     public void setRootAbsouluteAddress(String absAddress) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getParentName() {
+        return this.parentName;
+    }
+
+    @Override
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 }

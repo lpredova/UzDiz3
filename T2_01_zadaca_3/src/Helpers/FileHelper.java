@@ -56,6 +56,10 @@ public class FileHelper {
         File f = new File(path);
         return f.getName();
     }
+    
+    public static String getParentNameFromPath(File file) {
+        return file.getAbsoluteFile().getParentFile().getName();
+    }
 
     /**
      * Method that returns element size
@@ -139,10 +143,10 @@ public class FileHelper {
     }
     /**
      * Method for getting absolute address from file
-     * @param file
+     * @param path
      * @return 
      */
-    public static String getAbsoluteAddress(String path) {
+    public static String getAbsoluteAddressFromPath(String path) {
         File file = new File(path);
         return file.getAbsolutePath();
     }
