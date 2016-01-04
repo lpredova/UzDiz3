@@ -36,10 +36,10 @@ public class FileRepository implements Container {
         }
 
         @Override
-         /**
-         * This method is false by default because there is only one element
-         * in root, we add that element and recursions do the rest,
-         * In fact we don't need separator for this but let it be
+        /**
+         * This method is false by default because there is only one element in
+         * root, we add that element and recursions do the rest, In fact we
+         * don't need separator for this but let it be
          */
         public boolean hasNext() {
             return false;
@@ -67,9 +67,9 @@ public class FileRepository implements Container {
 
                         AppFile rootDirectoryElement = new Parent(
                                 Helpers.FileHelper.getFileNameFromPath(path),
-                                Helpers.FileHelper.getFileTypeFromPath(path), 
+                                Helpers.FileHelper.getFileTypeFromPath(path),
                                 Helpers.FileHelper.getFileCreatedAtTimeFromPath(path),
-                                Helpers.FileHelper.getFileUpdatedAtTimeFromPath(path), 
+                                Helpers.FileHelper.getFileUpdatedAtTimeFromPath(path),
                                 Helpers.FileHelper.getFileSizeFormattedFromPath(path),
                                 Helpers.FileHelper.getFileRawSizeFromPath(path)
                         );
@@ -103,15 +103,15 @@ public class FileRepository implements Container {
 
             AppFile directoryElement = new Parent(
                     Helpers.FileHelper.getFileName(directory),
-                    "directory", 
+                    "directory",
                     Helpers.FileHelper.getFileCreatedAtTime(directory),
-                    Helpers.FileHelper.getFileUpdatedAtTime(directory), 
+                    Helpers.FileHelper.getFileUpdatedAtTime(directory),
                     Helpers.FileHelper.getFileFormattedSize(directory),
                     Helpers.FileHelper.getFileRawSize(directory));
 
             long elementSize = Helpers.FileHelper.getFileRawSize(directory);
-            
-            AppFile parentElement = findParent(directory,elementSize);
+
+            AppFile parentElement = findParent(directory, elementSize);
             directoryElement.addParent(parentElement);
             parentElement.addChild(directoryElement);
             directoryTree.add(directoryElement);
@@ -126,14 +126,14 @@ public class FileRepository implements Container {
 
             AppFile fileElement = new Leaf(
                     Helpers.FileHelper.getFileName(file),
-                    Helpers.FileHelper.getFileType(file), 
+                    Helpers.FileHelper.getFileType(file),
                     Helpers.FileHelper.getFileCreatedAtTime(file),
-                    Helpers.FileHelper.getFileUpdatedAtTime(file), 
-                    Helpers.FileHelper.getFileFormattedSize(file), 
+                    Helpers.FileHelper.getFileUpdatedAtTime(file),
+                    Helpers.FileHelper.getFileFormattedSize(file),
                     Helpers.FileHelper.getFileRawSize(file));
-            long fileSize = Helpers.FileHelper.getFileRawSize(file);        
-            
-            AppFile parentElement = findParent(file,fileSize);
+            long fileSize = Helpers.FileHelper.getFileRawSize(file);
+
+            AppFile parentElement = findParent(file, fileSize);
             fileElement.addParent(parentElement);
             parentElement.addChild(fileElement);
             directoryTree.add(fileElement);
@@ -151,7 +151,8 @@ public class FileRepository implements Container {
 
         /**
          * Recursion that iterates trough elements in file structure
-         * @param files 
+         *
+         * @param files
          */
         private void showFiles(File[] files) {
             for (File file : files) {
@@ -166,24 +167,25 @@ public class FileRepository implements Container {
 
         /**
          * Recursion for finding element parent
+         *
          * @param file
-         * @return 
+         * @return
          */
-        private AppFile findParent(File file,long size) {
+        private AppFile findParent(File file, long size) {
 
             String parentName = file.getParentFile().getName();
             for (AppFile appFile : directoryTree) {
                 if (appFile.getName().equals(parentName)) {
-                   appFile.increaseSize(size);
+                    appFile.increaseSize(size);
                     return appFile;
                 }
 
                 //if dir name is not the same and element is dir, enter recursion
-                if(appFile.getType().equals("directory")){    
+                if (appFile.getType().equals("directory")) {
                     appFile.increaseSize(size);
-                    
-                    AppFile result = getParentElement(appFile, parentName,size);
-                    if(result!=null){
+
+                    AppFile result = getParentElement(appFile, parentName, size);
+                    if (result != null) {
                         return result;
                     }
                 }
@@ -191,7 +193,7 @@ public class FileRepository implements Container {
             return null;
         }
 
-        private AppFile getParentElement(AppFile file, String parentName,long size) {
+        private AppFile getParentElement(AppFile file, String parentName, long size) {
 
             for (AppFile child : file.getChildren()) {
                 //Anchor
@@ -203,7 +205,7 @@ public class FileRepository implements Container {
                 //element is container
                 if (child.getType().equals("directory")) {
                     child.increaseSize(size);
-                    return this.getParentElement(child, parentName,size);
+                    return this.getParentElement(child, parentName, size);
                 }
             }
             return null;

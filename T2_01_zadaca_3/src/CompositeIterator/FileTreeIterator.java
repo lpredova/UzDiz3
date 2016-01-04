@@ -49,14 +49,49 @@ public class FileTreeIterator implements Container {
     public void printStructure(AppFile elem) {
         
         FileTreeIterator ft = this;
+        elem.print();
         for (Iterator iter = ft.getIterator(); iter.hasNext(elem);) {
             AppFile nextElement = (AppFile) iter.getNextChild(elem);
             nextElement.print();
             if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
                 printStructure(nextElement);
             }
-        }
-        
+        } 
     }
     
+    public void getFileExtensions(AppFile elem) {
+        
+        FileTreeIterator ft = this;
+     
+        for (Iterator iter = ft.getIterator(); iter.hasNext(elem);) {
+            AppFile nextElement = (AppFile) iter.getNextChild(elem);
+            
+            String type = nextElement.getType();
+            if(!additional.FileInfo.fileTypes.contains(type)){
+                additional.FileInfo.fileTypes.add(type);
+            }
+            
+            if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
+                getFileExtensions(nextElement);
+            }
+        }
+    }
+    
+    public void compareExtensions(AppFile elem,String extension) {
+        
+        FileTreeIterator ft = this;
+        for (Iterator iter = ft.getIterator(); iter.hasNext(elem);) {
+            AppFile nextElement = (AppFile) iter.getNextChild(elem);
+            String type = nextElement.getType();
+            if(extension.equals(type)){
+                additional.FileInfo.elementCount++;
+                additional.FileInfo.totalFileSize += nextElement.getRawSize();
+                additional.FileInfo.extensionFiles.add(nextElement);
+            }
+            
+            if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
+                compareExtensions(nextElement,extension);
+            }
+        }
+    }   
 }
