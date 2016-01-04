@@ -116,8 +116,7 @@ public class Controller {
                     break;
 
                 case "6":
-                    System.out.print(Constants.CURSOS_RESTORE);
-                    System.out.print(Constants.ERASE_END_OF_LINE);
+                    
 
                     //SAVING STATE EXAMPLE
 //                    originator.set(T2_01_zadaca_3.root.clone());
@@ -128,14 +127,10 @@ public class Controller {
                                                                       
                     int chosenState = -1;
                     do {
+                        System.out.print(Constants.CURSOS_RESTORE);
+                        System.out.print(Constants.ERASE_END_OF_LINE);
                         System.out.print("States(0 - " + numberOfPossibleStates + "): ");  
                         chosenState = Integer.parseInt(in.nextLine());
-
-                        if (chosenState < 0 || chosenState > numberOfPossibleStates) {
-                            view.updateFirstScreenByString("Wrong input, choose again!", "37");
-                            System.out.print(Constants.CURSOS_RESTORE);
-                            System.out.print(Constants.ERASE_END_OF_LINE);
-                        }
                     } while (chosenState < 0 || chosenState > numberOfPossibleStates);
 
                     originator.restoreFromMemento(caretaker.getMemento(chosenState).getKey());
