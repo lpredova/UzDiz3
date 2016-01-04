@@ -44,7 +44,7 @@ public class T2_01_zadaca_3 {
    
         View v = new View(rowNum, colNum, screenDivision);
         Model m = new Model();
-        Controller c = new Controller(v, m);
+        Controller c = new Controller(v, m, seconds);
         c.showScreen();
         c.processOption();
 
