@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 /**
  *
@@ -27,8 +28,9 @@ public class Caretaker {
         savedStates.put(m, ft.format(dNow));
     }
 
-    public Object getMemento(int index) {
-        return savedStates.keySet().toArray()[index];
+    public Entry getMemento(int index) {
+        return (Entry) savedStates.entrySet().toArray()[index];
+        //return savedStates.keySet().toArray()[index];
     }
 
     public int getNumberOfPossibleStates(){

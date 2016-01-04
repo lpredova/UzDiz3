@@ -10,13 +10,13 @@ import CompositeIterator.FileTreeIterator;
 import FileIterator.InitialStructure.FileRepository;
 import additional.FileInfo;
 
-import FileStructureComposite.AppFile;
 import FileStructureMemento.Caretaker;
 import FileStructureMemento.Originator;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -101,10 +101,17 @@ public class Controller {
                     System.out.print(Constants.ERASE_END_OF_LINE);
 
                     HashMap<Object, String> savedStates = caretaker.getSavedStates();
+                    ArrayList<String> stringOutput = new ArrayList<>();
+                    
+                    stringOutput.add("Information about all states:");
+                    stringOutput.add("");
                     
                     for (int i = 0; i < savedStates.size(); i++) {
-                        System.out.println("State: " + i + " Saved: " + savedStates.values().toArray()[i]);
+                        stringOutput.add("State: " + i + " - Saved: " + savedStates.values().toArray()[i]);
                     }
+                    
+                    model.setData(stringOutput);
+                    view.updateFirstScreen(model.getData());
                     
                     break;
 
@@ -118,18 +125,17 @@ public class Controller {
 //                    
                     int numberOfPossibleStates = caretaker.getNumberOfPossibleStates() - 1;
 
-                    if (numberOfPossibleStates < 0) {
-                        System.out.println("There are no saved states!");
-                        break;
-                    }
-
-                    view.updateFirstScreenByString("Odaberi n(0 - " + numberOfPossibleStates + "):", "32");
+                    //HOW TO obrisati ostalo gore?!
+                    view.updateFirstScreenByString("Odaberi n(0 - " + numberOfPossibleStates + "): ", "32");
 
                     int chosenState = Integer.parseInt(in.nextLine());
 
-                    originator.restoreFromMemento(caretaker.getMemento(chosenState));
+                    
+                    originator.restoreFromMemento(caretaker.getMemento(chosenState).getKey());
                     T2_01_zadaca_3.root = originator.getState();
 
+                    view.updateFirstScreenByString("Restored state(" + chosenState + "): " + caretaker.getMemento(chosenState).getKey() + "\nFrom: " + caretaker.getMemento(chosenState).getValue(), "32");
+                    
                     break;
 
                 case "7":
