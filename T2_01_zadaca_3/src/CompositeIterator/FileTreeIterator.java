@@ -5,34 +5,23 @@
  */
 package CompositeIterator;
 
-import FileIterator.InitialStructure.FileRepository;
 import FileStructureComposite.AppFile;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- *
+ * Composite iterator for walking through file tree composite
  * @author tonovosel
  */
 public class FileTreeIterator implements Container {
-
-    private List<AppFile> directoryTree = new ArrayList<AppFile>();
-
+    
     @Override
     public Iterator getIterator() {
         return new CreatedTreeIterator();
     }
-
+    
     private class CreatedTreeIterator implements Iterator {
-
+        
         private int index;
-        private AppFile root;
-
-        public CreatedTreeIterator() {
-            directoryTree = FileRepository.directoryTree;
-            root = directoryTree.get(0);
-        }
-
+        
         @Override
         public boolean hasNext(AppFile parent) {
             int ChildrenNum = parent.getChildren().size();
@@ -41,14 +30,33 @@ public class FileTreeIterator implements Container {
             }
             return false;
         }
-
+        
         @Override
-        public Object getNextChild() {
-            if (this.hasNext(root)) {
-                return directoryTree.get(0).getChild(index++);
+        public Object getNextChild(AppFile parent) {
+            if (this.hasNext(parent)) {
+                return parent.getChild(index++);
             }
             return null;
         }
-    }
+        
+    }//inner class
+    
+    /**
+     * Recursion for printing out file tree composite
+     * @param elem 
+     */
 
+    public void printStructure(AppFile elem) {
+        
+        FileTreeIterator ft = this;
+        for (Iterator iter = ft.getIterator(); iter.hasNext(elem);) {
+            AppFile nextElement = (AppFile) iter.getNextChild(elem);
+            nextElement.print();
+            if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
+                printStructure(nextElement);
+            }
+        }
+        
+    }
+    
 }

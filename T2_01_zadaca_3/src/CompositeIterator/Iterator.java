@@ -15,5 +15,5 @@ public interface Iterator {
 
     public boolean hasNext(AppFile parent);
 
-    public Object getNextChild();
+    public Object getNextChild(AppFile parent);
 }
