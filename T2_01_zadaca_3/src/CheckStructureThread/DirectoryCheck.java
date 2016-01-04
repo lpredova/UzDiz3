@@ -10,9 +10,15 @@ import CompositeIterator.Iterator;
 import FileIterator.InitialStructure.FileRepository;
 import FileStructureComposite.AppFile;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mvc.Model;
 import mvc.View;
 import t2_01_zadaca_3.T2_01_zadaca_3;
@@ -48,7 +54,7 @@ public class DirectoryCheck extends Thread {
 
     @Override
     public synchronized void interrupt() {
-        active = false;
+        running = false;
         super.interrupt();
     }
 
@@ -67,16 +73,21 @@ public class DirectoryCheck extends Thread {
         while (running) {
 
             try {
+                checkForDelta(rootDir, compositeRoot);
+            } catch (IOException ex) {
+                Logger.getLogger(DirectoryCheck.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            try {
                 Thread.sleep((secondsNum * 1000) - duration);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
-                active = false;
             }
         }//while
 
     }
 
-    public void checkForDelta(File parent, AppFile compositeParent) {
+    public void checkForDelta(File parent, AppFile compositeParent) throws IOException {
 
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -90,7 +101,21 @@ public class DirectoryCheck extends Thread {
                 for (int i = 0; i < files.length; i++) {
                     if (nextElement.getName().equalsIgnoreCase(files[i].getName())) {
                         if (!nextElement.getUpdatedAt().equalsIgnoreCase(formatDate(files[i]))) {
-                            view.updateFirstScreenByString("Ima promjena", "31");
+                            //TODO spremiti stari composite u memento
+                            //TODO ponovno kreirati stablo u compositu sa novim stanjem
+                            view.updateFirstScreenByString("File je ažuriran", "31");
+                        }
+                        if (!nextElement.getType().equalsIgnoreCase("directory") && files[i].isFile()) {
+                            if (!nextElement.getFormattedSize().equalsIgnoreCase(formatSize(files[i]))) {
+                                //TODO spremiti stari composite u memento
+                                //TODO ponovno kreirati stablo u compositu sa novim stanjem
+                                view.updateFirstScreenByString("File ima drugačiju veličinu.", "31");
+                            }
+                        }
+                        if (!nextElement.getCreatedAt().equalsIgnoreCase(formatCreatedAt(files[i]))) {
+                            //TODO spremiti stari composite u memento
+                            //TODO ponovno kreirati stablo u compositu sa novim stanjem
+                            view.updateFirstScreenByString("Kreiran je novi file sa istim imenom", "31");
                         }
                     }
                     if (files[i].isDirectory() && nextElement.getType().equalsIgnoreCase("directory")) {
@@ -109,6 +134,16 @@ public class DirectoryCheck extends Thread {
         SimpleDateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         formattedDate = f.format(file.lastModified());
         return formattedDate;
+    }
+
+    public String formatCreatedAt(File file) throws IOException {
+        Path path = file.toPath();
+        String createdAt = "";
+        SimpleDateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        BasicFileAttributes fileAttributes = Files.readAttributes(path, BasicFileAttributes.class);
+        long creationTime = fileAttributes.creationTime().toMillis();
+        createdAt = f.format(creationTime);
+        return createdAt;
     }
 
     public String formatSize(File file) {
