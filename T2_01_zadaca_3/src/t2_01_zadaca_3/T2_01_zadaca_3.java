@@ -7,6 +7,7 @@ package t2_01_zadaca_3;
 
 import CompositeIterator.FileTreeIterator;
 import FileIterator.InitialStructure.FileRepository;
+import additional.FileInfo;
 import argumentValidation.ArgumentValidator;
 
 /**
@@ -46,8 +47,9 @@ public class T2_01_zadaca_3 {
 //        c.processOption();
         
         FileTreeIterator ft = new FileTreeIterator();
-        ft.printStructure(FileRepository.directoryTree.get(0));
-        
+        //ft.printStructure(FileRepository.directoryTree.get(0));
+        FileInfo fi = new FileInfo();
+        fi.printFileInfo();
     }
     
 }
