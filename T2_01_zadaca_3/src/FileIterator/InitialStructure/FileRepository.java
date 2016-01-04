@@ -73,6 +73,8 @@ public class FileRepository implements Container {
                                 Helpers.FileHelper.getFileSizeFormattedFromPath(path),
                                 Helpers.FileHelper.getFileRawSizeFromPath(path)
                         );
+                        rootDirectoryElement.setIsRoot(true);
+                        rootDirectoryElement.setRootAbsouluteAddress(Helpers.FileHelper.getAbsoluteAddress(path));
                         rootDirectoryElement.addParent(null);
                         directoryTree.add(rootDirectoryElement);
 

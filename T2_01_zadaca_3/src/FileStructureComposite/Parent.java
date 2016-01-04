@@ -14,6 +14,8 @@ public class Parent implements AppFile {
     private String updatedAt;
     private String formattedSize;
     private long rawSize;
+    private boolean isRoot;
+    private String rootAbsoluteAdress;
 
     private final List<AppFile> parentFiles = new ArrayList<>();
     private final List<AppFile> files = new ArrayList<>();
@@ -171,5 +173,25 @@ public class Parent implements AppFile {
         }
 
         return clone;
+    }
+
+    @Override
+    public boolean getIsRoot() {
+        return this.isRoot;
+    }
+
+    @Override
+    public String getRootAbsoluteAddress() {
+        return this.rootAbsoluteAdress;
+    }
+
+    @Override
+    public void setIsRoot(boolean isRoot) {
+        this.isRoot = isRoot;
+    }
+
+    @Override
+    public void setRootAbsouluteAddress(String absAddress) {
+        this.rootAbsoluteAdress = absAddress;
     }
 }
