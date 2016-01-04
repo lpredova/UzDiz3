@@ -5,6 +5,8 @@
  */
 package mvc;
 
+import FileStructureMemento.Caretaker;
+import FileStructureMemento.Originator;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -28,6 +30,9 @@ public class Controller {
     public static int numDir = 0;
     public static int numFile = 0;
     public static int overallSize = 0;
+
+    Caretaker caretaker = new Caretaker();
+    Originator originator = new Originator();
 
     public Controller(View view, Model model) {
         this.view = view;
@@ -105,8 +110,29 @@ public class Controller {
                 case "6":
                     System.out.print(Constants.CURSOS_RESTORE);
                     System.out.print(Constants.ERASE_END_OF_LINE);
-                    System.out.print("Odaberi n: ");
-                    in.nextLine();
+                    
+                    //SAVING STATE EXAMPLE
+//                    originator.set(T2_01_zadaca_3.root.clone());
+//                    caretaker.addMemento(originator.saveToMemento());
+//                    
+//                    T2_01_zadaca_3.root.setName("NOVO");
+//                    originator.set(T2_01_zadaca_3.root.clone());
+//                    caretaker.addMemento(originator.saveToMemento());
+                    //#
+                    
+                    int numberOfPossibleStates = caretaker.getNumberOfPossibleStates() - 1;
+                    
+                    if(numberOfPossibleStates < 0){
+                        System.out.println("There are no saved states!");
+                        break;
+                    }
+
+                    System.out.println("Odaberi n(0 - " + numberOfPossibleStates + "):");
+         
+                    int chosenState = Integer.parseInt(in.nextLine());
+
+                    originator.restoreFromMemento(caretaker.getMemento(chosenState));
+                    T2_01_zadaca_3.root = originator.getState();
 
                     break;
 

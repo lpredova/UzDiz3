@@ -6,6 +6,7 @@
 package t2_01_zadaca_3;
 
 import FileIterator.InitialStructure.FileRepository;
+import FileStructureComposite.AppFile;
 import argumentValidation.ArgumentValidator;
 import mvc.Controller;
 import mvc.Model;
@@ -19,7 +20,8 @@ public class T2_01_zadaca_3 {
 
     public static FileRepository fileTree;
     public static String rootDirectory;
-
+    public static AppFile root;
+    
     /**
      * @param args the command line arguments
      */
@@ -41,6 +43,8 @@ public class T2_01_zadaca_3 {
         FileRepository filesRepository = new FileRepository();
         filesRepository.getIterator(args[3]);
 
+        root = filesRepository.directoryTree.get(0);
+        
         View v = new View(rowNum, colNum, screenDivision);
         Model m = new Model();
         Controller c = new Controller(v, m);
