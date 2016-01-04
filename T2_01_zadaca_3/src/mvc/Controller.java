@@ -146,6 +146,11 @@ public class Controller {
                     break;
             }
             this.setForEntry();
+            if(thread != null && !thread.isActive()) {
+                System.out.print(Constants.ANSI_ESC + "33m");
+            } else if (thread != null && thread.isActive()) {
+                System.out.print(Constants.ANSI_ESC + "32m");
+            }
         } while (!choice.equalsIgnoreCase("Q"));
 
         System.out.print(Constants.ERASE_END_OF_LINE);
@@ -177,9 +182,9 @@ public class Controller {
             view.updateFirstScreenByString(text, "36");
 
         }
-        view.updateSecondScreenByString("Ukupan broj direktorija: " + numDir, "33", true);
-        view.updateSecondScreenByString("Ukupan broj datoteka: " + numFile, "33", false);
-        view.updateSecondScreenByString("Ukupna veličina: " + df.format(overallSize).replace(",", ".") + "B", "33", false);
+        view.updateSecondScreenByString("Ukupan broj direktorija: " + numDir, "37", true);
+        view.updateSecondScreenByString("Ukupan broj datoteka: " + numFile, "37", false);
+        view.updateSecondScreenByString("Ukupna veličina: " + df.format(overallSize).replace(",", ".") + "B", "37", false);
 
         if (file.isDirectory()) {
             File[] files = file.listFiles();

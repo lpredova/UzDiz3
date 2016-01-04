@@ -48,6 +48,7 @@ public class DirectoryCheck extends Thread {
 
     @Override
     public synchronized void interrupt() {
+        active = false;
         super.interrupt();
     }
 
@@ -60,15 +61,16 @@ public class DirectoryCheck extends Thread {
     public synchronized void run() {
 
         rootDir = new File(T2_01_zadaca_3.rootDirectory);
+        long duration = 0;
+        long startTime = System.currentTimeMillis();
 
         while (running) {
-            active = true;
-            checkForDelta(rootDir, compositeRoot);
-            active = false;
+
             try {
-                Thread.sleep(secondsNum * 1000);
+                Thread.sleep((secondsNum * 1000) - duration);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
+                active = false;
             }
         }//while
 
