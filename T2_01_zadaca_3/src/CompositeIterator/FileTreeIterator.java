@@ -125,7 +125,7 @@ public class FileTreeIterator implements Container {
     
     public ArrayList<String> getNumberDirsAndFiles() {
         elementsData.clear();
-        elementsData.add("Ukupan broj direktorija : " + numDir + 1);
+        elementsData.add("Ukupan broj direktorija : " + (numDir + 1));
         elementsData.add("Ukupan broj datoteka : " + numFil);
         numDir = 0;
         numFil = 0;
