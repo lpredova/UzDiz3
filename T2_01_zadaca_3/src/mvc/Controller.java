@@ -143,14 +143,20 @@ public class Controller {
                     in.nextLine();
                     break;
 
-                case "8": {
-                    try {
+                case "8": 
+                    //Do we need this???
+                    /*try {
                         showDir(0, new File(T2_01_zadaca_3.rootDirectory));
                     } catch (IOException ex) {
                         Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                break;
+                    }*/
+                    
+                    //Clearing all previous states and building dir tree again
+                    caretaker.clearAllStates();
+                    
+                    T2_01_zadaca_3.filesRepository.directoryTree.clear();
+                    T2_01_zadaca_3.filesRepository.getIterator(T2_01_zadaca_3.rootDirectory);
+                    break;
 
                 case "9":
                     break;
