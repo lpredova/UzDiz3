@@ -41,6 +41,7 @@ public class DirectoryCheck extends Thread {
 
     @Override
     public synchronized void interrupt() {
+        active = false;
         super.interrupt();
     }
 
@@ -56,12 +57,11 @@ public class DirectoryCheck extends Thread {
 
         while (running) {
             active = true;
-
-            active = false;
             try {
                 Thread.sleep(secondsNum * 1000);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
+                active = false;
             }
         }//while
 

@@ -47,10 +47,10 @@ public class View {
 
     private void VDivision() {
         for (int i = 1; i <= rows - 1; i++) {
-            show(i, halfCols + 1, 33, "*");
+            show(i, halfCols + 1, 37, "*");
         }
         for (int j = 1; j <= cols + 1; j++) {
-            show(rows, j, 33, "*");
+            show(rows, j, 37, "*");
         }
         this.setCursor(rows + 1, 1);
         System.out.print("Choose option: ");
@@ -59,17 +59,17 @@ public class View {
 
     private void ODivision() {
         for (int i = 1; i <= cols; i++) {
-            show(halfRows + 1, i, 33, "*");
+            show(halfRows + 1, i, 37, "*");
         }
         if (rows % 2 == 0) {
             for (int j = 1; j <= cols; j++) {
-                show(rows, j, 33, "*");
+                show(rows, j, 37, "*");
             }
             this.setCursor(rows + 1, 1);
 
         } else {
             for (int j = 1; j <= cols; j++) {
-                show(rows + 1, j, 33, "*");
+                show(rows + 1, j, 37, "*");
             }
             this.setCursor(rows + 2, 1);
 
@@ -368,7 +368,7 @@ public class View {
     public void enterInput() {
         System.out.print(Constants.CURSOS_RESTORE);
         System.out.print(Constants.ERASE_END_OF_LINE);
-        System.out.print(Constants.ANSI_ESC + "33m");
+        System.out.print(Constants.ANSI_ESC + "37m");
     }
 
     private void printMenu() {
