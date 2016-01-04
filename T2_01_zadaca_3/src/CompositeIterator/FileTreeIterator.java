@@ -6,6 +6,7 @@
 package CompositeIterator;
 
 import FileStructureComposite.AppFile;
+import additional.layers.ReportLayer;
 import additional.visitor.HashVisitor;
 import java.util.ArrayList;
 
@@ -65,6 +66,10 @@ public class FileTreeIterator implements Container {
         } 
     }
     
+    /**
+     * Method that gets different extensions from file tree and saves them to array
+     * @param elem 
+     */
     public void getFileExtensions(AppFile elem) {
         
         FileTreeIterator ft = this;
@@ -73,8 +78,8 @@ public class FileTreeIterator implements Container {
             AppFile nextElement = (AppFile) iter.getNextChild(elem);
             
             String type = nextElement.getType();
-            if(!additional.FileInfo.fileTypes.contains(type)){
-                additional.FileInfo.fileTypes.add(type);
+            if(!ReportLayer.fileTypes.contains(type)){
+                ReportLayer.fileTypes.add(type);
             }
             
             if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
@@ -83,6 +88,12 @@ public class FileTreeIterator implements Container {
         }
     }
     
+    /**
+     * Method that compares extensions that is passed as first argument, and
+     * adds elements with that extension to list
+     * @param elem
+     * @param extension 
+     */
     public void compareExtensions(AppFile elem,String extension) {
         
         FileTreeIterator ft = this;
@@ -90,9 +101,9 @@ public class FileTreeIterator implements Container {
             AppFile nextElement = (AppFile) iter.getNextChild(elem);
             String type = nextElement.getType();
             if(extension.equals(type)){
-                additional.FileInfo.elementCount++;
-                additional.FileInfo.totalFileSize += nextElement.getRawSize();
-                additional.FileInfo.extensionFiles.add(nextElement);
+                ReportLayer.elementCount++;
+                ReportLayer.totalFileSize += nextElement.getRawSize();
+                ReportLayer.extensionFiles.add(nextElement);
             }
             
             if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
@@ -153,8 +164,7 @@ public class FileTreeIterator implements Container {
         }
     }
     
-    public void calculateHash(AppFile elem,HashVisitor hv){
-        
+    public void calculateHash(AppFile elem, HashVisitor hv){
         
         FileTreeIterator ft = this;
         for (Iterator iter = ft.getIterator(); iter.hasNext(elem);) {

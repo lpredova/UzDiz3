@@ -9,10 +9,10 @@ package mvc;
 import CheckStructureThread.DirectoryCheck;
 import CompositeIterator.FileTreeIterator;
 import FileIterator.InitialStructure.FileRepository;
-import additional.FileInfo;
 
 import FileStructureMemento.Caretaker;
 import FileStructureMemento.Originator;
+import additional.layers.ReportLayer;
 
 import java.io.File;
 import java.io.IOException;
@@ -141,10 +141,9 @@ public class Controller {
 
 
                 case "9":
-
-                    FileInfo fi = new FileInfo();
-                    fi.printFileInfo();
-
+                    ReportLayer rl = new ReportLayer();
+                    rl.action();
+                    
                     break;
             }
             this.setForEntry();

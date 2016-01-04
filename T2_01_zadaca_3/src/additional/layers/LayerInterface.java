@@ -10,5 +10,7 @@ package additional.layers;
  * @author lovro
  */
 public interface LayerInterface {
-    public void action();    
+    public void action(); 
+    public String pull();
+    public void push(String info);
 }

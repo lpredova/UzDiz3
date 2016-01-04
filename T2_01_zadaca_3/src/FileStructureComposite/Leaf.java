@@ -15,6 +15,7 @@ public class Leaf implements AppFile,TreeElementVisitor {
     private String createdAt;
     private String updatedAt;
     private String formattedSize;
+    private String fileHash;
     private long rawSize;
 
     private List<AppFile> parentFiles = new ArrayList<>();
@@ -100,6 +101,16 @@ public class Leaf implements AppFile,TreeElementVisitor {
     public long getRawSize() {
         return this.rawSize;
     }
+    
+    @Override
+    public String getFileHash() {
+        return this.fileHash;
+    }
+
+    @Override
+    public void setFileHash(String hash) {
+        this.fileHash = hash;
+    }
 
     @Override
     public void setName(String name) {
@@ -142,6 +153,27 @@ public class Leaf implements AppFile,TreeElementVisitor {
 
         System.out.println("------------------------------------");
     }
+    
+    /**
+     * Method that returns data from element as string
+     *
+     * @return
+     */
+    @Override
+    public String elementData() {
+
+        String output;
+        output
+                = "\nName:" + this.getName() + "\n"
+                + "Type:" + this.getType() + "\n"
+                + "Created at:" + this.getCreatedAt() + "\n"
+                + "Updated at:" + this.getUpdatedAt() + "\n"
+                + "Size:" + this.getFormattedSize() + "\n"
+                + "Hash: " + this.getFileHash() + "\n"
+                + "------------------------------------";
+
+        return output;
+    }
 
     /**
      * Method that we use for updating parents size, not really necessary with
@@ -174,7 +206,7 @@ public class Leaf implements AppFile,TreeElementVisitor {
     
     @Override
     public void visit(AppFile file) {
-        System.out.println("visiting");    
+        //   
     } 
     
     @Override

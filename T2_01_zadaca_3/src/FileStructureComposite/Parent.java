@@ -7,13 +7,14 @@ import java.util.List;
 /**
  * Created by lovro
  */
-public class Parent implements AppFile,TreeElementVisitor{
+public class Parent implements AppFile, TreeElementVisitor {
 
     private String name;
     private String type;
     private String createdAt;
     private String updatedAt;
     private String formattedSize;
+    private String fileHash;
     private long rawSize;
 
     private final List<AppFile> parentFiles = new ArrayList<>();
@@ -66,9 +67,9 @@ public class Parent implements AppFile,TreeElementVisitor{
     public List<AppFile> getParent() {
         return this.parentFiles;
     }
-    
+
     @Override
-    public void clearParentList(){
+    public void clearParentList() {
         this.parentFiles.clear();
     }
 
@@ -100,6 +101,16 @@ public class Parent implements AppFile,TreeElementVisitor{
     @Override
     public long getRawSize() {
         return this.rawSize;
+    }
+
+    @Override
+    public String getFileHash() {
+        return this.fileHash;
+    }
+
+    @Override
+    public void setFileHash(String hash) {
+        this.fileHash = hash;
     }
 
     @Override
@@ -145,6 +156,27 @@ public class Parent implements AppFile,TreeElementVisitor{
     }
 
     /**
+     * Method that returns data from element as string
+     *
+     * @return
+     */
+    @Override
+    public String elementData() {
+
+        String output;
+        output
+                = "\nName:" + this.getName() + "\n"
+                + "Type:" + this.getType() + "\n"
+                + "Created at:" + this.getCreatedAt() + "\n"
+                + "Updated at:" + this.getUpdatedAt() + "\n"
+                + "Size:" + this.getFormattedSize() + "\n"
+                + "Hash: " + this.getFileHash() + "\n"
+                + "------------------------------------";
+
+        return output;
+    }
+
+    /**
      * Method that we use for updating parents size
      *
      * @param size
@@ -152,19 +184,19 @@ public class Parent implements AppFile,TreeElementVisitor{
     @Override
     public void increaseSize(long size) {
         this.rawSize += size;
-        this.formattedSize = helpers.FileHelper.formatSize(this.rawSize);
+        this.formattedSize = Helpers.FileHelper.formatSize(this.rawSize);
     }
 
     @Override
     public Parent clone() {
-        Parent clone = new Parent(name, type, createdAt, updatedAt, name, rawSize);       
-     
+        Parent clone = new Parent(name, type, createdAt, updatedAt, name, rawSize);
+
         clone.formattedSize = this.formattedSize;
         clone.parentFiles.add(clone);
 
         for (AppFile child : files) {
             AppFile childClone = (AppFile) child.clone();
-            
+
             childClone.clearParentList();
             childClone.addParent(clone);
 
@@ -176,11 +208,11 @@ public class Parent implements AppFile,TreeElementVisitor{
 
     @Override
     public void visit(AppFile file) {
-        System.out.println("visiting");    
+        //   
     }
 
     @Override
     public void accept(TreeElementVisitor elementVisitor) {
-         elementVisitor.visit(this);
+        elementVisitor.visit(this);
     }
 }

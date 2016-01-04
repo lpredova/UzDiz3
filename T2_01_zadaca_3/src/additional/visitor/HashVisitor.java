@@ -11,14 +11,12 @@ import FileStructureComposite.AppFile;
  *
  * @author lovro
  */
-public class HashVisitor implements TreeElementVisitor{
+public class HashVisitor implements TreeElementVisitor {
 
     @Override
     public void visit(AppFile file) {
-        String fileHash = file.getName()+file.getType()+file.getCreatedAt()+file.getUpdatedAt()+file.getFormattedSize();
-        String hash = helpers.FileHelper.MD5(fileHash);
-        
-        System.out.println(hash);
+        String fileHash = file.getName() + file.getType() + file.getCreatedAt() + file.getUpdatedAt() + file.getFormattedSize();
+        file.setFileHash(Helpers.FileHelper.MD5(fileHash));
     }
-    
+
 }

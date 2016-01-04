@@ -11,8 +11,20 @@ package additional.layers;
  */
 public class UploadLayer implements LayerInterface{
 
+    String info;
+    
     @Override
     public void action() {
+    }
+    
+     @Override
+    public String pull() {
+        return this.info;
+    }
+
+    @Override
+    public void push(String info) {
+        this.info = info;
     }
  
 }

@@ -6,8 +6,9 @@
 package t2_01_zadaca_3;
 
 import FileIterator.InitialStructure.FileRepository;
-import additional.FileInfo;
 import FileStructureComposite.AppFile;
+import additional.layers.LayerStructure;
+import additional.layers.ReportLayer;
 
 import argumentValidation.ArgumentValidator;
 import java.io.File;
@@ -53,8 +54,8 @@ public class T2_01_zadaca_3 {
 
         root = filesRepository.directoryTree.get(0);
         
-        FileInfo fi = new FileInfo();
-        fi.printFileInfo();
+        LayerStructure ls = new LayerStructure();
+        ls.doActions();
 
  /*       View v = new View(rowNum, colNum, screenDivision);
         Model m = new Model();

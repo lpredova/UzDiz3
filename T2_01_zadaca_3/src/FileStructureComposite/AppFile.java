@@ -17,6 +17,7 @@ public interface AppFile extends TreeElementInterface{
     String getCreatedAt();
     String getUpdatedAt();
     String getFormattedSize();
+    String getFileHash();
     long getRawSize();
     
     void setName(String name);
@@ -24,6 +25,7 @@ public interface AppFile extends TreeElementInterface{
     void setCreatedAt(String createdAt);
     void setUpdatedAt(String updatedAt);
     void setFormattedSize(String size);
+    void setFileHash(String hash);
     void setRawSize(long rawSize);
     
     
@@ -51,6 +53,8 @@ public interface AppFile extends TreeElementInterface{
      * Helper functions to manipulate structure
      */
     void print();
+    
+    String elementData();
     
     void increaseSize(long size);
     
