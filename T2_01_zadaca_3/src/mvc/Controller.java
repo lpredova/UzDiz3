@@ -5,7 +5,6 @@
  */
 package mvc;
 
-
 import CheckStructureThread.DirectoryCheck;
 import CompositeIterator.FileTreeIterator;
 import FileIterator.InitialStructure.FileRepository;
@@ -17,6 +16,8 @@ import FileStructureMemento.Originator;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,6 +59,11 @@ public class Controller {
         FileTreeIterator ft = new FileTreeIterator();
         Caretaker caretaker = new Caretaker();
         Originator originator = new Originator();
+
+        // Saving initial state to memento
+        originator.set(T2_01_zadaca_3.root.clone());
+        caretaker.addMemento(originator.saveToMemento());
+
         String choice = "";
         do {
             System.out.print(Constants.CURSOR_SAVE);
@@ -91,36 +97,58 @@ public class Controller {
                     break;
 
                 case "5":
-                    // TODO
+                    System.out.print(Constants.CURSOS_RESTORE);
+                    System.out.print(Constants.ERASE_END_OF_LINE);
+
+                    HashMap<Object, String> savedStates = caretaker.getSavedStates();
+                    ArrayList<String> stringOutputOption5 = new ArrayList<>();
+
+                    stringOutputOption5.add("Information about all states:");
+                    stringOutputOption5.add("");
+
+                    for (int i = 0; i < savedStates.size(); i++) {
+                        stringOutputOption5.add("State: " + i + " - Saved: " + savedStates.values().toArray()[i]);
+                    }
+
+                    model.setData(stringOutputOption5);
+                    view.updateFirstScreen(model.getData());
+
                     break;
 
                 case "6":
                     System.out.print(Constants.CURSOS_RESTORE);
                     System.out.print(Constants.ERASE_END_OF_LINE);
-                    
+
                     //SAVING STATE EXAMPLE
 //                    originator.set(T2_01_zadaca_3.root.clone());
 //                    caretaker.addMemento(originator.saveToMemento());
 //                    
-//                    T2_01_zadaca_3.root.setName("NOVO");
-//                    originator.set(T2_01_zadaca_3.root.clone());
-//                    caretaker.addMemento(originator.saveToMemento());
-                    //#
-                    
                     int numberOfPossibleStates = caretaker.getNumberOfPossibleStates() - 1;
-                    
-                    if(numberOfPossibleStates < 0){
-                        System.out.println("There are no saved states!");
-                        break;
-                    }
 
-                    System.out.println("Odaberi n(0 - " + numberOfPossibleStates + "):");
-         
-                    int chosenState = Integer.parseInt(in.nextLine());
+                                                                      
+                    int chosenState = -1;
+                    do {
+                        System.out.print("States(0 - " + numberOfPossibleStates + "): ");  
+                        chosenState = Integer.parseInt(in.nextLine());
 
-                    originator.restoreFromMemento(caretaker.getMemento(chosenState));
+                        if (chosenState < 0 || chosenState > numberOfPossibleStates) {
+                            view.updateFirstScreenByString("Wrong input, choose again!", "37");
+                            System.out.print(Constants.CURSOS_RESTORE);
+                            System.out.print(Constants.ERASE_END_OF_LINE);
+                        }
+                    } while (chosenState < 0 || chosenState > numberOfPossibleStates);
+
+                    originator.restoreFromMemento(caretaker.getMemento(chosenState).getKey());
                     T2_01_zadaca_3.root = originator.getState();
 
+                    ArrayList<String> stringOutputOption6 = new ArrayList<>();
+                    
+                    stringOutputOption6.add("Restored state(" + chosenState + "): " + caretaker.getMemento(chosenState).getKey());
+                    stringOutputOption6.add("From: " + caretaker.getMemento(chosenState).getValue());
+
+                    model.setData(stringOutputOption6);
+                    view.updateFirstScreen(model.getData());
+                    
                     break;
 
                 case "7":
@@ -130,15 +158,22 @@ public class Controller {
                     in.nextLine();
                     // TODO
                     break;
-                    
-                case "8": 
-            
+
+                case "8":
+
                     //Clearing all previous states and building dir tree again
                     caretaker.clearAllStates();
-                    
+
                     T2_01_zadaca_3.filesRepository.directoryTree.clear();
                     T2_01_zadaca_3.filesRepository.getIterator(T2_01_zadaca_3.rootDirectory);
 
+                    //Setting the new root element and saving it to memento
+                    T2_01_zadaca_3.root = T2_01_zadaca_3.filesRepository.directoryTree.get(0);
+
+                    originator.set(T2_01_zadaca_3.root.clone());
+                    caretaker.addMemento(originator.saveToMemento());
+
+                    break;
 
                 case "9":
 

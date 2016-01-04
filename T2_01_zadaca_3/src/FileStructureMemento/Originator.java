@@ -17,16 +17,17 @@ public class Originator {
     private AppFile state;
 
     public void set(AppFile state) {
-        System.out.println("Originator: Setting state to " + state);
+        //System.out.println("Originator: Setting state to " + state);
         this.state = state;
     }
 
-    public AppFile getState(){
+    public AppFile getState() {
         return state.clone();
     }
-    
+
     public Object saveToMemento() {
-        System.out.println("Originator: Saving to Memento.");
+        //System.out.println("Originator: Saving to Memento.");
+
         return new Memento(state);
     }
 
@@ -34,8 +35,7 @@ public class Originator {
         if (m instanceof Memento) {
             Memento memento = (Memento) m;
             state = memento.getSavedState();
-            System.out.println(
-                    "Originator: State after restoring from Memento:" + state);
+            //System.out.println("Originator: State after restoring from Memento:" + state);
         }
     }
 
