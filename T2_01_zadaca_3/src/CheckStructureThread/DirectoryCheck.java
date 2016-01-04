@@ -5,7 +5,13 @@
  */
 package CheckStructureThread;
 
+import CompositeIterator.FileTreeIterator;
+import CompositeIterator.Iterator;
+import FileIterator.InitialStructure.FileRepository;
+import FileStructureComposite.AppFile;
+import java.io.File;
 import mvc.View;
+import t2_01_zadaca_3.T2_01_zadaca_3;
 
 /**
  *
@@ -17,6 +23,8 @@ public class DirectoryCheck extends Thread {
     private View view;
     private volatile boolean running;
     private volatile boolean active;
+    FileTreeIterator ft = null;
+    File rootDir = null;
 
     public DirectoryCheck(int secondsNum, View view) {
         this.secondsNum = secondsNum;
@@ -42,11 +50,12 @@ public class DirectoryCheck extends Thread {
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
+
+        rootDir = new File(T2_01_zadaca_3.rootDirectory);
 
         while (running) {
             active = true;
-            //TODO check for directory changes
 
             active = false;
             try {
@@ -56,6 +65,24 @@ public class DirectoryCheck extends Thread {
             }
         }//while
 
+    }
+
+    public void checkForDelta(File root) {
+        if (root.exists()) {
+            if (root.isDirectory()) {
+                ft = new FileTreeIterator();
+                for (Iterator iter = ft.getIterator(); iter.hasNext(FileRepository.directoryTree.get(0));) {
+                    AppFile nextElement = (AppFile) iter.getNextChild(FileRepository.directoryTree.get(0));
+                    File[] files = root.listFiles();
+                    for (int i = 0; i < files.length; i++) {
+                    }
+                }
+            } else {
+                view.updateFirstScreenByString("Root is not directory.", "31");
+            }
+        } else {
+            view.updateFirstScreenByString("Can't find root directory.", "31");
+        }
     }
 
 }
