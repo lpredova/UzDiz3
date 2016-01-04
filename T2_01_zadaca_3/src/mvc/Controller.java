@@ -111,16 +111,21 @@ public class Controller {
                     System.out.print(Constants.CURSOS_RESTORE);
                     System.out.print(Constants.ERASE_END_OF_LINE);
                     
-                    //TEST PART
-                    originator.set(T2_01_zadaca_3.root.clone());
-                    caretaker.addMemento(originator.saveToMemento());
-                    
-                    T2_01_zadaca_3.root.setName("NOVO");
-                    originator.set(T2_01_zadaca_3.root.clone());
-                    caretaker.addMemento(originator.saveToMemento());
+                    //SAVING STATE EXAMPLE
+//                    originator.set(T2_01_zadaca_3.root.clone());
+//                    caretaker.addMemento(originator.saveToMemento());
+//                    
+//                    T2_01_zadaca_3.root.setName("NOVO");
+//                    originator.set(T2_01_zadaca_3.root.clone());
+//                    caretaker.addMemento(originator.saveToMemento());
                     //#
                     
                     int numberOfPossibleStates = caretaker.getNumberOfPossibleStates() - 1;
+                    
+                    if(numberOfPossibleStates < 0){
+                        System.out.println("There are no saved states!");
+                        break;
+                    }
 
                     System.out.println("Odaberi n(0 - " + numberOfPossibleStates + "):");
          
