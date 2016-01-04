@@ -53,4 +53,9 @@ public interface AppFile {
     
     void increaseSize(long size);
     
+    // Required for memento
+    
+    void clearParentList();
+    
+    AppFile clone();
 }
