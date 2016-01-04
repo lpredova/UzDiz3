@@ -10,8 +10,6 @@ import FileStructureMemento.Originator;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -110,10 +108,15 @@ public class Controller {
                     in.nextLine();
                     // TODO
                     break;
+                    
+                case "8": 
+            
+                    //Clearing all previous states and building dir tree again
+                    caretaker.clearAllStates();
+                    
+                    T2_01_zadaca_3.filesRepository.directoryTree.clear();
+                    T2_01_zadaca_3.filesRepository.getIterator(T2_01_zadaca_3.rootDirectory);
 
-                case "8":
-                    // TODO
-                    break;
 
                 case "9":
                     // TODO OWN FUNCIONALITY
