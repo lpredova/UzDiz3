@@ -101,16 +101,16 @@ public class Controller {
                     System.out.print(Constants.ERASE_END_OF_LINE);
 
                     HashMap<Object, String> savedStates = caretaker.getSavedStates();
-                    ArrayList<String> stringOutput = new ArrayList<>();
+                    ArrayList<String> stringOutputOption5 = new ArrayList<>();
                     
-                    stringOutput.add("Information about all states:");
-                    stringOutput.add("");
+                    stringOutputOption5.add("Information about all states:");
+                    stringOutputOption5.add("");
                     
                     for (int i = 0; i < savedStates.size(); i++) {
-                        stringOutput.add("State: " + i + " - Saved: " + savedStates.values().toArray()[i]);
+                        stringOutputOption5.add("State: " + i + " - Saved: " + savedStates.values().toArray()[i]);
                     }
                     
-                    model.setData(stringOutput);
+                    model.setData(stringOutputOption5);
                     view.updateFirstScreen(model.getData());
                     
                     break;
@@ -124,17 +124,21 @@ public class Controller {
 //                    caretaker.addMemento(originator.saveToMemento());
 //                    
                     int numberOfPossibleStates = caretaker.getNumberOfPossibleStates() - 1;
-
-                    //HOW TO obrisati ostalo gore?!
-                    view.updateFirstScreenByString("Odaberi n(0 - " + numberOfPossibleStates + "): ", "32");
-
-                    int chosenState = Integer.parseInt(in.nextLine());
-
+                    
+                    int chosenState = -1;
+                    do{
+                        System.out.print("\nOdaberi n(0 - " + numberOfPossibleStates + "): ");
+                        chosenState = Integer.parseInt(in.nextLine());
+                    }while(chosenState < 0 || chosenState > numberOfPossibleStates);
                     
                     originator.restoreFromMemento(caretaker.getMemento(chosenState).getKey());
                     T2_01_zadaca_3.root = originator.getState();
 
-                    view.updateFirstScreenByString("Restored state(" + chosenState + "): " + caretaker.getMemento(chosenState).getKey() + "\nFrom: " + caretaker.getMemento(chosenState).getValue(), "32");
+                    ArrayList<String> stringOutputOption6 = new ArrayList<>();
+                    stringOutputOption6.add("Restored state(" + chosenState + "): " + caretaker.getMemento(chosenState).getKey() + "\nFrom: " + caretaker.getMemento(chosenState).getValue());
+                    
+                    model.setData(stringOutputOption6);
+                    view.updateFirstScreen(model.getData());
                     
                     break;
 
