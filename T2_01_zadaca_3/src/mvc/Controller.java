@@ -102,17 +102,17 @@ public class Controller {
 
                     HashMap<Object, String> savedStates = caretaker.getSavedStates();
                     ArrayList<String> stringOutputOption5 = new ArrayList<>();
-                    
+
                     stringOutputOption5.add("Information about all states:");
                     stringOutputOption5.add("");
-                    
+
                     for (int i = 0; i < savedStates.size(); i++) {
                         stringOutputOption5.add("State: " + i + " - Saved: " + savedStates.values().toArray()[i]);
                     }
-                    
+
                     model.setData(stringOutputOption5);
                     view.updateFirstScreen(model.getData());
-                    
+
                     break;
 
                 case "6":
@@ -124,19 +124,28 @@ public class Controller {
 //                    caretaker.addMemento(originator.saveToMemento());
 //                    
                     int numberOfPossibleStates = caretaker.getNumberOfPossibleStates() - 1;
-                    
+
+                                                                      
                     int chosenState = -1;
-                    do{
-                        System.out.print("Odaberi n(0 - " + numberOfPossibleStates + "): ");
+                    do {
+                        System.out.print("States(0 - " + numberOfPossibleStates + "): ");  
                         chosenState = Integer.parseInt(in.nextLine());
-                    }while(chosenState < 0 || chosenState > numberOfPossibleStates);
-                    
+
+                        if (chosenState < 0 || chosenState > numberOfPossibleStates) {
+                            view.updateFirstScreenByString("Wrong input, choose again!", "37");
+                            System.out.print(Constants.CURSOS_RESTORE);
+                            System.out.print(Constants.ERASE_END_OF_LINE);
+                        }
+                    } while (chosenState < 0 || chosenState > numberOfPossibleStates);
+
                     originator.restoreFromMemento(caretaker.getMemento(chosenState).getKey());
                     T2_01_zadaca_3.root = originator.getState();
 
                     ArrayList<String> stringOutputOption6 = new ArrayList<>();
-                    stringOutputOption6.add("Restored state(" + chosenState + "): " + caretaker.getMemento(chosenState).getKey() + "\nFrom: " + caretaker.getMemento(chosenState).getValue());
                     
+                    stringOutputOption6.add("Restored state(" + chosenState + "): " + caretaker.getMemento(chosenState).getKey());
+                    stringOutputOption6.add("From: " + caretaker.getMemento(chosenState).getValue());
+
                     model.setData(stringOutputOption6);
                     view.updateFirstScreen(model.getData());
                     
