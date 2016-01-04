@@ -18,7 +18,7 @@ public class Leaf implements AppFile {
     private List<AppFile> parentFiles = new ArrayList<>();
     private List<AppFile> files = new ArrayList<>();
 
-    public Leaf(String name, String type, String createdAt, String updatedAt, String size,long rawSize) {
+    public Leaf(String name, String type, String createdAt, String updatedAt, String size, long rawSize) {
         this.name = name;
         this.type = type;
         this.createdAt = createdAt;
@@ -57,6 +57,11 @@ public class Leaf implements AppFile {
     @Override
     public List<AppFile> getParent() {
         return null;
+    }
+    
+    @Override
+    public void clearParentList(){
+        this.parentFiles.clear();
     }
 
     @Override
@@ -135,13 +140,33 @@ public class Leaf implements AppFile {
 
         System.out.println("------------------------------------");
     }
-    
+
     /**
-     * Method that we use for updating parents size, 
-     * not really necessary with child nodes
-     * @param size 
+     * Method that we use for updating parents size, not really necessary with
+     * child nodes
+     *
+     * @param size
      */
     @Override
-    public void increaseSize(long size){
+    public void increaseSize(long size) {
+    }
+
+    @Override
+    public Leaf clone() {
+        Leaf clone = new Leaf(name, type, createdAt, updatedAt, name, rawSize);
+
+        clone.formattedSize = this.formattedSize;
+        clone.parentFiles.add(clone);
+
+        for (AppFile child : files) {
+            AppFile childClone = (AppFile) child.clone();
+
+            childClone.clearParentList();
+            childClone.addParent(clone);
+
+            clone.addChild(childClone);
+        }
+
+        return clone;
     }
 }
