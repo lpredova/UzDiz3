@@ -15,7 +15,8 @@ import java.util.ArrayList;
  */
 public class FileTreeIterator implements Container {
 
-    ArrayList<String> elementsData = new ArrayList<>();
+    public ArrayList<String> elementsData = new ArrayList<>();
+    public static int numDir, numFil = 0;
 
     @Override
     public Iterator getIterator() {
@@ -106,7 +107,6 @@ public class FileTreeIterator implements Container {
      * @return
      */
     public ArrayList<String> getElementData(AppFile elem) {
-
         FileTreeIterator ft = this;
         for (Iterator iter = ft.getIterator(); iter.hasNext(elem);) {
             AppFile nextElement = (AppFile) iter.getNextChild(elem);
@@ -121,6 +121,35 @@ public class FileTreeIterator implements Container {
             }
         }
         return elementsData;
+    }
+    
+    public ArrayList<String> getNumberDirsAndFiles() {
+        elementsData.clear();
+        elementsData.add("Ukupan broj direktorija : " + numDir + 1);
+        elementsData.add("Ukupan broj datoteka : " + numFil);
+        numDir = 0;
+        numFil = 0;
+        return elementsData;
+    }
+    
+    public void clearData() {
+        elementsData.clear();
+    }
+    
+    public void calculateNumberOfDirsAndFiles(AppFile elem) {
+
+        FileTreeIterator ft = this;
+        for (Iterator iter = ft.getIterator(); iter.hasNext(elem);) {
+            AppFile nextElement = (AppFile) iter.getNextChild(elem);
+            if(nextElement.getType().equals("directory")) {
+                numDir++;
+            } else {
+                numFil++;
+            }
+            if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
+                calculateNumberOfDirsAndFiles(nextElement);
+            }
+        }
     }
 
 }

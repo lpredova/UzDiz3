@@ -41,6 +41,7 @@ public class Controller {
     }
     
     public void processOption() {
+        FileTreeIterator ft = new FileTreeIterator();
         String choice = "";
         do {
             System.out.print(Constants.CURSOR_SAVE);
@@ -48,17 +49,14 @@ public class Controller {
             choice = in.nextLine();
             switch (choice) {
                 case "1":
-                    ArrayList<String> lista1 = new ArrayList<>();
-                    String stringara5 = "Ukupan broj direktorija: 5";
-                    String stringara6 = "Ukupan broj datoteka: 16";
-                    lista1.add(stringara5);
-                    lista1.add(stringara6);
-                    model.setData(lista1);
-                    view.updateFirstScreen(lista1);
+                    ft.clearData();
+                    ft.calculateNumberOfDirsAndFiles(FileRepository.directoryTree.get(0));
+                    model.setData(ft.getNumberDirsAndFiles());
+                    view.updateFirstScreen(model.getData());
                     break;
                 
                 case "2":
-                    FileTreeIterator ft = new FileTreeIterator();
+                    ft.clearData();
                     model.setData(ft.getElementData(FileRepository.directoryTree.get(0)));
                     view.updateFirstScreen(model.getData());
                     break;
