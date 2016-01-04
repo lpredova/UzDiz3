@@ -5,8 +5,10 @@
  */
 package mvc;
 
+import CheckStructureThread.DirectoryCheck;
 import CompositeIterator.FileTreeIterator;
 import FileIterator.InitialStructure.FileRepository;
+import additional.FileInfo;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -24,22 +26,26 @@ import utils.Constants;
  * @author Josip
  */
 public class Controller {
-    
+
     private View view;
     private Model model;
+    private int seconds;
     public static int numDir = 0;
     public static int numFile = 0;
     public static int overallSize = 0;
-    
-    public Controller(View view, Model model) {
+
+    DirectoryCheck thread = null;
+
+    public Controller(View view, Model model, int seconds) {
         this.view = view;
         this.model = model;
+        this.seconds = seconds;
     }
-    
+
     public void showScreen() {
         view.printScreen();
     }
-    
+
     public void processOption() {
         FileTreeIterator ft = new FileTreeIterator();
         String choice = "";
@@ -54,47 +60,46 @@ public class Controller {
                     model.setData(ft.getNumberDirsAndFiles());
                     view.updateFirstScreen(model.getData());
                     break;
-                
+
                 case "2":
                     ft.clearData();
                     model.setData(ft.getElementData(FileRepository.directoryTree.get(0)));
                     view.updateFirstScreen(model.getData());
                     break;
-                
+
                 case "3":
-                    ArrayList<String> list = new ArrayList<>();
-                    String stringara3 = "some string for testing border crosses and fix that! Glupi kermek daje grupnu zadacu dok smo svi na praznicima. Kakav krele!!!";
-                    String stringara4 = "something else on my mind hehe";
-                    list.add(stringara3);
-                    list.add(stringara4);
-                    model.setData(list);
-                    view.updateFirstScreen(model.getData());
+                    thread = new DirectoryCheck(seconds, view);
+                    thread.setRunning(true);
+                    thread.start();
+                    view.updateFirstScreenByString("Thread is running.\n", "32");
                     break;
-                
+
                 case "4":
-                    view.updateSecondScreen();
+                    thread.setRunning(false);
+                    thread.interrupt();
+                    view.updateFirstScreenByString("Thread is stopped.", "33");
                     break;
-                
+
                 case "5":
                     view.updateFirstScreenByString("I usually don't do this.", "32");
                     view.updateFirstScreenByString("I hate Java", "32");
                     break;
-                
+
                 case "6":
                     System.out.print(Constants.CURSOS_RESTORE);
                     System.out.print(Constants.ERASE_END_OF_LINE);
                     System.out.print("Odaberi n: ");
                     in.nextLine();
-                    
+
                     break;
-                
+
                 case "7":
                     System.out.print(Constants.CURSOS_RESTORE);
                     System.out.print(Constants.ERASE_END_OF_LINE);
                     System.out.print("Odaberi m: ");
                     in.nextLine();
                     break;
-                
+
                 case "8": {
                     try {
                         showDir(0, new File(T2_01_zadaca_3.rootDirectory));
@@ -103,18 +108,20 @@ public class Controller {
                     }
                 }
                 break;
-                
+
                 case "9":
+                    FileInfo fi = new FileInfo();
+                    fi.printFileInfo();
                     break;
             }
             System.out.print(Constants.CURSOS_RESTORE);
             System.out.print(Constants.ERASE_END_OF_LINE);
             System.out.print(Constants.ANSI_ESC + "33m");
         } while (!choice.equalsIgnoreCase("Q"));
-        
+
         System.out.print(Constants.ERASE_END_OF_LINE);
     }
-    
+
     private void showDir(int indent, File file) throws IOException {
         String text = "";
         for (int i = 0; i < indent; i++) {
@@ -137,29 +144,29 @@ public class Controller {
         if (file.isDirectory()) {
             numDir++;
             view.updateFirstScreenByString(text, "31");
-            
+
         } else {
             numFile++;
             view.updateFirstScreenByString(text, "36");
-            
+
         }
         view.updateSecondScreenByString("Ukupan broj direktorija: " + numDir, "33", true);
         view.updateSecondScreenByString("Ukupan broj datoteka: " + numFile, "33", false);
         view.updateSecondScreenByString("Ukupna veličina: " + df.format(overallSize).replace(",", ".") + "B", "33", false);
-        
+
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             for (int i = 0; i < files.length; i++) {
-                
+
                 showDir(indent + 2, files[i]);
-                
+
             }
         }
     }
-    
+
     private long getFolderSize(File directory) {
         long size = 0;
-        
+
         for (File file : directory.listFiles()) {
             if (file.isFile()) {
                 size += file.length();
@@ -167,7 +174,7 @@ public class Controller {
                 size += getFolderSize(file);
             }
         }
-        
+
         return size;
     }
 }

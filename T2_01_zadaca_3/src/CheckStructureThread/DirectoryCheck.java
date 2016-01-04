@@ -5,6 +5,8 @@
  */
 package CheckStructureThread;
 
+import mvc.View;
+
 /**
  *
  * @author tonovosel
@@ -12,11 +14,13 @@ package CheckStructureThread;
 public class DirectoryCheck extends Thread {
 
     private int secondsNum;
+    private View view;
     private volatile boolean running;
     private volatile boolean active;
 
-    public DirectoryCheck(int secondsNum) {
+    public DirectoryCheck(int secondsNum, View view) {
         this.secondsNum = secondsNum;
+        this.view = view;
     }
 
     public void setRunning(boolean running) {
@@ -42,7 +46,6 @@ public class DirectoryCheck extends Thread {
 
         while (running) {
             active = true;
-            System.out.println("Checking for directory changes...");
             //TODO check for directory changes
 
             active = false;
@@ -50,7 +53,6 @@ public class DirectoryCheck extends Thread {
                 Thread.sleep(secondsNum * 1000);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
-                System.out.println("Dretva zaustavljena.");
             }
         }//while
 

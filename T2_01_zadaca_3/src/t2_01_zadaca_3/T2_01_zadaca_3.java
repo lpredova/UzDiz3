@@ -42,14 +42,9 @@ public class T2_01_zadaca_3 {
         FileRepository filesRepository = new FileRepository();
         filesRepository.getIterator(args[3]);
    
-        /**Additional option**/
-        System.out.println("\nFile info\n");
-        FileInfo fi = new FileInfo();
-        fi.printFileInfo();
-
         View v = new View(rowNum, colNum, screenDivision);
         Model m = new Model();
-        Controller c = new Controller(v, m);
+        Controller c = new Controller(v, m, seconds);
         c.showScreen();
         c.processOption();
 
