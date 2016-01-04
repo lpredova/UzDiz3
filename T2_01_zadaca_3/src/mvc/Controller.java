@@ -149,9 +149,9 @@ public class Controller {
                     break;
             }
             this.setForEntry();
-            if(!thread.isActive()) {
+            if(thread != null && !thread.isActive()) {
                 System.out.print(Constants.ANSI_ESC + "33m");
-            } else {
+            } else if (thread != null && thread.isActive()) {
                 System.out.print(Constants.ANSI_ESC + "32m");
             }
         } while (!choice.equalsIgnoreCase("Q"));
