@@ -6,6 +6,7 @@
 package t2_01_zadaca_3;
 
 import FileIterator.InitialStructure.FileRepository;
+import additional.FileInfo;
 import argumentValidation.ArgumentValidator;
 import mvc.Controller;
 import mvc.Model;
@@ -40,6 +41,11 @@ public class T2_01_zadaca_3 {
         //Reading initial file structure - creational iterator, has only one iteration and creates dir 
         FileRepository filesRepository = new FileRepository();
         filesRepository.getIterator(args[3]);
+   
+        /**Additional option**/
+        System.out.println("\nFile info\n");
+        FileInfo fi = new FileInfo();
+        fi.printFileInfo();
 
         View v = new View(rowNum, colNum, screenDivision);
         Model m = new Model();
