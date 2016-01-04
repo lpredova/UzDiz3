@@ -5,7 +5,6 @@
  */
 package mvc;
 
-
 import CheckStructureThread.DirectoryCheck;
 import CompositeIterator.FileTreeIterator;
 import FileIterator.InitialStructure.FileRepository;
@@ -78,7 +77,7 @@ public class Controller {
                     break;
 
                 case "3":
-                    thread = new DirectoryCheck(seconds, view);
+                    thread = new DirectoryCheck(seconds, view, model);
                     thread.setRunning(true);
                     thread.start();
                     view.updateFirstScreenByString("Thread is running.\n", "32");
@@ -97,7 +96,7 @@ public class Controller {
                 case "6":
                     System.out.print(Constants.CURSOS_RESTORE);
                     System.out.print(Constants.ERASE_END_OF_LINE);
-                    
+
                     //SAVING STATE EXAMPLE
 //                    originator.set(T2_01_zadaca_3.root.clone());
 //                    caretaker.addMemento(originator.saveToMemento());
@@ -106,16 +105,15 @@ public class Controller {
 //                    originator.set(T2_01_zadaca_3.root.clone());
 //                    caretaker.addMemento(originator.saveToMemento());
                     //#
-                    
                     int numberOfPossibleStates = caretaker.getNumberOfPossibleStates() - 1;
-                    
-                    if(numberOfPossibleStates < 0){
+
+                    if (numberOfPossibleStates < 0) {
                         System.out.println("There are no saved states!");
                         break;
                     }
 
                     System.out.println("Odaberi n(0 - " + numberOfPossibleStates + "):");
-         
+
                     int chosenState = Integer.parseInt(in.nextLine());
 
                     originator.restoreFromMemento(caretaker.getMemento(chosenState));
@@ -130,15 +128,14 @@ public class Controller {
                     in.nextLine();
                     // TODO
                     break;
-                    
-                case "8": 
-            
+
+                case "8":
+
                     //Clearing all previous states and building dir tree again
                     caretaker.clearAllStates();
-                    
+
                     T2_01_zadaca_3.filesRepository.directoryTree.clear();
                     T2_01_zadaca_3.filesRepository.getIterator(T2_01_zadaca_3.rootDirectory);
-
 
                 case "9":
 

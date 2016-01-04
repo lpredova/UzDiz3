@@ -12,8 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -102,17 +101,17 @@ public class FileHelper {
 
         return FileHelper.getCreatedTime(filePath);
     }
-    
+
     /**
      * Method for getting file(directory) size from path
+     *
      * @param path
-     * @return 
+     * @return
      */
-    public static long getFileRawSizeFromPath(String path){
+    public static long getFileRawSizeFromPath(String path) {
         File file = new File(path);
         return file.length();
     }
-    
 
     /**
      * Method for getting last updated time of the file
@@ -120,12 +119,11 @@ public class FileHelper {
      * @param path
      * @return
      */
-    public static String getFileUpdatedAtTimeFromPath(String path) {
+    public static String getFileUpdatedAtTimeFromPath(String file) {
 
-        File file = new File(path);
-        Path filePath = file.toPath();
+        File filee = new File(file);
 
-        return FileHelper.getUpdatedTime(filePath);
+        return FileHelper.getUpdatedTime(filee);
     }
 
     /**
@@ -147,17 +145,16 @@ public class FileHelper {
     public static String getFileFormattedSize(File file) {
         return Helpers.FileHelper.getFileSizeFormat(file);
     }
-    
 
     /**
      * Method that returns file size in bytes long format
+     *
      * @param file
-     * @return 
+     * @return
      */
-    public static long getFileRawSize(File file){
+    public static long getFileRawSize(File file) {
         return file.length();
     }
-
 
     /**
      * Method for getting file type, returns directory if file is directory or
@@ -196,62 +193,50 @@ public class FileHelper {
      * @return
      */
     public static String getFileUpdatedAtTime(File file) {
-
-        Path filePath = file.toPath();
-        return FileHelper.getUpdatedTime(filePath);
+        return FileHelper.getUpdatedTime(file);
     }
 
     private static String getCreatedTime(Path filePath) {
+        String fileCreatedAt = "";
         try {
+            SimpleDateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
             BasicFileAttributes fileAttributes = Files.readAttributes(filePath, BasicFileAttributes.class);
-
-            long milliseconds = fileAttributes.creationTime().to(TimeUnit.MILLISECONDS);
-            if ((milliseconds > Long.MIN_VALUE) && (milliseconds < Long.MAX_VALUE)) {
-                Date creationDate = new Date(fileAttributes.creationTime().to(TimeUnit.MILLISECONDS));
-                return creationDate.getDate() + "." + (creationDate.getMonth() + 1) + "." + (creationDate.getYear() + 1900) + " " + (creationDate.getHours()) + ":" + (creationDate.getMinutes()) + ":" + (creationDate.getSeconds());
-            }
-
+            long creationTime = fileAttributes.creationTime().toMillis();
+            fileCreatedAt = f.format(creationTime);
         } catch (IOException ex) {
             Logger.getLogger(FileRepository.class.getName()).log(Level.SEVERE, null, ex);
             return "Unable to fetch time";
         }
-        return "1.1.2016";
+        return fileCreatedAt;
     }
 
-    private static String getUpdatedTime(Path filePath) {
-        try {
-            BasicFileAttributes fileAttributes = Files.readAttributes(filePath, BasicFileAttributes.class);
-
-            long milliseconds = fileAttributes.creationTime().to(TimeUnit.MILLISECONDS);
-            if ((milliseconds > Long.MIN_VALUE) && (milliseconds < Long.MAX_VALUE)) {
-                Date updatedDate = new Date(fileAttributes.lastModifiedTime().to(TimeUnit.MILLISECONDS));
-                return updatedDate.getDate() + "." + (updatedDate.getMonth() + 1) + "." + (updatedDate.getYear() + 1900) + " " + (updatedDate.getHours()) + ":" + (updatedDate.getMinutes()) + ":" + (updatedDate.getSeconds());
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(FileRepository.class.getName()).log(Level.SEVERE, null, ex);
-            return "Unable to fetch time";
-        }
-        return "1.1.2016";
+    private static String getUpdatedTime(File file) {
+        String fileUpdatedAt = "";
+        SimpleDateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        fileUpdatedAt = f.format(file.lastModified());
+        return fileUpdatedAt;
     }
 
     /**
      * Method that gets initial file size on creation tree
+     *
      * @param file
-     * @return 
+     * @return
      */
     private static String getFileSizeFormat(File file) {
         return formatSize(file.length());
     }
-    
+
     /**
      * Method that converts raw size in long and formats it to string
+     *
      * @param size
-     * @return 
+     * @return
      */
-    public static String formatSize(long size){
+    public static String formatSize(long size) {
         String pattern = "###,###.###";
         DecimalFormat myFormatter = new DecimalFormat(pattern);
         String formattedSize = myFormatter.format(size).replace(',', '.') + " B";
         return formattedSize;
-    }  
+    }
 }
