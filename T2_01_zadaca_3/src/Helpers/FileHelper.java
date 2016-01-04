@@ -55,6 +55,10 @@ public class FileHelper {
         File f = new File(path);
         return f.getName();
     }
+    
+    public static String getParentNameFromPath(File file) {
+        return file.getAbsoluteFile().getParentFile().getName();
+    }
 
     /**
      * Method that returns element size
@@ -135,6 +139,15 @@ public class FileHelper {
     public static String getFileName(File file) {
         return file.getName();
     }
+    /**
+     * Method for getting absolute address from file
+     * @param path
+     * @return 
+     */
+    public static String getAbsoluteAddressFromPath(String path) {
+        File file = new File(path);
+        return file.getAbsolutePath();
+    }
 
     /**
      * Method that returns element size
@@ -185,6 +198,7 @@ public class FileHelper {
         return FileHelper.getCreatedTime(filePath);
 
     }
+    
 
     /**
      * Method for getting last updated time of the file

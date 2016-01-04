@@ -17,6 +17,9 @@ public interface AppFile {
     String getUpdatedAt();
     String getFormattedSize();
     long getRawSize();
+    boolean getIsRoot();
+    String getRootAbsoluteAddress();
+    String getParentName();
     
     void setName(String name);
     void setType(String type);
@@ -24,6 +27,9 @@ public interface AppFile {
     void setUpdatedAt(String updatedAt);
     void setFormattedSize(String size);
     void setRawSize(long rawSize);
+    void setIsRoot(boolean isRoot);
+    void setRootAbsouluteAddress(String absAddress);
+    void setParentName(String parentName);
     
     
     /**
