@@ -127,7 +127,7 @@ public class Controller {
                     
                     int chosenState = -1;
                     do{
-                        System.out.print("\nOdaberi n(0 - " + numberOfPossibleStates + "): ");
+                        System.out.print("Odaberi n(0 - " + numberOfPossibleStates + "): ");
                         chosenState = Integer.parseInt(in.nextLine());
                     }while(chosenState < 0 || chosenState > numberOfPossibleStates);
                     
