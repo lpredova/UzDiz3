@@ -24,6 +24,10 @@ public class FileInfo {
     public static long totalFileSize;
     public static int elementCount;
     
+    /**
+     * Method that gets files extensions and then prints elements 
+     * with corresponding extensions
+     */
     public void printFileInfo() {
         
         FileTreeIterator ft = new FileTreeIterator();
@@ -47,7 +51,7 @@ public class FileInfo {
                     "------------------------------------\n"+
                     "Extension: " + extension +  "\n" + 
                     "Total files: " + elementCount + "\n" +
-                    "Size: " + Helpers.FileHelper.formatSize(totalFileSize) + "\n" +
+                    "Total size: " + Helpers.FileHelper.formatSize(totalFileSize) + "\n" +
                     "\n");
          
             for(AppFile file:extensionFiles){
