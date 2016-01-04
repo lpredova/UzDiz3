@@ -7,6 +7,7 @@ package mvc;
 
 import CompositeIterator.FileTreeIterator;
 import FileIterator.InitialStructure.FileRepository;
+import additional.FileInfo;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -107,6 +108,8 @@ public class Controller {
                 break;
                 
                 case "9":
+                    FileInfo fi = new FileInfo();
+                    fi.printFileInfo();
                     break;
             }
             System.out.print(Constants.CURSOS_RESTORE);
