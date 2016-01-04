@@ -47,7 +47,10 @@ public class T2_01_zadaca_3 {
 //        c.processOption();
         
         FileTreeIterator ft = new FileTreeIterator();
-        //ft.printStructure(FileRepository.directoryTree.get(0));
+        ft.printStructure(FileRepository.directoryTree.get(0));
+        
+        /**Additional option**/
+        System.out.println("\nFile info\n");
         FileInfo fi = new FileInfo();
         fi.printFileInfo();
     }
