@@ -65,6 +65,11 @@ public class Parent implements AppFile {
     public List<AppFile> getParent() {
         return this.parentFiles;
     }
+    
+    @Override
+    public void clearParentList(){
+        this.parentFiles.clear();
+    }
 
     @Override
     public String getName() {
@@ -137,14 +142,34 @@ public class Parent implements AppFile {
 
         System.out.println("------------------------------------");
     }
-    
+
     /**
      * Method that we use for updating parents size
-     * @param size 
+     *
+     * @param size
      */
     @Override
-    public void increaseSize(long size){
+    public void increaseSize(long size) {
         this.rawSize += size;
         this.formattedSize = Helpers.FileHelper.formatSize(this.rawSize);
+    }
+
+    @Override
+    public Parent clone() {
+        Parent clone = new Parent(name, type, createdAt, updatedAt, name, rawSize);       
+     
+        clone.formattedSize = this.formattedSize;
+        clone.parentFiles.add(clone);
+
+        for (AppFile child : files) {
+            AppFile childClone = (AppFile) child.clone();
+            
+            childClone.clearParentList();
+            childClone.addParent(clone);
+
+            clone.addChild(childClone);
+        }
+
+        return clone;
     }
 }

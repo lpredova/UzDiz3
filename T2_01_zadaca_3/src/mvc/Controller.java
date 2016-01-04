@@ -5,15 +5,18 @@
  */
 package mvc;
 
+
 import CheckStructureThread.DirectoryCheck;
 import CompositeIterator.FileTreeIterator;
 import FileIterator.InitialStructure.FileRepository;
 import additional.FileInfo;
+
+import FileStructureMemento.Caretaker;
+import FileStructureMemento.Originator;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,6 +40,7 @@ public class Controller {
     DirectoryCheck thread = null;
 
     public Controller(View view, Model model, int seconds) {
+
         this.view = view;
         this.model = model;
         this.seconds = seconds;
@@ -46,8 +50,14 @@ public class Controller {
         view.printScreen();
     }
 
+    public void setForEntry() {
+        view.enterInput();
+    }
+
     public void processOption() {
         FileTreeIterator ft = new FileTreeIterator();
+        Caretaker caretaker = new Caretaker();
+        Originator originator = new Originator();
         String choice = "";
         do {
             System.out.print(Constants.CURSOR_SAVE);
@@ -81,15 +91,35 @@ public class Controller {
                     break;
 
                 case "5":
-                    view.updateFirstScreenByString("I usually don't do this.", "32");
-                    view.updateFirstScreenByString("I hate Java", "32");
+                    // TODO
                     break;
 
                 case "6":
                     System.out.print(Constants.CURSOS_RESTORE);
                     System.out.print(Constants.ERASE_END_OF_LINE);
-                    System.out.print("Odaberi n: ");
-                    in.nextLine();
+                    
+                    //SAVING STATE EXAMPLE
+//                    originator.set(T2_01_zadaca_3.root.clone());
+//                    caretaker.addMemento(originator.saveToMemento());
+//                    
+//                    T2_01_zadaca_3.root.setName("NOVO");
+//                    originator.set(T2_01_zadaca_3.root.clone());
+//                    caretaker.addMemento(originator.saveToMemento());
+                    //#
+                    
+                    int numberOfPossibleStates = caretaker.getNumberOfPossibleStates() - 1;
+                    
+                    if(numberOfPossibleStates < 0){
+                        System.out.println("There are no saved states!");
+                        break;
+                    }
+
+                    System.out.println("Odaberi n(0 - " + numberOfPossibleStates + "):");
+         
+                    int chosenState = Integer.parseInt(in.nextLine());
+
+                    originator.restoreFromMemento(caretaker.getMemento(chosenState));
+                    T2_01_zadaca_3.root = originator.getState();
 
                     break;
 
@@ -98,42 +128,42 @@ public class Controller {
                     System.out.print(Constants.ERASE_END_OF_LINE);
                     System.out.print("Odaberi m: ");
                     in.nextLine();
+                    // TODO
                     break;
+                    
+                case "8": 
+            
+                    //Clearing all previous states and building dir tree again
+                    caretaker.clearAllStates();
+                    
+                    T2_01_zadaca_3.filesRepository.directoryTree.clear();
+                    T2_01_zadaca_3.filesRepository.getIterator(T2_01_zadaca_3.rootDirectory);
 
-                case "8": {
-                    try {
-                        showDir(0, new File(T2_01_zadaca_3.rootDirectory));
-                    } catch (IOException ex) {
-                        Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                break;
 
                 case "9":
+
                     FileInfo fi = new FileInfo();
                     fi.printFileInfo();
+
+                    // TODO OWN FUNCIONALITY
                     break;
             }
-            System.out.print(Constants.CURSOS_RESTORE);
-            System.out.print(Constants.ERASE_END_OF_LINE);
-            System.out.print(Constants.ANSI_ESC + "33m");
+            this.setForEntry();
         } while (!choice.equalsIgnoreCase("Q"));
 
         System.out.print(Constants.ERASE_END_OF_LINE);
     }
 
-    private void showDir(int indent, File file) throws IOException {
+    public void showDir(int indent, File file) throws IOException {
         String text = "";
         for (int i = 0; i < indent; i++) {
             text += "-";
         }
-        SimpleDateFormat formatedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        String dateModified = formatedDate.format(file.lastModified());
         DecimalFormat df = new DecimalFormat("###,###.###");
         if (file.isDirectory()) {
-            text += file.getName() + " " + dateModified + " " + df.format(getFolderSize(file)).replace(",", ".") + "B";
+            text += file.getName();
         } else {
-            text += file.getName() + " " + dateModified + " " + df.format(file.length()).replace(",", ".") + "B";
+            text += file.getName();
         }
         try {
             Thread.sleep(500);
@@ -164,17 +194,4 @@ public class Controller {
         }
     }
 
-    private long getFolderSize(File directory) {
-        long size = 0;
-
-        for (File file : directory.listFiles()) {
-            if (file.isFile()) {
-                size += file.length();
-            } else {
-                size += getFolderSize(file);
-            }
-        }
-
-        return size;
-    }
 }
