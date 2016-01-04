@@ -10,8 +10,6 @@ import FileStructureMemento.Originator;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,6 +41,10 @@ public class Controller {
         view.printScreen();
     }
 
+    public void setForEntry() {
+        view.enterInput();
+    }
+
     public void processOption() {
         String choice = "";
         do {
@@ -51,60 +53,23 @@ public class Controller {
             choice = in.nextLine();
             switch (choice) {
                 case "1":
-                    ArrayList<String> lista1 = new ArrayList<>();
-                    String stringara5 = "Ukupan broj direktorija: 5";
-                    String stringara6 = "Ukupan broj datoteka: 16";
-                    lista1.add(stringara5);
-                    lista1.add(stringara6);
-                    model.setData(lista1);
-                    view.updateFirstScreen(lista1);
+                    // TODO
                     break;
 
                 case "2":
-                    ArrayList<String> lista = new ArrayList<>();
-                    String stringara = "some string for testing border crosses and fix that! Glupi kermek daje grupnu zadacu dok smo svi na praznicima. Kakav krele!!!";
-                    String stringara2 = "something else on my mind hehe";
-                    lista.add(stringara);
-                    lista.add(stringara2);
-                    lista.add("a");
-                    lista.add("b");
-                    lista.add("c");
-                    lista.add("d");
-                    lista.add("e");
-                    lista.add("f");
-                    lista.add("g");
-                    lista.add("h");
-                    lista.add("j");
-                    lista.add("k");
-                    lista.add("l");
-                    lista.add("m");
-                    lista.add("n");
-                    lista.add("o");
-                    lista.add("p");
-                    lista.add("p");
-                    lista.add("p");
-                    lista.add("p");
-                    model.setData(lista);
-                    view.updateFirstScreen(model.getData());
+                    // TODO
                     break;
 
                 case "3":
-                    ArrayList<String> list = new ArrayList<>();
-                    String stringara3 = "some string for testing border crosses and fix that! Glupi kermek daje grupnu zadacu dok smo svi na praznicima. Kakav krele!!!";
-                    String stringara4 = "something else on my mind hehe";
-                    list.add(stringara3);
-                    list.add(stringara4);
-                    model.setData(list);
-                    view.updateFirstScreen(model.getData());
+                    // TODO
                     break;
 
                 case "4":
-                    view.updateSecondScreen();
+                    // TODO
                     break;
 
                 case "5":
-                    view.updateFirstScreenByString("I usually don't do this.", "32");
-                    view.updateFirstScreenByString("I hate Java", "32");
+                    // TODO
                     break;
 
                 case "6":
@@ -141,46 +106,38 @@ public class Controller {
                     System.out.print(Constants.ERASE_END_OF_LINE);
                     System.out.print("Odaberi m: ");
                     in.nextLine();
+                    // TODO
                     break;
-
-                case "8": 
-                    //Do we need this???
-                    /*try {
-                        showDir(0, new File(T2_01_zadaca_3.rootDirectory));
-                    } catch (IOException ex) {
-                        Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-                    }*/
                     
+                case "8": 
+            
                     //Clearing all previous states and building dir tree again
                     caretaker.clearAllStates();
                     
                     T2_01_zadaca_3.filesRepository.directoryTree.clear();
                     T2_01_zadaca_3.filesRepository.getIterator(T2_01_zadaca_3.rootDirectory);
-                    break;
+
 
                 case "9":
+                    // TODO OWN FUNCIONALITY
                     break;
             }
-            System.out.print(Constants.CURSOS_RESTORE);
-            System.out.print(Constants.ERASE_END_OF_LINE);
-            System.out.print(Constants.ANSI_ESC + "33m");
+            this.setForEntry();
         } while (!choice.equalsIgnoreCase("Q"));
 
         System.out.print(Constants.ERASE_END_OF_LINE);
     }
 
-    private void showDir(int indent, File file) throws IOException {
+    public void showDir(int indent, File file) throws IOException {
         String text = "";
         for (int i = 0; i < indent; i++) {
             text += "-";
         }
-        SimpleDateFormat formatedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        String dateModified = formatedDate.format(file.lastModified());
         DecimalFormat df = new DecimalFormat("###,###.###");
         if (file.isDirectory()) {
-            text += file.getName() + " " + dateModified + " " + df.format(getFolderSize(file)).replace(",", ".") + "B";
+            text += file.getName();
         } else {
-            text += file.getName() + " " + dateModified + " " + df.format(file.length()).replace(",", ".") + "B";
+            text += file.getName();
         }
         try {
             Thread.sleep(500);
@@ -211,17 +168,4 @@ public class Controller {
         }
     }
 
-    private long getFolderSize(File directory) {
-        long size = 0;
-
-        for (File file : directory.listFiles()) {
-            if (file.isFile()) {
-                size += file.length();
-            } else {
-                size += getFolderSize(file);
-            }
-        }
-
-        return size;
-    }
 }
