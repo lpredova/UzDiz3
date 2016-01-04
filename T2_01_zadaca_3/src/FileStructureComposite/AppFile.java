@@ -1,11 +1,12 @@
 package FileStructureComposite;
 
+import additional.visitor.TreeElementInterface;
 import java.util.List;
 
 /**
  * Created by lovro
  */
-public interface AppFile {
+public interface AppFile extends TreeElementInterface{
       
     /**
      * Getters and setters for file elements

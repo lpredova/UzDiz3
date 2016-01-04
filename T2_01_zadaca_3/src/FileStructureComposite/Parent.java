@@ -1,12 +1,13 @@
 package FileStructureComposite;
 
+import additional.visitor.TreeElementVisitor;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by lovro
  */
-public class Parent implements AppFile {
+public class Parent implements AppFile,TreeElementVisitor{
 
     private String name;
     private String type;
@@ -151,7 +152,7 @@ public class Parent implements AppFile {
     @Override
     public void increaseSize(long size) {
         this.rawSize += size;
-        this.formattedSize = Helpers.FileHelper.formatSize(this.rawSize);
+        this.formattedSize = helpers.FileHelper.formatSize(this.rawSize);
     }
 
     @Override
@@ -171,5 +172,15 @@ public class Parent implements AppFile {
         }
 
         return clone;
+    }
+
+    @Override
+    public void visit(AppFile file) {
+        System.out.println("visiting");    
+    }
+
+    @Override
+    public void accept(TreeElementVisitor elementVisitor) {
+         elementVisitor.visit(this);
     }
 }

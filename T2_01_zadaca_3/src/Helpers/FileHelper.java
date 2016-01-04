@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Helpers;
+package helpers;
 
 import FileIterator.InitialStructure.FileRepository;
 import java.io.File;
@@ -66,7 +66,7 @@ public class FileHelper {
     public static String getFileSizeFormattedFromPath(String path) {
         File f = new File(path);
 
-        return Helpers.FileHelper.getFileSizeFormat(f);
+        return helpers.FileHelper.getFileSizeFormat(f);
     }
 
     /**
@@ -77,7 +77,7 @@ public class FileHelper {
      * @return
      */
     public static String getFileTypeFromPath(String path) {
-        if (Helpers.FileHelper.isDirectory(path)) {
+        if (helpers.FileHelper.isDirectory(path)) {
             return "directory";
         }
         File f = new File(path);
@@ -102,17 +102,17 @@ public class FileHelper {
 
         return FileHelper.getCreatedTime(filePath);
     }
-    
+
     /**
      * Method for getting file(directory) size from path
+     *
      * @param path
-     * @return 
+     * @return
      */
-    public static long getFileRawSizeFromPath(String path){
+    public static long getFileRawSizeFromPath(String path) {
         File file = new File(path);
         return file.length();
     }
-    
 
     /**
      * Method for getting last updated time of the file
@@ -145,19 +145,18 @@ public class FileHelper {
      * @return
      */
     public static String getFileFormattedSize(File file) {
-        return Helpers.FileHelper.getFileSizeFormat(file);
+        return helpers.FileHelper.getFileSizeFormat(file);
     }
-    
 
     /**
      * Method that returns file size in bytes long format
+     *
      * @param file
-     * @return 
+     * @return
      */
-    public static long getFileRawSize(File file){
+    public static long getFileRawSize(File file) {
         return file.length();
     }
-
 
     /**
      * Method for getting file type, returns directory if file is directory or
@@ -236,22 +235,45 @@ public class FileHelper {
 
     /**
      * Method that gets initial file size on creation tree
+     *
      * @param file
-     * @return 
+     * @return
      */
     private static String getFileSizeFormat(File file) {
         return formatSize(file.length());
     }
-    
+
     /**
      * Method that converts raw size in long and formats it to string
+     *
      * @param size
-     * @return 
+     * @return
      */
-    public static String formatSize(long size){
+    public static String formatSize(long size) {
         String pattern = "###,###.###";
         DecimalFormat myFormatter = new DecimalFormat(pattern);
         String formattedSize = myFormatter.format(size).replace(',', '.') + " B";
         return formattedSize;
-    }  
+    }
+
+    /**
+     * Method that returns hash value of string
+     * https://stackoverflow.com/questions/415953/how-can-i-generate-an-md5-hash/421696#421696
+     *
+     * @param md5
+     * @return
+     */
+    public static String MD5(String md5) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            byte[] array = md.digest(md5.getBytes());
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < array.length; ++i) {
+                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+        }
+        return null;
+    }
 }

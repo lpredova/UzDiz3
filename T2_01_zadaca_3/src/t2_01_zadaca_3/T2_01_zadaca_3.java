@@ -53,8 +53,10 @@ public class T2_01_zadaca_3 {
 
         root = filesRepository.directoryTree.get(0);
         
+        FileInfo fi = new FileInfo();
+        fi.printFileInfo();
 
-        View v = new View(rowNum, colNum, screenDivision);
+ /*       View v = new View(rowNum, colNum, screenDivision);
         Model m = new Model();
         Controller c = new Controller(v, m, seconds);
         c.showScreen();
@@ -64,7 +66,7 @@ public class T2_01_zadaca_3 {
             Logger.getLogger(T2_01_zadaca_3.class.getName()).log(Level.SEVERE, null, ex);
         }
         c.setForEntry();
-        c.processOption();
+        c.processOption();*/
 
     }
 

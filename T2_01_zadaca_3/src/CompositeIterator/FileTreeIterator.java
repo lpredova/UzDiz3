@@ -6,6 +6,7 @@
 package CompositeIterator;
 
 import FileStructureComposite.AppFile;
+import additional.visitor.HashVisitor;
 import java.util.ArrayList;
 
 /**
@@ -148,6 +149,20 @@ public class FileTreeIterator implements Container {
             }
             if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
                 calculateNumberOfDirsAndFiles(nextElement);
+            }
+        }
+    }
+    
+    public void calculateHash(AppFile elem,HashVisitor hv){
+        
+        
+        FileTreeIterator ft = this;
+        for (Iterator iter = ft.getIterator(); iter.hasNext(elem);) {
+            AppFile nextElement = (AppFile) iter.getNextChild(elem);
+            nextElement.accept(hv);
+            
+            if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
+                calculateHash(nextElement,hv);
             }
         }
     }

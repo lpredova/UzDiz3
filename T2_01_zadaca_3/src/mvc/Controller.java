@@ -145,7 +145,6 @@ public class Controller {
                     FileInfo fi = new FileInfo();
                     fi.printFileInfo();
 
-                    // TODO OWN FUNCIONALITY
                     break;
             }
             this.setForEntry();

@@ -8,6 +8,7 @@ package additional;
 import CompositeIterator.FileTreeIterator;
 import FileIterator.InitialStructure.FileRepository;
 import FileStructureComposite.AppFile;
+import additional.visitor.HashVisitor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -51,12 +52,18 @@ public class FileInfo {
                     "------------------------------------\n"+
                     "Extension: " + extension +  "\n" + 
                     "Total files: " + elementCount + "\n" +
-                    "Total size: " + Helpers.FileHelper.formatSize(totalFileSize) + "\n" +
+                    "Total size: " + helpers.FileHelper.formatSize(totalFileSize) + "\n" +
                     "\n");
          
             for(AppFile file:extensionFiles){
                 file.print();
             }
         }
+        
+        
+        HashVisitor hv = new HashVisitor();
+        ft.calculateHash(FileRepository.directoryTree.get(0),hv);
+        
+        
     }  
 }

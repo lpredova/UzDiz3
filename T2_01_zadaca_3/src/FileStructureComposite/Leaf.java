@@ -1,12 +1,14 @@
 package FileStructureComposite;
 
+
+import additional.visitor.TreeElementVisitor;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by lovro
  */
-public class Leaf implements AppFile {
+public class Leaf implements AppFile,TreeElementVisitor {
 
     private String name;
     private String type;
@@ -168,5 +170,15 @@ public class Leaf implements AppFile {
         }
 
         return clone;
+    }
+    
+    @Override
+    public void visit(AppFile file) {
+        System.out.println("visiting");    
+    } 
+    
+    @Override
+    public void accept(TreeElementVisitor elementVisitor) {
+        elementVisitor.visit(this);
     }
 }
