@@ -5,7 +5,6 @@
  */
 package mvc;
 
-
 import CheckStructureThread.DirectoryCheck;
 import CompositeIterator.FileTreeIterator;
 import FileIterator.InitialStructure.FileRepository;
@@ -58,6 +57,11 @@ public class Controller {
         FileTreeIterator ft = new FileTreeIterator();
         Caretaker caretaker = new Caretaker();
         Originator originator = new Originator();
+
+        // Saving initial state to memento
+        originator.set(T2_01_zadaca_3.root.clone());
+        caretaker.addMemento(originator.saveToMemento());
+
         String choice = "";
         do {
             System.out.print(Constants.CURSOR_SAVE);
@@ -97,25 +101,20 @@ public class Controller {
                 case "6":
                     System.out.print(Constants.CURSOS_RESTORE);
                     System.out.print(Constants.ERASE_END_OF_LINE);
-                    
+
                     //SAVING STATE EXAMPLE
 //                    originator.set(T2_01_zadaca_3.root.clone());
 //                    caretaker.addMemento(originator.saveToMemento());
 //                    
-//                    T2_01_zadaca_3.root.setName("NOVO");
-//                    originator.set(T2_01_zadaca_3.root.clone());
-//                    caretaker.addMemento(originator.saveToMemento());
-                    //#
-                    
                     int numberOfPossibleStates = caretaker.getNumberOfPossibleStates() - 1;
-                    
-                    if(numberOfPossibleStates < 0){
+
+                    if (numberOfPossibleStates < 0) {
                         System.out.println("There are no saved states!");
                         break;
                     }
 
                     System.out.println("Odaberi n(0 - " + numberOfPossibleStates + "):");
-         
+
                     int chosenState = Integer.parseInt(in.nextLine());
 
                     originator.restoreFromMemento(caretaker.getMemento(chosenState));
@@ -130,15 +129,22 @@ public class Controller {
                     in.nextLine();
                     // TODO
                     break;
-                    
-                case "8": 
-            
+
+                case "8":
+
                     //Clearing all previous states and building dir tree again
                     caretaker.clearAllStates();
-                    
+
                     T2_01_zadaca_3.filesRepository.directoryTree.clear();
                     T2_01_zadaca_3.filesRepository.getIterator(T2_01_zadaca_3.rootDirectory);
 
+                    //Setting the new root element and saving it to memento
+                    T2_01_zadaca_3.root = T2_01_zadaca_3.filesRepository.directoryTree.get(0);
+                    
+                    originator.set(T2_01_zadaca_3.root.clone());
+                    caretaker.addMemento(originator.saveToMemento());
+                    
+                    break;
 
                 case "9":
 
