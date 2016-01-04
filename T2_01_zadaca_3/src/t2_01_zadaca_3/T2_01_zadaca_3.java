@@ -7,8 +7,6 @@ package t2_01_zadaca_3;
 
 import FileIterator.InitialStructure.FileRepository;
 import FileStructureComposite.AppFile;
-import additional.layers.LayerStructure;
-import additional.layers.ReportLayer;
 
 import argumentValidation.ArgumentValidator;
 import java.io.File;
@@ -49,15 +47,10 @@ public class T2_01_zadaca_3 {
 
         //Reading initial file structure - creational iterator, has only one iteration and creates dir 
         filesRepository.getIterator(args[3]);
-
-   
-
+        
         root = filesRepository.directoryTree.get(0);
         
-        LayerStructure ls = new LayerStructure();
-        ls.doActions();
-
- /*       View v = new View(rowNum, colNum, screenDivision);
+        View v = new View(rowNum, colNum, screenDivision);
         Model m = new Model();
         Controller c = new Controller(v, m, seconds);
         c.showScreen();
@@ -67,7 +60,7 @@ public class T2_01_zadaca_3 {
             Logger.getLogger(T2_01_zadaca_3.class.getName()).log(Level.SEVERE, null, ex);
         }
         c.setForEntry();
-        c.processOption();*/
+        c.processOption();
 
     }
 

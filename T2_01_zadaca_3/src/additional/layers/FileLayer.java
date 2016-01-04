@@ -5,6 +5,7 @@
  */
 package additional.layers;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -14,19 +15,16 @@ import java.util.logging.Logger;
  *
  * @author lovro
  */
-public class FileLayer implements LayerInterface{
+public class FileLayer implements LayerInterface {
 
     String info;
 
     @Override
     public void action() {
-                
+
         try {
             PrintWriter out;
-            
             String filename = (System.currentTimeMillis() / 1000L) + ".txt";
-            
-                    System.out.println(filename);
 
             out = new PrintWriter(filename);
             out.println(info);
@@ -47,8 +45,7 @@ public class FileLayer implements LayerInterface{
 
     @Override
     public void push(String info) {
-        this.info = info; 
+        this.info = info;
     }
 
-   
 }

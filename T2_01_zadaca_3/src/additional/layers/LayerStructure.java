@@ -24,7 +24,7 @@ public class LayerStructure {
         //Getting report
         this.layer.action();
         info = this.layer.pull();
-        
+        System.out.println(info);
         
         //Creating file
         this.layer = new FileLayer();
@@ -38,10 +38,5 @@ public class LayerStructure {
         this.layer.action();
         info = this.layer.pull();
         
-        //uploading file to dropbox
-        
-    }
-    
-    
-    
+    }  
 }

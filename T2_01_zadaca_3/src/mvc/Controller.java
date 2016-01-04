@@ -12,7 +12,7 @@ import FileIterator.InitialStructure.FileRepository;
 
 import FileStructureMemento.Caretaker;
 import FileStructureMemento.Originator;
-import additional.layers.ReportLayer;
+import additional.layers.LayerStructure;
 
 import java.io.File;
 import java.io.IOException;
@@ -141,8 +141,8 @@ public class Controller {
 
 
                 case "9":
-                    ReportLayer rl = new ReportLayer();
-                    rl.action();
+                    LayerStructure ls = new LayerStructure();
+                    ls.doActions();
                     
                     break;
             }

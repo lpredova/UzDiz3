@@ -32,23 +32,15 @@ public class ZipLayer implements LayerInterface {
         ZipOutputStream out = null;
 
         try {
-                        System.out.println("INFO : " + info);
 
-            
             String fileContents = Helpers.FileHelper.readFile(info);
-            
-            
-            
-            System.out.println(fileContents);
-            
             final File f = new File(info.split("\\.")[0] + ".zip");
-            
+
             out = new ZipOutputStream(new FileOutputStream(f));
             ZipEntry e = new ZipEntry(info);
             out.putNextEntry(e);
-            byte[] data =fileContents.getBytes();
-            
-            
+            byte[] data = fileContents.getBytes();
+
             out.write(data, 0, data.length);
             out.closeEntry();
             out.close();
