@@ -5,8 +5,15 @@
  */
 package mvc;
 
+
+import CheckStructureThread.DirectoryCheck;
+import CompositeIterator.FileTreeIterator;
+import FileIterator.InitialStructure.FileRepository;
+import additional.FileInfo;
+
 import FileStructureMemento.Caretaker;
 import FileStructureMemento.Originator;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -25,16 +32,18 @@ public class Controller {
 
     private View view;
     private Model model;
+    private int seconds;
     public static int numDir = 0;
     public static int numFile = 0;
     public static int overallSize = 0;
 
-    Caretaker caretaker = new Caretaker();
-    Originator originator = new Originator();
+    DirectoryCheck thread = null;
 
-    public Controller(View view, Model model) {
+    public Controller(View view, Model model, int seconds) {
+
         this.view = view;
         this.model = model;
+        this.seconds = seconds;
     }
 
     public void showScreen() {
@@ -46,6 +55,9 @@ public class Controller {
     }
 
     public void processOption() {
+        FileTreeIterator ft = new FileTreeIterator();
+        Caretaker caretaker = new Caretaker();
+        Originator originator = new Originator();
         String choice = "";
         do {
             System.out.print(Constants.CURSOR_SAVE);
@@ -53,19 +65,29 @@ public class Controller {
             choice = in.nextLine();
             switch (choice) {
                 case "1":
-                    // TODO
+                    ft.clearData();
+                    ft.calculateNumberOfDirsAndFiles(FileRepository.directoryTree.get(0));
+                    model.setData(ft.getNumberDirsAndFiles());
+                    view.updateFirstScreen(model.getData());
                     break;
 
                 case "2":
-                    // TODO
+                    ft.clearData();
+                    model.setData(ft.getElementData(FileRepository.directoryTree.get(0)));
+                    view.updateFirstScreen(model.getData());
                     break;
 
                 case "3":
-                    // TODO
+                    thread = new DirectoryCheck(seconds, view);
+                    thread.setRunning(true);
+                    thread.start();
+                    view.updateFirstScreenByString("Thread is running.\n", "32");
                     break;
 
                 case "4":
-                    // TODO
+                    thread.setRunning(false);
+                    thread.interrupt();
+                    view.updateFirstScreenByString("Thread is stopped.", "33");
                     break;
 
                 case "5":
@@ -119,6 +141,10 @@ public class Controller {
 
 
                 case "9":
+
+                    FileInfo fi = new FileInfo();
+                    fi.printFileInfo();
+
                     // TODO OWN FUNCIONALITY
                     break;
             }
