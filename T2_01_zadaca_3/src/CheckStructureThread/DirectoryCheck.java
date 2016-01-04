@@ -34,6 +34,7 @@ public class DirectoryCheck extends Thread {
     private Model model;
     private volatile boolean running;
     private volatile boolean active;
+    private boolean deltaExists;
     FileTreeIterator ft = null;
     File rootDir = null;
     AppFile compositeRoot = FileRepository.directoryTree.get(0);
@@ -74,6 +75,9 @@ public class DirectoryCheck extends Thread {
 
             try {
                 checkForDelta(rootDir, compositeRoot);
+                if (!deltaExists) {
+                    view.updateFirstScreenByString("Ne postoje promjene", "31");
+                }
             } catch (IOException ex) {
                 Logger.getLogger(DirectoryCheck.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -89,6 +93,7 @@ public class DirectoryCheck extends Thread {
 
     public void checkForDelta(File parent, AppFile compositeParent) throws IOException {
 
+        deltaExists = false;
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         String currentTime = sdf.format(cal.getTime());
@@ -104,18 +109,21 @@ public class DirectoryCheck extends Thread {
                             //TODO spremiti stari composite u memento
                             //TODO ponovno kreirati stablo u compositu sa novim stanjem
                             view.updateFirstScreenByString("File je ažuriran", "31");
+                            deltaExists = true;
                         }
                         if (!nextElement.getType().equalsIgnoreCase("directory") && files[i].isFile()) {
                             if (!nextElement.getFormattedSize().equalsIgnoreCase(formatSize(files[i]))) {
                                 //TODO spremiti stari composite u memento
                                 //TODO ponovno kreirati stablo u compositu sa novim stanjem
                                 view.updateFirstScreenByString("File ima drugačiju veličinu.", "31");
+                                deltaExists = true;
                             }
                         }
                         if (!nextElement.getCreatedAt().equalsIgnoreCase(formatCreatedAt(files[i]))) {
                             //TODO spremiti stari composite u memento
                             //TODO ponovno kreirati stablo u compositu sa novim stanjem
                             view.updateFirstScreenByString("Kreiran je novi file sa istim imenom", "31");
+                            deltaExists = true;
                         }
                     }
                     if (files[i].isDirectory() && nextElement.getType().equalsIgnoreCase("directory")) {
