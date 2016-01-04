@@ -49,7 +49,7 @@ public class FileRepository implements Container {
         public Object next() {
             return null;
         }
-
+        
         /**
          * Method for creating root of directory tree, root must be directory,
          * otherwise we print out error and stop the program

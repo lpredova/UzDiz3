@@ -8,10 +8,10 @@ package mvc;
 import CheckStructureThread.DirectoryCheck;
 import CompositeIterator.FileTreeIterator;
 import FileIterator.InitialStructure.FileRepository;
-import additional.FileInfo;
 
 import FileStructureMemento.Caretaker;
 import FileStructureMemento.Originator;
+import additional.layers.LayerStructure;
 
 import java.io.File;
 import java.io.IOException;
@@ -171,11 +171,9 @@ public class Controller {
                     break;
 
                 case "9":
-
-                    FileInfo fi = new FileInfo();
-                    fi.printFileInfo();
-
-                    // TODO OWN FUNCIONALITY
+                    LayerStructure ls = new LayerStructure();
+                    ls.doActions();
+                    
                     break;
             }
             this.setForEntry();

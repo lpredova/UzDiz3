@@ -1,18 +1,21 @@
 package FileStructureComposite;
 
+
+import additional.visitor.TreeElementVisitor;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by lovro
  */
-public class Leaf implements AppFile {
+public class Leaf implements AppFile,TreeElementVisitor {
 
     private String name;
     private String type;
     private String createdAt;
     private String updatedAt;
     private String formattedSize;
+    private String fileHash;
     private long rawSize;
 
     private List<AppFile> parentFiles = new ArrayList<>();
@@ -98,6 +101,16 @@ public class Leaf implements AppFile {
     public long getRawSize() {
         return this.rawSize;
     }
+    
+    @Override
+    public String getFileHash() {
+        return this.fileHash;
+    }
+
+    @Override
+    public void setFileHash(String hash) {
+        this.fileHash = hash;
+    }
 
     @Override
     public void setName(String name) {
@@ -140,6 +153,27 @@ public class Leaf implements AppFile {
 
         System.out.println("------------------------------------");
     }
+    
+    /**
+     * Method that returns data from element as string
+     *
+     * @return
+     */
+    @Override
+    public String elementData() {
+
+        String output;
+        output
+                = "\nName:" + this.getName() + "\n"
+                + "Type:" + this.getType() + "\n"
+                + "Created at:" + this.getCreatedAt() + "\n"
+                + "Updated at:" + this.getUpdatedAt() + "\n"
+                + "Size:" + this.getFormattedSize() + "\n"
+                + "Hash: " + this.getFileHash() + "\n"
+                + "------------------------------------";
+
+        return output;
+    }
 
     /**
      * Method that we use for updating parents size, not really necessary with
@@ -168,5 +202,15 @@ public class Leaf implements AppFile {
         }
 
         return clone;
+    }
+    
+    @Override
+    public void visit(AppFile file) {
+        //   
+    } 
+    
+    @Override
+    public void accept(TreeElementVisitor elementVisitor) {
+        elementVisitor.visit(this);
     }
 }

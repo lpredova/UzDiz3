@@ -6,7 +6,6 @@
 package t2_01_zadaca_3;
 
 import FileIterator.InitialStructure.FileRepository;
-import additional.FileInfo;
 import FileStructureComposite.AppFile;
 
 import argumentValidation.ArgumentValidator;
@@ -48,12 +47,9 @@ public class T2_01_zadaca_3 {
 
         //Reading initial file structure - creational iterator, has only one iteration and creates dir 
         filesRepository.getIterator(args[3]);
-
-   
-
+        
         root = filesRepository.directoryTree.get(0);
         
-
         View v = new View(rowNum, colNum, screenDivision);
         Model m = new Model();
         Controller c = new Controller(v, m, seconds);
