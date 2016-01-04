@@ -142,6 +142,10 @@ public class View {
                     }
 
                     counter++;
+                    if (i == halfRows) {
+                        this.eraseFirstScreen();
+                        i = 0;
+                    }
                 }
 
                 try {
