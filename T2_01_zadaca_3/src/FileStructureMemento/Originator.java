@@ -21,12 +21,13 @@ public class Originator {
         this.state = state;
     }
 
-    public AppFile getState(){
+    public AppFile getState() {
         return state.clone();
     }
-    
+
     public Object saveToMemento() {
         System.out.println("Originator: Saving to Memento.");
+
         return new Memento(state);
     }
 

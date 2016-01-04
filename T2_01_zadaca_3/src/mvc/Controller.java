@@ -10,12 +10,14 @@ import CompositeIterator.FileTreeIterator;
 import FileIterator.InitialStructure.FileRepository;
 import additional.FileInfo;
 
+import FileStructureComposite.AppFile;
 import FileStructureMemento.Caretaker;
 import FileStructureMemento.Originator;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -95,7 +97,15 @@ public class Controller {
                     break;
 
                 case "5":
-                    // TODO
+                    System.out.print(Constants.CURSOS_RESTORE);
+                    System.out.print(Constants.ERASE_END_OF_LINE);
+
+                    HashMap<Object, String> savedStates = caretaker.getSavedStates();
+                    
+                    for (int i = 0; i < savedStates.size(); i++) {
+                        System.out.println("State: " + i + " Saved: " + savedStates.values().toArray()[i]);
+                    }
+                    
                     break;
 
                 case "6":
@@ -113,7 +123,7 @@ public class Controller {
                         break;
                     }
 
-                    System.out.println("Odaberi n(0 - " + numberOfPossibleStates + "):");
+                    view.updateFirstScreenByString("Odaberi n(0 - " + numberOfPossibleStates + "):", "32");
 
                     int chosenState = Integer.parseInt(in.nextLine());
 
@@ -140,10 +150,10 @@ public class Controller {
 
                     //Setting the new root element and saving it to memento
                     T2_01_zadaca_3.root = T2_01_zadaca_3.filesRepository.directoryTree.get(0);
-                    
+
                     originator.set(T2_01_zadaca_3.root.clone());
                     caretaker.addMemento(originator.saveToMemento());
-                    
+
                     break;
 
                 case "9":
