@@ -80,13 +80,13 @@ public class Controller {
                     thread = new DirectoryCheck(seconds, view, model);
                     thread.setRunning(true);
                     thread.start();
-                    view.updateFirstScreenByString("Thread is running.", "32");
+                    view.updateFirstScreenByString("Dretva se izvršava.", "32");
                     break;
 
                 case "4":
                     thread.setRunning(false);
                     thread.interrupt();
-                    view.updateFirstScreenByString("Thread is stopped.", "33");
+                    view.updateFirstScreenByString("Dretva je stopirana.", "33");
                     break;
 
                 case "5":
@@ -108,7 +108,7 @@ public class Controller {
                     int numberOfPossibleStates = caretaker.getNumberOfPossibleStates() - 1;
 
                     if (numberOfPossibleStates < 0) {
-                        System.out.println("There are no saved states!");
+                        System.out.println("Nema spremljenih stanja!");
                         break;
                     }
 

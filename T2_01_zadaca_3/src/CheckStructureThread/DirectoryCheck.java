@@ -138,12 +138,12 @@ public class DirectoryCheck extends Thread {
                         }
                     }
                     if (!compositeFiles.contains(files[i].getName()) && fileSystemFiles.contains(files[i].getName())) {
-                        view.updateSecondScreenByString(currentTime + " File " + files[i].getName() + " je dodan, "
+                        view.updateSecondScreenByString(currentTime + " File/folder " + files[i].getName() + " je dodan, "
                                 + " putanja: " + files[i].getCanonicalPath(), "31", false);
                         deltaExists = true;
                     }
                     if (compositeFiles.contains(files[i].getName()) && !fileSystemFiles.contains(files[i].getName())) {
-                        view.updateSecondScreenByString(currentTime + " File " + files[i].getName() + "je obrisan, "
+                        view.updateSecondScreenByString(currentTime + " File/folder " + files[i].getName() + "je obrisan, "
                                 + " putanja: " + files[i].getCanonicalPath(), "31", false);
                         deltaExists = true;
                     }
@@ -153,7 +153,7 @@ public class DirectoryCheck extends Thread {
                 }
             }
         } else {
-            view.updateSecondScreenByString("Can't find root directory.", "31", false);
+            view.updateSecondScreenByString("Ne postoji root direktorij.", "31", false);
         }
         return deltaExists;
 
