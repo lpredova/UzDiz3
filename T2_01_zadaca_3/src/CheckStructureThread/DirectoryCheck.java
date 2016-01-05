@@ -36,7 +36,6 @@ public class DirectoryCheck extends Thread {
     private Model model;
     private volatile boolean running;
     private volatile boolean active;
-    private boolean deltaExists;
     FileTreeIterator ft = null;
     File rootDir = null;
     AppFile compositeRoot = FileRepository.directoryTree.get(0);
@@ -76,8 +75,8 @@ public class DirectoryCheck extends Thread {
         while (running) {
 
             try {
-                checkForDelta(rootDir, compositeRoot);
-                if (!deltaExists) {
+                
+                if (!checkForDelta(rootDir, compositeRoot)) {
                     view.updateFirstScreenByString(getCurrentTimeStamp() + ": Ne postoje promjene", "31");
                 }
             } catch (IOException ex) {
@@ -94,9 +93,9 @@ public class DirectoryCheck extends Thread {
 
     }
 
-    public void checkForDelta(File parent, AppFile compositeParent) throws IOException {
+    public boolean checkForDelta(File parent, AppFile compositeParent) throws IOException {
 
-        deltaExists = false;
+        boolean deltaExists = false;
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         String currentTime = sdf.format(cal.getTime());
@@ -145,6 +144,8 @@ public class DirectoryCheck extends Thread {
         } else {
             view.updateSecondScreenByString("Can't find root directory.", "31", false);
         }
+        return deltaExists;
+        
     }
 
     public String formatDate(File file) {
