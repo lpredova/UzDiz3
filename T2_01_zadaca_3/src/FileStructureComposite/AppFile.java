@@ -63,4 +63,8 @@ public interface AppFile extends TreeElementInterface{
     void clearParentList();
     
     AppFile clone();
+    
+    String getAbsolutePath();
+    
+    String createAbsolutePath(String childPath);
 }

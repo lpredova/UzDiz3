@@ -50,6 +50,11 @@ public class T2_01_zadaca_3 {
         
         root = filesRepository.directoryTree.get(0);
         
+        for (Object file : filesRepository.directoryTree.toArray()) {
+            AppFile af = (AppFile) file;
+            System.out.println(af.getAbsolutePath());
+        }
+        
         View v = new View(rowNum, colNum, screenDivision);
         Model m = new Model();
         Controller c = new Controller(v, m, seconds);

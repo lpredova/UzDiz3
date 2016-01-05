@@ -215,4 +215,23 @@ public class Parent implements AppFile, TreeElementVisitor {
     public void accept(TreeElementVisitor elementVisitor) {
         elementVisitor.visit(this);
     }
+    
+    @Override
+    public String getAbsolutePath(){
+        // If this is root
+        if(parentFiles.get(0) == null)
+            return this.name;
+        
+        return parentFiles.get(0).createAbsolutePath(this.name);
+    }
+    
+    @Override
+    public String createAbsolutePath(String childPath){
+        String absolutePath = this.name + "\\" + childPath;
+        
+        if(parentFiles.get(0) == null)
+            return absolutePath;
+        
+        return parentFiles.get(0).createAbsolutePath(absolutePath);
+    }
 }
