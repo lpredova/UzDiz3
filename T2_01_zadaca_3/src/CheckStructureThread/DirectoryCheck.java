@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -99,6 +100,9 @@ public class DirectoryCheck extends Thread {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         String currentTime = sdf.format(cal.getTime());
 
+        ArrayList<String> compositeFiles = new ArrayList<String>();
+        ArrayList<String> fileSystemFiles = new ArrayList<String>();
+
         if (parent.exists()) {
             ft = new FileTreeIterator();
             for (Iterator iter = ft.getIterator(); iter.hasNext(compositeParent);) {
@@ -126,6 +130,11 @@ public class DirectoryCheck extends Thread {
                             view.updateFirstScreenByString("Kreiran je novi file sa istim imenom", "31");
                             deltaExists = true;
                         }
+                    }
+                    fileSystemFiles.add(files[i].getName());
+                    compositeFiles.add(nextElement.getName());
+                    if (fileSystemFiles.size() != compositeFiles.size()) {
+                        view.updateFirstScreenByString("Postoje nove fileovi", "31");
                     }
                     if (files[i].isDirectory() && nextElement.getType().equalsIgnoreCase("directory")) {
                         checkForDelta(files[i], nextElement);
