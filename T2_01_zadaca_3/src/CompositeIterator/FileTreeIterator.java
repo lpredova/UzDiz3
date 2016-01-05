@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class FileTreeIterator implements Container {
 
     public ArrayList<String> elementsData = new ArrayList<>();
-    public static int numDir, numFil = 0;
+    public int numDir, numFil = 0;
 
     @Override
     public Iterator getIterator() {
@@ -61,44 +61,44 @@ public class FileTreeIterator implements Container {
             if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
                 printStructure(nextElement);
             }
-        } 
+        }
     }
-    
+
     public void getFileExtensions(AppFile elem) {
-        
+
         FileTreeIterator ft = this;
-     
+
         for (Iterator iter = ft.getIterator(); iter.hasNext(elem);) {
             AppFile nextElement = (AppFile) iter.getNextChild(elem);
-            
+
             String type = nextElement.getType();
-            if(!additional.FileInfo.fileTypes.contains(type)){
+            if (!additional.FileInfo.fileTypes.contains(type)) {
                 additional.FileInfo.fileTypes.add(type);
             }
-            
+
             if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
                 getFileExtensions(nextElement);
             }
         }
     }
-    
-    public void compareExtensions(AppFile elem,String extension) {
-        
+
+    public void compareExtensions(AppFile elem, String extension) {
+
         FileTreeIterator ft = this;
         for (Iterator iter = ft.getIterator(); iter.hasNext(elem);) {
             AppFile nextElement = (AppFile) iter.getNextChild(elem);
             String type = nextElement.getType();
-            if(extension.equals(type)){
+            if (extension.equals(type)) {
                 additional.FileInfo.elementCount++;
                 additional.FileInfo.totalFileSize += nextElement.getRawSize();
                 additional.FileInfo.extensionFiles.add(nextElement);
             }
-            
+
             if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
-                compareExtensions(nextElement,extension);
+                compareExtensions(nextElement, extension);
             }
         }
-    }   
+    }
 
     /**
      * Method that returns elements data in list
@@ -122,7 +122,7 @@ public class FileTreeIterator implements Container {
         }
         return elementsData;
     }
-    
+
     public ArrayList<String> getNumberDirsAndFiles() {
         elementsData.clear();
         elementsData.add("Ukupan broj direktorija : " + numDir + 1);
@@ -131,17 +131,17 @@ public class FileTreeIterator implements Container {
         numFil = 0;
         return elementsData;
     }
-    
+
     public void clearData() {
         elementsData.clear();
     }
-    
+
     public void calculateNumberOfDirsAndFiles(AppFile elem) {
 
         FileTreeIterator ft = this;
         for (Iterator iter = ft.getIterator(); iter.hasNext(elem);) {
             AppFile nextElement = (AppFile) iter.getNextChild(elem);
-            if(nextElement.getType().equals("directory")) {
+            if (nextElement.getType().equals("directory")) {
                 numDir++;
             } else {
                 numFil++;

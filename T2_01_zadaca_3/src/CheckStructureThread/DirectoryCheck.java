@@ -40,10 +40,14 @@ public class DirectoryCheck extends Thread {
     File rootDir = null;
     AppFile compositeRoot = FileRepository.directoryTree.get(0);
 
+    ArrayList<String> compositeFiles = new ArrayList<String>();
+    ArrayList<String> fileSystemFiles = new ArrayList<String>();
+
     public DirectoryCheck(int secondsNum, View view, Model model) {
         this.secondsNum = secondsNum;
         this.view = view;
         this.model = model;
+        ft = new FileTreeIterator();
     }
 
     public void setRunning(boolean running) {
@@ -76,7 +80,11 @@ public class DirectoryCheck extends Thread {
 
             try {
                 checkForDelta(rootDir, compositeRoot);
-                if (!deltaExists) {
+                if (fileSystemFiles.size() != compositeFiles.size()) {
+                    deltaExists = true;
+                    view.updateFirstScreenByString("Postoje novi fileovi", "31");
+                }
+                if (deltaExists == false) {
                     view.updateFirstScreenByString("Ne postoje promjene", "31");
                 }
             } catch (IOException ex) {
@@ -96,15 +104,15 @@ public class DirectoryCheck extends Thread {
     public void checkForDelta(File parent, AppFile compositeParent) throws IOException {
 
         deltaExists = false;
+
+        countFileSystemFIles(parent);
+        countCompositeFiles(compositeParent);
+
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         String currentTime = sdf.format(cal.getTime());
 
-        ArrayList<String> compositeFiles = new ArrayList<String>();
-        ArrayList<String> fileSystemFiles = new ArrayList<String>();
-
         if (parent.exists()) {
-            ft = new FileTreeIterator();
             for (Iterator iter = ft.getIterator(); iter.hasNext(compositeParent);) {
                 AppFile nextElement = (AppFile) iter.getNextChild(compositeParent);
                 File[] files = parent.listFiles();
@@ -124,17 +132,6 @@ public class DirectoryCheck extends Thread {
                                 deltaExists = true;
                             }
                         }
-                        if (!nextElement.getCreatedAt().equalsIgnoreCase(formatCreatedAt(files[i]))) {
-                            //TODO spremiti stari composite u memento
-                            //TODO ponovno kreirati stablo u compositu sa novim stanjem
-                            view.updateFirstScreenByString("Kreiran je novi file sa istim imenom", "31");
-                            deltaExists = true;
-                        }
-                    }
-                    fileSystemFiles.add(files[i].getName());
-                    compositeFiles.add(nextElement.getName());
-                    if (fileSystemFiles.size() != compositeFiles.size()) {
-                        view.updateFirstScreenByString("Postoje nove fileovi", "31");
                     }
                     if (files[i].isDirectory() && nextElement.getType().equalsIgnoreCase("directory")) {
                         checkForDelta(files[i], nextElement);
@@ -175,6 +172,28 @@ public class DirectoryCheck extends Thread {
         String filePath = "";
         filePath = file.getAbsolutePath();
         return filePath;
+    }
+
+    public void countCompositeFiles(AppFile parent) {
+
+        for (Iterator iter = ft.getIterator(); iter.hasNext(parent);) {
+            AppFile nextElement = (AppFile) iter.getNextChild(parent);
+            compositeFiles.add(nextElement.getName());
+            if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
+                countCompositeFiles(nextElement);
+            }
+        }
+    }
+
+    public void countFileSystemFIles(File parent) {
+        for (File file : parent.listFiles()) {
+            if (file.isFile()) {
+                fileSystemFiles.add(file.getName());
+            } else {
+                fileSystemFiles.add(file.getName());
+                countFileSystemFIles(file);
+            }
+        }
     }
 
 }
