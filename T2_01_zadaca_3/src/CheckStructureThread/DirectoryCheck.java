@@ -11,9 +11,6 @@ import FileIterator.InitialStructure.FileRepository;
 import FileStructureComposite.AppFile;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,12 +34,13 @@ public class DirectoryCheck extends Thread {
     private volatile boolean running;
     private volatile boolean active;
     private boolean deltaExists;
-    FileTreeIterator ft = null;
-    File rootDir = null;
-    AppFile compositeRoot = FileRepository.directoryTree.get(0);
+    private FileTreeIterator ft = null;
+    private File rootDir = null;
+    private AppFile compositeRoot = FileRepository.directoryTree.get(0);
+    private FileRepository fr = null;
 
-    ArrayList<String> compositeFiles = new ArrayList<String>();
-    ArrayList<String> fileSystemFiles = new ArrayList<String>();
+    private ArrayList<String> compositeFiles = new ArrayList<String>();
+    private ArrayList<String> fileSystemFiles = new ArrayList<String>();
 
     public DirectoryCheck(int secondsNum, View view, Model model) {
         this.secondsNum = secondsNum;
@@ -81,9 +79,17 @@ public class DirectoryCheck extends Thread {
 
             try {
 
-                if (!checkForDelta(rootDir, compositeRoot)) {
+                fileSystemFiles.clear();
+                compositeFiles.clear();
+
+                countFileSystemFIles(rootDir);
+                countCompositeFiles(compositeRoot);
+
+                if (!checkForDelta(rootDir, compositeRoot) && newFilesExist() == false) {
                     view.updateFirstScreenByString(getCurrentTimeStamp() + ": Ne postoje promjene", "31");
                 }
+                System.out.println(fileSystemFiles.size());
+                System.out.println(compositeFiles.size());
 
                 try {
                     Thread.sleep((secondsNum * 1000) - duration);
@@ -100,12 +106,9 @@ public class DirectoryCheck extends Thread {
 
     }
 
-    public boolean checkForDelta(File parent, AppFile compositeParent) throws IOException {
+    private boolean checkForDelta(File parent, AppFile compositeParent) throws IOException {
 
         boolean deltaExists = false;
-
-        countFileSystemFIles(parent);
-        countCompositeFiles(compositeParent);
 
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -118,18 +121,24 @@ public class DirectoryCheck extends Thread {
                 for (int i = 0; i < files.length; i++) {
                     if (nextElement.getName().equalsIgnoreCase(files[i].getName())) {
                         if (!nextElement.getUpdatedAt().equalsIgnoreCase(formatDate(files[i]))) {
+
                             //TODO spremiti stari composite u memento
-                            //TODO ponovno kreirati stablo u compositu sa novim stanjem
+                            T2_01_zadaca_3.filesRepository.directoryTree.clear();
+                            fr = new FileRepository();
+                            fr.getIterator(T2_01_zadaca_3.rootDirectory);
                             view.updateSecondScreenByString(currentTime + " File " + files[i].getName() + "je ažuriran, "
-                                    + " putanja: " + files[i].getAbsolutePath(), "31", false);
+                                    + " putanja: " + files[i].getCanonicalPath(), "31", false);
                             deltaExists = true;
                         }
                         if (!nextElement.getType().equalsIgnoreCase("directory") && files[i].isFile()) {
                             if (!nextElement.getFormattedSize().equalsIgnoreCase(formatSize(files[i]))) {
+
                                 //TODO spremiti stari composite u memento
-                                //TODO ponovno kreirati stablo u compositu sa novim stanjem
+                                T2_01_zadaca_3.filesRepository.directoryTree.clear();
+                                fr = new FileRepository();
+                                fr.getIterator(T2_01_zadaca_3.rootDirectory);
                                 view.updateSecondScreenByString(currentTime + " File " + files[i].getName() + "ima drugačiju veličinu, "
-                                        + " putanja: " + files[i].getAbsolutePath(), "31", false);
+                                        + " putanja: " + files[i].getCanonicalPath(), "31", false);
                                 deltaExists = true;
                             }
                         }
@@ -142,34 +151,18 @@ public class DirectoryCheck extends Thread {
         } else {
             view.updateSecondScreenByString("Can't find root directory.", "31", false);
         }
-        if (fileSystemFiles.size() != compositeFiles.size()) {
-            //TODO spremiti stari composite u memento
-            //TODO ponovno kreirati stablo u compositu sa novim stanjem
-            view.updateSecondScreenByString(getCurrentTimeStamp() + "Postoje novi fileovi na disku.", "31", false);
-            deltaExists = true;
-        }
         return deltaExists;
 
     }
 
-    public String formatDate(File file) {
+    private String formatDate(File file) {
         String formattedDate = "";
         SimpleDateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         formattedDate = f.format(file.lastModified());
         return formattedDate;
     }
 
-    public String formatCreatedAt(File file) throws IOException {
-        Path path = file.toPath();
-        String createdAt = "";
-        SimpleDateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-        BasicFileAttributes fileAttributes = Files.readAttributes(path, BasicFileAttributes.class);
-        long creationTime = fileAttributes.creationTime().toMillis();
-        createdAt = f.format(creationTime);
-        return createdAt;
-    }
-
-    public String formatSize(File file) {
+    private String formatSize(File file) {
         String formattedSize = "";
         String pattern = "###,###.###";
         DecimalFormat myFormatter = new DecimalFormat(pattern);
@@ -177,7 +170,7 @@ public class DirectoryCheck extends Thread {
         return formattedSize;
     }
 
-    public void countCompositeFiles(AppFile parent) {
+    private void countCompositeFiles(AppFile parent) {
 
         for (Iterator iter = ft.getIterator(); iter.hasNext(parent);) {
             AppFile nextElement = (AppFile) iter.getNextChild(parent);
@@ -188,7 +181,7 @@ public class DirectoryCheck extends Thread {
         }
     }
 
-    public void countFileSystemFIles(File parent) {
+    private void countFileSystemFIles(File parent) {
         for (File file : parent.listFiles()) {
             if (file.isFile()) {
                 fileSystemFiles.add(file.getName());
@@ -205,6 +198,29 @@ public class DirectoryCheck extends Thread {
         String strDate = sdf.format(now);
         return strDate;
 
+    }
+
+    private String getRootPath(String file) throws IOException {
+        String path = "";
+        File filee = new File(file);
+        path = filee.getCanonicalPath();
+        return path;
+    }
+
+    private boolean newFilesExist() throws IOException {
+        boolean exist = false;
+        if (fileSystemFiles.size() != compositeFiles.size()) {
+            T2_01_zadaca_3.filesRepository.directoryTree.clear();
+            fr = new FileRepository();
+            fr.getIterator(T2_01_zadaca_3.rootDirectory);
+
+            //TODO spremiti stari composite u memento
+            view.updateSecondScreenByString(getCurrentTimeStamp()
+                    + " Postoje novi fileovi/folderi na disku na putanji "
+                    + getRootPath(T2_01_zadaca_3.rootDirectory), "31", false);
+            exist = true;
+        }
+        return exist;
     }
 
 }
