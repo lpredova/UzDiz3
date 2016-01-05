@@ -37,7 +37,6 @@ public class DirectoryCheck extends Thread {
     private FileTreeIterator ft = null;
     private File rootDir = null;
     private AppFile compositeRoot = FileRepository.directoryTree.get(0);
-    private FileRepository fr = null;
 
     private ArrayList<String> compositeFiles = new ArrayList<String>();
     private ArrayList<String> fileSystemFiles = new ArrayList<String>();
@@ -82,14 +81,17 @@ public class DirectoryCheck extends Thread {
                 fileSystemFiles.clear();
                 compositeFiles.clear();
 
-                countFileSystemFiles(rootDir);
-                countCompositeFiles(compositeRoot);
+                setFileSystemFiles(rootDir);
+                setCompositeFiles(compositeRoot);
 
-                if (!checkForDelta(rootDir, compositeRoot) && newFilesExist() == false) {
+                if (!checkForDelta(rootDir, compositeRoot)) {
                     view.updateFirstScreenByString(getCurrentTimeStamp() + ": Ne postoje promjene", "31");
+                } else {
+
+                    //TODO spremiti stari composite u memento
+                    T2_01_zadaca_3.filesRepository.directoryTree.clear();
+                    T2_01_zadaca_3.filesRepository.getIterator(T2_01_zadaca_3.rootDirectory);
                 }
-                System.out.println(fileSystemFiles.size());
-                System.out.println(compositeFiles.size());
 
                 try {
                     Thread.sleep((secondsNum * 1000) - duration);
@@ -122,10 +124,6 @@ public class DirectoryCheck extends Thread {
                     if (nextElement.getName().equalsIgnoreCase(files[i].getName())) {
                         if (!nextElement.getUpdatedAt().equalsIgnoreCase(formatDate(files[i]))) {
 
-                            //TODO spremiti stari composite u memento
-                            T2_01_zadaca_3.filesRepository.directoryTree.clear();
-                            fr = new FileRepository();
-                            fr.getIterator(T2_01_zadaca_3.rootDirectory);
                             view.updateSecondScreenByString(currentTime + " File " + files[i].getName() + "je ažuriran, "
                                     + " putanja: " + files[i].getCanonicalPath(), "31", false);
                             deltaExists = true;
@@ -133,15 +131,21 @@ public class DirectoryCheck extends Thread {
                         if (!nextElement.getType().equalsIgnoreCase("directory") && files[i].isFile()) {
                             if (!nextElement.getFormattedSize().equalsIgnoreCase(formatSize(files[i]))) {
 
-                                //TODO spremiti stari composite u memento
-                                T2_01_zadaca_3.filesRepository.directoryTree.clear();
-                                fr = new FileRepository();
-                                fr.getIterator(T2_01_zadaca_3.rootDirectory);
                                 view.updateSecondScreenByString(currentTime + " File " + files[i].getName() + "ima drugačiju veličinu, "
                                         + " putanja: " + files[i].getCanonicalPath(), "31", false);
                                 deltaExists = true;
                             }
                         }
+                    }
+                    if (!compositeFiles.contains(files[i].getName()) && fileSystemFiles.contains(files[i].getName())) {
+                        view.updateSecondScreenByString(currentTime + " File " + files[i].getName() + " je dodan, "
+                                + " putanja: " + files[i].getCanonicalPath(), "31", false);
+                        deltaExists = true;
+                    }
+                    if (compositeFiles.contains(files[i].getName()) && !fileSystemFiles.contains(files[i].getName())) {
+                        view.updateSecondScreenByString(currentTime + " File " + files[i].getName() + "je obrisan, "
+                                + " putanja: " + files[i].getCanonicalPath(), "31", false);
+                        deltaExists = true;
                     }
                     if (files[i].isDirectory() && nextElement.getType().equalsIgnoreCase("directory")) {
                         checkForDelta(files[i], nextElement);
@@ -170,24 +174,24 @@ public class DirectoryCheck extends Thread {
         return formattedSize;
     }
 
-    private void countCompositeFiles(AppFile parent) {
+    private void setCompositeFiles(AppFile parent) {
 
         for (Iterator iter = ft.getIterator(); iter.hasNext(parent);) {
             AppFile nextElement = (AppFile) iter.getNextChild(parent);
             compositeFiles.add(nextElement.getName());
             if (nextElement.getType().equals("directory")) {
-                countCompositeFiles(nextElement);
+                setCompositeFiles(nextElement);
             }
         }
     }
 
-    private void countFileSystemFiles(File parent) {
+    private void setFileSystemFiles(File parent) {
         for (File file : parent.listFiles()) {
             if (file.isFile()) {
                 fileSystemFiles.add(file.getName());
             } else {
                 fileSystemFiles.add(file.getName());
-                countFileSystemFiles(file);
+                setFileSystemFiles(file);
             }
         }
     }
@@ -199,28 +203,4 @@ public class DirectoryCheck extends Thread {
         return strDate;
 
     }
-
-    private String getRootPath(String file) throws IOException {
-        String path = "";
-        File filee = new File(file);
-        path = filee.getCanonicalPath();
-        return path;
-    }
-
-    private boolean newFilesExist() throws IOException {
-        boolean exist = false;
-        if (fileSystemFiles.size() != compositeFiles.size()) {
-            T2_01_zadaca_3.filesRepository.directoryTree.clear();
-            fr = new FileRepository();
-            fr.getIterator(T2_01_zadaca_3.rootDirectory);
-
-            //TODO spremiti stari composite u memento
-            view.updateSecondScreenByString(getCurrentTimeStamp()
-                    + " Postoje novi fileovi/folderi na disku na putanji "
-                    + getRootPath(T2_01_zadaca_3.rootDirectory), "31", false);
-            exist = true;
-        }
-        return exist;
-    }
-
 }
