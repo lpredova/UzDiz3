@@ -82,7 +82,7 @@ public class DirectoryCheck extends Thread {
                 fileSystemFiles.clear();
                 compositeFiles.clear();
 
-                countFileSystemFIles(rootDir);
+                countFileSystemFiles(rootDir);
                 countCompositeFiles(compositeRoot);
 
                 if (!checkForDelta(rootDir, compositeRoot) && newFilesExist() == false) {
@@ -175,19 +175,19 @@ public class DirectoryCheck extends Thread {
         for (Iterator iter = ft.getIterator(); iter.hasNext(parent);) {
             AppFile nextElement = (AppFile) iter.getNextChild(parent);
             compositeFiles.add(nextElement.getName());
-            if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
+            if (nextElement.getType().equals("directory")) {
                 countCompositeFiles(nextElement);
             }
         }
     }
 
-    private void countFileSystemFIles(File parent) {
+    private void countFileSystemFiles(File parent) {
         for (File file : parent.listFiles()) {
             if (file.isFile()) {
                 fileSystemFiles.add(file.getName());
             } else {
                 fileSystemFiles.add(file.getName());
-                countFileSystemFIles(file);
+                countFileSystemFiles(file);
             }
         }
     }
