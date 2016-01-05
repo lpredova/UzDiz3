@@ -18,6 +18,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mvc.Model;
@@ -77,7 +78,7 @@ public class DirectoryCheck extends Thread {
             try {
                 checkForDelta(rootDir, compositeRoot);
                 if (!deltaExists) {
-                    view.updateFirstScreenByString("Ne postoje promjene", "31");
+                    view.updateFirstScreenByString(getCurrentTimeStamp() + ": Ne postoje promjene", "31");
                 }
             } catch (IOException ex) {
                 Logger.getLogger(DirectoryCheck.class.getName()).log(Level.SEVERE, null, ex);
@@ -113,28 +114,28 @@ public class DirectoryCheck extends Thread {
                         if (!nextElement.getUpdatedAt().equalsIgnoreCase(formatDate(files[i]))) {
                             //TODO spremiti stari composite u memento
                             //TODO ponovno kreirati stablo u compositu sa novim stanjem
-                            view.updateFirstScreenByString("File je ažuriran", "31");
+                            view.updateSecondScreenByString("File je ažuriran", "31", false);
                             deltaExists = true;
                         }
                         if (!nextElement.getType().equalsIgnoreCase("directory") && files[i].isFile()) {
                             if (!nextElement.getFormattedSize().equalsIgnoreCase(formatSize(files[i]))) {
                                 //TODO spremiti stari composite u memento
                                 //TODO ponovno kreirati stablo u compositu sa novim stanjem
-                                view.updateFirstScreenByString("File ima drugačiju veličinu.", "31");
+                                view.updateSecondScreenByString("File ima drugačiju veličinu.", "31", false);
                                 deltaExists = true;
                             }
                         }
                         if (!nextElement.getCreatedAt().equalsIgnoreCase(formatCreatedAt(files[i]))) {
                             //TODO spremiti stari composite u memento
                             //TODO ponovno kreirati stablo u compositu sa novim stanjem
-                            view.updateFirstScreenByString("Kreiran je novi file sa istim imenom", "31");
+                            view.updateSecondScreenByString("Kreiran je novi file sa istim imenom", "31", false);
                             deltaExists = true;
                         }
                     }
                     fileSystemFiles.add(files[i].getName());
                     compositeFiles.add(nextElement.getName());
                     if (fileSystemFiles.size() != compositeFiles.size()) {
-                        view.updateFirstScreenByString("Postoje nove fileovi", "31");
+                        view.updateSecondScreenByString("Postoje nove fileovi", "31", false);
                     }
                     if (files[i].isDirectory() && nextElement.getType().equalsIgnoreCase("directory")) {
                         checkForDelta(files[i], nextElement);
@@ -142,7 +143,7 @@ public class DirectoryCheck extends Thread {
                 }
             }
         } else {
-            view.updateFirstScreenByString("Can't find root directory.", "31");
+            view.updateSecondScreenByString("Can't find root directory.", "31", false);
         }
     }
 
@@ -175,6 +176,13 @@ public class DirectoryCheck extends Thread {
         String filePath = "";
         filePath = file.getAbsolutePath();
         return filePath;
+    }
+
+    public static String getCurrentTimeStamp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        Date now = new Date();
+        String strDate = sdf.format(now);
+        return strDate;
     }
 
 }
