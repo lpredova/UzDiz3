@@ -143,6 +143,8 @@ public class DirectoryCheck extends Thread {
             view.updateSecondScreenByString("Can't find root directory.", "31", false);
         }
         if (fileSystemFiles.size() != compositeFiles.size()) {
+            //TODO spremiti stari composite u memento
+            //TODO ponovno kreirati stablo u compositu sa novim stanjem
             view.updateSecondScreenByString(getCurrentTimeStamp() + "Postoje novi fileovi na disku.", "31", false);
             deltaExists = true;
         }
