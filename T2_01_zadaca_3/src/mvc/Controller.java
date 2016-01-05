@@ -80,7 +80,7 @@ public class Controller {
                     thread = new DirectoryCheck(seconds, view, model);
                     thread.setRunning(true);
                     thread.start();
-                    view.updateFirstScreenByString("Thread is running.\n", "32");
+                    view.updateFirstScreenByString("Thread is running.", "32");
                     break;
 
                 case "4":
