@@ -55,7 +55,7 @@ public class DirectoryCheck extends Thread {
 
     @Override
     public synchronized void interrupt() {
-        running = false;
+        active = false;
         super.interrupt();
     }
 
@@ -86,6 +86,7 @@ public class DirectoryCheck extends Thread {
                 Thread.sleep((secondsNum * 1000) - duration);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
+                active = false;
             }
         }//while
 
@@ -134,7 +135,6 @@ public class DirectoryCheck extends Thread {
         } else {
             view.updateFirstScreenByString("Can't find root directory.", "31");
         }
-
     }
 
     public String formatDate(File file) {
