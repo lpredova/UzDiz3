@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -84,7 +83,9 @@ public class DirectoryCheck extends Thread {
                 setFileSystemFiles(rootDir);
                 setCompositeFiles(compositeRoot);
 
-                if (!checkForDelta(rootDir, compositeRoot)) {
+                if (checkForDelta(rootDir, compositeRoot) == false
+                        && checkForAddedFiles(rootDir) == false
+                        && checkForDeletedFiles(compositeRoot) == false) {
                     view.updateFirstScreenByString(getCurrentTimeStamp() + ": Ne postoje promjene", "31");
                 } else {
 
@@ -112,10 +113,6 @@ public class DirectoryCheck extends Thread {
 
         boolean deltaExists = false;
 
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-        String currentTime = sdf.format(cal.getTime());
-
         if (parent.exists()) {
             for (Iterator iter = ft.getIterator(); iter.hasNext(compositeParent);) {
                 AppFile nextElement = (AppFile) iter.getNextChild(compositeParent);
@@ -124,28 +121,18 @@ public class DirectoryCheck extends Thread {
                     if (nextElement.getName().equalsIgnoreCase(files[i].getName())) {
                         if (!nextElement.getUpdatedAt().equalsIgnoreCase(formatDate(files[i]))) {
 
-                            view.updateSecondScreenByString(currentTime + " File " + files[i].getName() + "je ažuriran, "
+                            view.updateSecondScreenByString(getCurrentTimeStamp() + " File " + files[i].getName() + "je ažuriran, "
                                     + " putanja: " + files[i].getCanonicalPath(), "31", false);
                             deltaExists = true;
                         }
                         if (!nextElement.getType().equalsIgnoreCase("directory") && files[i].isFile()) {
                             if (!nextElement.getFormattedSize().equalsIgnoreCase(formatSize(files[i]))) {
 
-                                view.updateSecondScreenByString(currentTime + " File " + files[i].getName() + "ima drugačiju veličinu, "
+                                view.updateSecondScreenByString(getCurrentTimeStamp() + " File " + files[i].getName() + "ima drugačiju veličinu, "
                                         + " putanja: " + files[i].getCanonicalPath(), "31", false);
                                 deltaExists = true;
                             }
                         }
-                    }
-                    if (!compositeFiles.contains(files[i].getName()) && fileSystemFiles.contains(files[i].getName())) {
-                        view.updateSecondScreenByString(currentTime + " File/folder " + files[i].getName() + " je dodan, "
-                                + " putanja: " + files[i].getCanonicalPath(), "31", false);
-                        deltaExists = true;
-                    }
-                    if (compositeFiles.contains(files[i].getName()) && !fileSystemFiles.contains(files[i].getName())) {
-                        view.updateSecondScreenByString(currentTime + " File/folder " + files[i].getName() + "je obrisan, "
-                                + " putanja: " + files[i].getCanonicalPath(), "31", false);
-                        deltaExists = true;
                     }
                     if (files[i].isDirectory() && nextElement.getType().equalsIgnoreCase("directory")) {
                         checkForDelta(files[i], nextElement);
@@ -157,6 +144,46 @@ public class DirectoryCheck extends Thread {
         }
         return deltaExists;
 
+    }
+
+    private boolean checkForAddedFiles(File parent) throws IOException {
+        boolean added = false;
+        for (File files : parent.listFiles()) {
+            if (!compositeFiles.contains(files.getName())
+                    && fileSystemFiles.contains(files.getName())) {
+                view.updateSecondScreenByString(getCurrentTimeStamp() + " File/folder " + files.getName() + " je dodan, "
+                        + " putanja: " + files.getCanonicalPath(), "31", false);
+                added = true;
+            }
+            if (files.isDirectory()) {
+                checkForAddedFiles(files);
+            }
+        }
+        return added;
+    }
+
+    private boolean checkForDeletedFiles(AppFile parent) throws IOException {
+        boolean deleted = false;
+        for (Iterator iter = ft.getIterator(); iter.hasNext(parent);) {
+            AppFile nextElement = (AppFile) iter.getNextChild(parent);
+            if (!fileSystemFiles.contains(nextElement.getName())
+                    && compositeFiles.contains(nextElement.getName())) {
+                view.updateSecondScreenByString(getCurrentTimeStamp() + " File/folder " + nextElement.getName() + " je obrisan, "
+                        + " putanja: " + getFilePath(nextElement.getName()), "31", false);
+                deleted = true;
+            }
+            if (nextElement.getType().equalsIgnoreCase("directory")) {
+                checkForDeletedFiles(nextElement);
+            }
+        }
+        return deleted;
+    }
+
+    private String getFilePath(String fileName) throws IOException {
+        String path = "";
+        File filee = new File(fileName);
+        path = filee.getCanonicalPath();
+        return path;
     }
 
     private String formatDate(File file) {
@@ -197,7 +224,7 @@ public class DirectoryCheck extends Thread {
     }
 
     public static String getCurrentTimeStamp() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         Date now = new Date();
         String strDate = sdf.format(now);
         return strDate;
