@@ -47,8 +47,7 @@ public class T2_01_zadaca_3 {
 
         //Reading initial file structure - creational iterator, has only one iteration and creates dir 
         filesRepository.getIterator(rootDirectory);
-        rootComposite = filesRepository.directoryTree.get(0);
-        
+        rootComposite = FileRepository.directoryTree.get(0);
 
         View v = new View(rowNum, colNum, screenDivision);
         Model m = new Model();

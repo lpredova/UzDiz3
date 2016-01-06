@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Helpers;
+package utils;
 
 import FileIterator.InitialStructure.FileRepository;
 import java.io.File;
@@ -68,8 +68,7 @@ public class FileHelper {
      */
     public static String getFileSizeFormattedFromPath(String path) {
         File f = new File(path);
-
-        return Helpers.FileHelper.getFileSizeFormat(f);
+        return utils.FileHelper.getFileSizeFormat(f);
     }
 
     /**
@@ -80,7 +79,7 @@ public class FileHelper {
      * @return
      */
     public static String getFileTypeFromPath(String path) {
-        if (Helpers.FileHelper.isDirectory(path)) {
+        if (utils.FileHelper.isDirectory(path)) {
             return "directory";
         }
         File f = new File(path);
@@ -120,13 +119,12 @@ public class FileHelper {
     /**
      * Method for getting last updated time of the file
      *
-     * @param path
+     * @param file
      * @return
      */
     public static String getFileUpdatedAtTimeFromPath(String file) {
 
         File filee = new File(file);
-
         return FileHelper.getUpdatedTime(filee);
     }
 
@@ -156,7 +154,7 @@ public class FileHelper {
      * @return
      */
     public static String getFileFormattedSize(File file) {
-        return Helpers.FileHelper.getFileSizeFormat(file);
+        return utils.FileHelper.getFileSizeFormat(file);
     }
 
     /**
@@ -224,7 +222,7 @@ public class FileHelper {
         return fileCreatedAt;
     }
 
-    private static String getUpdatedTime(File file) {
+    public static String getUpdatedTime(File file) {
         String fileUpdatedAt = "";
         SimpleDateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         fileUpdatedAt = f.format(file.lastModified());
@@ -237,7 +235,7 @@ public class FileHelper {
      * @param file
      * @return
      */
-    private static String getFileSizeFormat(File file) {
+    public static String getFileSizeFormat(File file) {
         return formatSize(file.length());
     }
 
@@ -252,5 +250,23 @@ public class FileHelper {
         DecimalFormat myFormatter = new DecimalFormat(pattern);
         String formattedSize = myFormatter.format(size).replace(',', '.') + " B";
         return formattedSize;
+    }
+    
+    /**
+     * Method for getting file sizes
+     * @param folder
+     * @return 
+     */
+    public static long getFolderSize(File folder) {
+        long size = 0;
+        for (File file : folder.listFiles()) {
+            if (file.isFile()) {
+                size += file.length();
+            } else {
+                size += getFolderSize(file);
+            }
+        }
+
+        return size;
     }
 }

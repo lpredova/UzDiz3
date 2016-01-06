@@ -154,7 +154,7 @@ public class Parent implements AppFile {
     @Override
     public void increaseSize(long size) {
         this.rawSize += size;
-        this.formattedSize = Helpers.FileHelper.formatSize(this.rawSize);
+        this.formattedSize = utils.FileHelper.formatSize(this.rawSize);
     }
 
     @Override
