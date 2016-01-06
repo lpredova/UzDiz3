@@ -134,10 +134,9 @@ public class DirectoryCheck extends Thread {
                             }
                         }
                         if (nextElement.getType().equalsIgnoreCase("directory") && files[i].isDirectory()) {
-                            if (!nextElement.getFormattedSize().equalsIgnoreCase(getDirectoryFormattedSize(files[i]))) {
-                                view.updateSecondScreenByString(nextElement.getFormattedSize() + "=" + getDirectoryFormattedSize(files[i]), "31", false);
-//                                view.updateSecondScreenByString(getCurrentTimeStamp() + " Folder " + files[i].getName() + "ima drugačiju veličinu, "
-//                                        + " putanja: " + files[i].getCanonicalPath(), "31", false);
+                            if (!nextElement.getFormattedSize().equalsIgnoreCase(formatSize(files[i]))) {
+                                view.updateSecondScreenByString(getCurrentTimeStamp() + " Folder " + files[i].getName() + "ima drugačiju veličinu, "
+                                        + " putanja: " + files[i].getCanonicalPath(), "31", false);
                                 deltaExists = true;
                             }
                         }
@@ -237,26 +236,6 @@ public class DirectoryCheck extends Thread {
         String strDate = sdf.format(now);
         return strDate;
 
-    }
-
-    private long getDirectorySize(File directory) {
-        long size = 0;
-        for (File file : directory.listFiles()) {
-            if (file.isFile()) {
-                size += file.length();
-            } else {
-                size += getDirectorySize(file);
-            }
-        }
-        return size;
-    }
-
-    private String getDirectoryFormattedSize(File directory) {
-        String formattedSize = "";
-        String pattern = "###,###.###";
-        DecimalFormat myFormatter = new DecimalFormat(pattern);
-        formattedSize = myFormatter.format(getDirectorySize(directory)).replace(',', '.') + " B";
-        return formattedSize;
     }
 
 }
