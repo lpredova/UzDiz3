@@ -108,7 +108,7 @@ public class FileRepository implements Container {
                     "directory",
                     Helpers.FileHelper.getFileCreatedAtTime(directory),
                     Helpers.FileHelper.getFileUpdatedAtTime(directory),
-                    Helpers.FileHelper.getFileFormattedSize(directory),
+                    Helpers.FileHelper.getDirectoryFormattedSize(directory),
                     Helpers.FileHelper.getFileRawSize(directory));
             directoryElement.setParentName(Helpers.FileHelper.getParentNameFromPath(directory));
             long elementSize = Helpers.FileHelper.getFileRawSize(directory);

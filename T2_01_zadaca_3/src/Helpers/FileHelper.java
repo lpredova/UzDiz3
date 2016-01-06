@@ -55,7 +55,7 @@ public class FileHelper {
         File f = new File(path);
         return f.getName();
     }
-    
+
     public static String getParentNameFromPath(File file) {
         return file.getAbsoluteFile().getParentFile().getName();
     }
@@ -139,10 +139,12 @@ public class FileHelper {
     public static String getFileName(File file) {
         return file.getName();
     }
+
     /**
      * Method for getting absolute address from file
+     *
      * @param path
-     * @return 
+     * @return
      */
     public static String getAbsoluteAddressFromPath(String path) {
         File file = new File(path);
@@ -198,7 +200,6 @@ public class FileHelper {
         return FileHelper.getCreatedTime(filePath);
 
     }
-    
 
     /**
      * Method for getting last updated time of the file
@@ -239,6 +240,37 @@ public class FileHelper {
      */
     private static String getFileSizeFormat(File file) {
         return formatSize(file.length());
+    }
+
+    /**
+     * Method calculates directory size
+     *
+     * @param directory
+     * @return
+     */
+    public static long getDirectorySize(File directory) {
+        long size = 0;
+        for (File file : directory.listFiles()) {
+            if (file.isFile()) {
+                size += file.length();
+            } else {
+                size += getDirectorySize(file);
+            }
+        }
+        return size;
+    }
+
+    /**
+     * Method formats calculated directory size
+     * @param directory
+     * @return 
+     */
+    public static String getDirectoryFormattedSize(File directory) {
+        String formattedSize = "";
+        String pattern = "###,###.###";
+        DecimalFormat myFormatter = new DecimalFormat(pattern);
+        formattedSize = myFormatter.format(getDirectorySize(directory)).replace(',', '.') + " B";
+        return formattedSize;
     }
 
     /**
