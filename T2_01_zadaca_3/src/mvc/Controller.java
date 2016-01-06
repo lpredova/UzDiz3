@@ -117,7 +117,7 @@ public class Controller {
                     int chosenState = Integer.parseInt(in.nextLine());
 
                     originator.restoreFromMemento(caretaker.getMemento(chosenState));
-                    T2_01_zadaca_3.root = originator.getState();
+                    T2_01_zadaca_3.rootComposite = originator.getState();
 
                     break;
 

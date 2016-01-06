@@ -7,7 +7,6 @@ package CheckStructureThread;
 
 import CompositeIterator.FileTreeIterator;
 import CompositeIterator.Iterator;
-import FileIterator.InitialStructure.FileRepository;
 import FileStructureComposite.AppFile;
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +34,7 @@ public class DirectoryCheck extends Thread {
     private boolean deltaExists;
     private FileTreeIterator ft = null;
     private File rootDir = null;
-    private AppFile compositeRoot = FileRepository.directoryTree.get(0);
+    private AppFile compositeRoot;
 
     private ArrayList<String> compositeFiles = new ArrayList<String>();
     private ArrayList<String> fileSystemFiles = new ArrayList<String>();
@@ -70,6 +69,7 @@ public class DirectoryCheck extends Thread {
     public synchronized void run() {
 
         rootDir = new File(T2_01_zadaca_3.rootDirectory);
+        compositeRoot = T2_01_zadaca_3.rootComposite;
         long duration = 0;
         long startTime = System.currentTimeMillis();
 
@@ -121,7 +121,7 @@ public class DirectoryCheck extends Thread {
                     if (nextElement.getName().equalsIgnoreCase(files[i].getName())) {
                         if (!nextElement.getUpdatedAt().equalsIgnoreCase(formatDate(files[i]))) {
 
-                            view.updateSecondScreenByString(getCurrentTimeStamp() + " File " + files[i].getName() + "je ažuriran, "
+                            view.updateSecondScreenByString(getCurrentTimeStamp() + " File/folder " + files[i].getName() + "je ažuriran, "
                                     + " putanja: " + files[i].getCanonicalPath(), "31", false);
                             deltaExists = true;
                         }
@@ -129,6 +129,13 @@ public class DirectoryCheck extends Thread {
                             if (!nextElement.getFormattedSize().equalsIgnoreCase(formatSize(files[i]))) {
 
                                 view.updateSecondScreenByString(getCurrentTimeStamp() + " File " + files[i].getName() + "ima drugačiju veličinu, "
+                                        + " putanja: " + files[i].getCanonicalPath(), "31", false);
+                                deltaExists = true;
+                            }
+                        }
+                        if (nextElement.getType().equalsIgnoreCase("directory") && files[i].isDirectory()) {
+                            if (!nextElement.getFormattedSize().equalsIgnoreCase(formatSize(files[i]))) {
+                                view.updateSecondScreenByString(getCurrentTimeStamp() + " Folder " + files[i].getName() + "ima drugačiju veličinu, "
                                         + " putanja: " + files[i].getCanonicalPath(), "31", false);
                                 deltaExists = true;
                             }
@@ -230,4 +237,5 @@ public class DirectoryCheck extends Thread {
         return strDate;
 
     }
+
 }
