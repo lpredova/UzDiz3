@@ -134,9 +134,11 @@ public class DirectoryCheck extends Thread {
                             }
                         }
                         if (nextElement.getType().equalsIgnoreCase("directory") && files[i].isDirectory()) {
-                            if (!nextElement.getFormattedSize().equalsIgnoreCase(formatSize(files[i]))) {
-                                view.updateSecondScreenByString(getCurrentTimeStamp() + " Folder " + files[i].getName() + "ima drugačiju veličinu, "
-                                        + " putanja: " + files[i].getCanonicalPath(), "31", false);
+                            if (!nextElement.getFormattedSize().equalsIgnoreCase(formatFolderSize(files[i]))) {
+                                view.updateSecondScreenByString(nextElement.getName() + nextElement.getFormattedSize() + " nije isto "
+                                        + formatFolderSize(files[i]) + files[i].getName(), "31", false);
+//                                view.updateSecondScreenByString(getCurrentTimeStamp() + " Folder " + files[i].getName() + "ima drugačiju veličinu, "
+//                                        + " putanja: " + files[i].getCanonicalPath(), "31", false);
                                 deltaExists = true;
                             }
                         }
@@ -236,6 +238,27 @@ public class DirectoryCheck extends Thread {
         String strDate = sdf.format(now);
         return strDate;
 
+    }
+
+    private long getFolderSize(File folder) {
+        long size = 0;
+        for (File file : folder.listFiles()) {
+            if (file.isFile()) {
+                size += file.length();
+            } else {
+                size += getFolderSize(file);
+            }
+        }
+
+        return size;
+    }
+
+    private String formatFolderSize(File folder) {
+        String formattedSize = "";
+        String pattern = "###,###.###";
+        DecimalFormat myFormatter = new DecimalFormat(pattern);
+        formattedSize = myFormatter.format(getFolderSize(folder)).replace(',', '.') + " B";
+        return formattedSize;
     }
 
 }
