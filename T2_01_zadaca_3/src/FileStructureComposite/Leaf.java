@@ -234,6 +234,7 @@ public class Leaf implements AppFile,TreeElementVisitor {
     @Override
     public void setParentName(String parentName) {
         this.parentName = parentName;
+    }
 
     
     @Override

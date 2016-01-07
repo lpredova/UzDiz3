@@ -1,5 +1,6 @@
 package FileStructureComposite;
 
+import additional.visitor.TreeElementInterface;
 import additional.visitor.TreeElementVisitor;
 import java.util.ArrayList;
 import java.util.List;
@@ -238,6 +239,7 @@ public class Parent implements AppFile, TreeElementVisitor {
     @Override
     public void setParentName(String parentName) {
         this.parentName = parentName;
+    }
 
     @Override
     public void visit(AppFile file) {
