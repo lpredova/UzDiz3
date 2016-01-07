@@ -9,8 +9,6 @@ import CompositeIterator.FileTreeIterator;
 import CompositeIterator.Iterator;
 import FileIterator.InitialStructure.FileRepository;
 import FileStructureComposite.AppFile;
-import FileStructureMemento.Caretaker;
-import FileStructureMemento.Originator;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -19,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static mvc.Controller.caretaker;
+import static mvc.Controller.originator;
 import mvc.Model;
 import mvc.View;
 import t2_01_zadaca_3.T2_01_zadaca_3;
@@ -72,10 +72,10 @@ public class DirectoryCheck extends Thread {
     public synchronized void run() {
         rootDir = new File(T2_01_zadaca_3.rootDirectory);
         compositeRoot = FileRepository.directoryTree.get(0);
-        Caretaker caretaker = new Caretaker();
-        Originator originator = new Originator();
+
         long duration;
         long startTime;
+        
         while (running) {
             
             duration = 0;

@@ -39,6 +39,9 @@ public class Controller {
     public static int overallSize = 0;
 
     DirectoryCheck thread = null;
+    
+    public static Caretaker caretaker = new Caretaker();
+    public static Originator originator = new Originator();
 
     public Controller(View view, Model model, int seconds) {
 
@@ -57,9 +60,7 @@ public class Controller {
 
     public void processOption() {
         FileTreeIterator ft = new FileTreeIterator();
-        Caretaker caretaker = new Caretaker();
-        Originator originator = new Originator();
-
+        
         // Saving initial state to memento
         originator.set(T2_01_zadaca_3.rootComposite.clone());
         caretaker.addMemento(originator.saveToMemento());
