@@ -33,8 +33,6 @@ public class DirectoryCheck extends Thread {
     private volatile boolean active;
     private boolean deltaExists;
     private FileTreeIterator ft = null;
-    private File rootDir = null;
-    private AppFile compositeRoot;
 
     private ArrayList<String> compositeFiles = new ArrayList<String>();
     private ArrayList<String> fileSystemFiles = new ArrayList<String>();
@@ -68,11 +66,6 @@ public class DirectoryCheck extends Thread {
     @Override
     public synchronized void run() {
 
-        rootDir = new File(T2_01_zadaca_3.rootDirectory);
-        compositeRoot = T2_01_zadaca_3.rootComposite;
-        long duration = 0;
-        long startTime = System.currentTimeMillis();
-
         while (running) {
 
             try {
@@ -80,15 +73,12 @@ public class DirectoryCheck extends Thread {
                 fileSystemFiles.clear();
                 compositeFiles.clear();
 
-                setFileSystemFiles(rootDir);
-                setCompositeFiles(compositeRoot);
+                setFileSystemFiles(new File(T2_01_zadaca_3.rootDirectory));
+                setCompositeFiles(T2_01_zadaca_3.rootComposite);
 
-//                listfiles();
-//                listComposite();
-
-                if (checkForDelta(rootDir, compositeRoot) == false
-                        && checkForAddedFiles(rootDir) == false
-                        && checkForDeletedFiles(compositeRoot) == false) {
+                if (checkForDelta(new File(T2_01_zadaca_3.rootDirectory), T2_01_zadaca_3.rootComposite) == false
+                        && checkForAddedFiles(new File(T2_01_zadaca_3.rootDirectory)) == false
+                        && checkForDeletedFiles(T2_01_zadaca_3.rootComposite) == false) {
                     view.updateFirstScreenByString(getCurrentTimeStamp() + ": Ne postoje promjene", "31");
                 } else {
 
@@ -98,7 +88,7 @@ public class DirectoryCheck extends Thread {
                 }
 
                 try {
-                    Thread.sleep((secondsNum * 1000) - duration);
+                    Thread.sleep(secondsNum * 1000);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                     active = false;
@@ -138,11 +128,10 @@ public class DirectoryCheck extends Thread {
                         }
                         if (nextElement.getType().equalsIgnoreCase("directory") && files[i].isDirectory()) {
                             if (!nextElement.getFormattedSize().equalsIgnoreCase(formatFolderSize(files[i]))) {
-//                                view.updateSecondScreenByString(nextElement.getName() + nextElement.getFormattedSize() + " nije isto "
-//                                        + formatFolderSize(files[i]) + files[i].getName(), "31", false);
-//                                view.updateSecondScreenByString(getCurrentTimeStamp() + " Folder " + files[i].getName() + "ima drugačiju veličinu, "
-//                                        + " putanja: " + files[i].getCanonicalPath(), "31", false);
-//                                deltaExists = true;
+
+                                view.updateSecondScreenByString(getCurrentTimeStamp() + " Folder " + files[i].getName() + "ima drugačiju veličinu, "
+                                        + " putanja: " + files[i].getCanonicalPath(), "31", false);
+                                deltaExists = true;
                             }
                         }
                     }
@@ -226,18 +215,6 @@ public class DirectoryCheck extends Thread {
             }
         }
     }
-
-//    private void listfiles() {
-//        for (String file : fileSystemFiles) {
-//            view.updateSecondScreenByString(file, "31", false);
-//        }
-//    }
-//
-//    private void listComposite() {
-//        for (String file : compositeFiles) {
-//            view.updateSecondScreenByString(file, "31", false);
-//        }
-//    }
 
     private void setFileSystemFiles(File parent) {
         for (File file : parent.listFiles()) {
