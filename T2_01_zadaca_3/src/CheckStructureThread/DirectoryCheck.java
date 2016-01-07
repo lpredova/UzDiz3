@@ -8,6 +8,8 @@ package CheckStructureThread;
 import CompositeIterator.FileTreeIterator;
 import CompositeIterator.Iterator;
 import FileStructureComposite.AppFile;
+import FileStructureMemento.Caretaker;
+import FileStructureMemento.Originator;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -66,6 +68,9 @@ public class DirectoryCheck extends Thread {
     @Override
     public synchronized void run() {
 
+        Caretaker caretaker = new Caretaker();
+        Originator originator = new Originator();
+
         while (running) {
 
             try {
@@ -82,7 +87,9 @@ public class DirectoryCheck extends Thread {
                     view.updateFirstScreenByString(getCurrentTimeStamp() + ": Ne postoje promjene", "31");
                 } else {
 
-                    //TODO spremiti stari composite u memento
+                    originator.set(T2_01_zadaca_3.rootComposite.clone());
+                    caretaker.addMemento(originator.saveToMemento());
+
                     T2_01_zadaca_3.filesRepository.directoryTree.clear();
                     T2_01_zadaca_3.filesRepository.getIterator(T2_01_zadaca_3.rootDirectory);
                 }
