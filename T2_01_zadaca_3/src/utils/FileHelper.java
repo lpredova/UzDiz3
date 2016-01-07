@@ -6,7 +6,10 @@
 package utils;
 
 import FileIterator.InitialStructure.FileRepository;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -269,4 +272,48 @@ public class FileHelper {
 
         return size;
     }
+    
+    /**
+      * Method that returns hash value of string
+      * https://stackoverflow.com/questions/415953/howcanigenerateanmd5hash/421696#421696
+      *
+      * @param md5
+      * @return
+      **/
+     public static String MD5(String md5) {
+         try {
+             java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+             byte[] array = md.digest(md5.getBytes());
+             StringBuilder sb = new StringBuilder();
+             for (int i = 0; i < array.length; ++i) {
+                 sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
+             }
+             return sb.toString();
+         } catch (java.security.NoSuchAlgorithmException e) {
+         }
+         return null;
+     }
+ 
+     /**
+      * Method that returns entire text file contents as string
+      * @param fileName
+      * @return
+      * @throws FileNotFoundException
+      * @throws IOException 
+      */
+     public static String readFile(String fileName) throws FileNotFoundException, IOException {
+ 
+         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+             StringBuilder sb = new StringBuilder();
+             String line = br.readLine();
+ 
+             while (line != null) {
+                 sb.append(line);
+                 sb.append(System.lineSeparator());
+                 line = br.readLine();
+             }
+             return sb.toString();
+         }
+ 
+     }
 }

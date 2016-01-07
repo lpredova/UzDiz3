@@ -16,7 +16,7 @@ public class HashVisitor implements TreeElementVisitor {
     @Override
     public void visit(AppFile file) {
         String fileHash = file.getName() + file.getType() + file.getCreatedAt() + file.getUpdatedAt() + file.getFormattedSize();
-        file.setFileHash(Helpers.FileHelper.MD5(fileHash));
+        file.setFileHash(utils.FileHelper.MD5(fileHash));
     }
 
 }

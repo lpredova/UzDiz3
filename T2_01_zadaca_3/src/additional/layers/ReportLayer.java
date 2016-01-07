@@ -66,7 +66,7 @@ public class ReportLayer implements LayerInterface {
                     + "------------------------------------\n"
                     + "Extension: " + extension + "\n"
                     + "Total files: " + elementCount + "\n"
-                    + "Total size: " + Helpers.FileHelper.formatSize(totalFileSize) + "\n"
+                    + "Total size: " + utils.FileHelper.formatSize(totalFileSize) + "\n"
                     + "\n";
 
             for (AppFile file : extensionFiles) {

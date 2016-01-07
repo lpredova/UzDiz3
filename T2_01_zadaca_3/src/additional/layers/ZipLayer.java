@@ -33,7 +33,7 @@ public class ZipLayer implements LayerInterface {
 
         try {
 
-            String fileContents = Helpers.FileHelper.readFile(info);
+            String fileContents = utils.FileHelper.readFile(info);
             final File f = new File(info.split("\\.")[0] + ".zip");
 
             out = new ZipOutputStream(new FileOutputStream(f));
