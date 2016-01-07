@@ -7,6 +7,7 @@ package CheckStructureThread;
 
 import CompositeIterator.FileTreeIterator;
 import CompositeIterator.Iterator;
+import FileIterator.InitialStructure.FileRepository;
 import FileStructureComposite.AppFile;
 import FileStructureMemento.Caretaker;
 import FileStructureMemento.Originator;
@@ -35,6 +36,8 @@ public class DirectoryCheck extends Thread {
     private volatile boolean active;
     private boolean deltaExists;
     private FileTreeIterator ft = null;
+    private File rootDir = null;
+    private AppFile compositeRoot;
 
     private ArrayList<String> compositeFiles = new ArrayList<String>();
     private ArrayList<String> fileSystemFiles = new ArrayList<String>();
@@ -67,11 +70,16 @@ public class DirectoryCheck extends Thread {
 
     @Override
     public synchronized void run() {
-
+        rootDir = new File(T2_01_zadaca_3.rootDirectory);
+        compositeRoot = FileRepository.directoryTree.get(0);
         Caretaker caretaker = new Caretaker();
         Originator originator = new Originator();
-
+        long duration;
+        long startTime;
         while (running) {
+            
+            duration = 0;
+            startTime = System.currentTimeMillis();
 
             try {
 
@@ -79,11 +87,11 @@ public class DirectoryCheck extends Thread {
                 compositeFiles.clear();
 
                 setFileSystemFiles(new File(T2_01_zadaca_3.rootDirectory));
-                setCompositeFiles(T2_01_zadaca_3.rootComposite);
+                setCompositeFiles(FileRepository.directoryTree.get(0));
 
-                if (checkForDelta(new File(T2_01_zadaca_3.rootDirectory), T2_01_zadaca_3.rootComposite) == false
+                if (checkForDelta(new File(T2_01_zadaca_3.rootDirectory), FileRepository.directoryTree.get(0)) == false
                         && checkForAddedFiles(new File(T2_01_zadaca_3.rootDirectory)) == false
-                        && checkForDeletedFiles(T2_01_zadaca_3.rootComposite) == false) {
+                        && checkForDeletedFiles(FileRepository.directoryTree.get(0)) == false) {
                     view.updateFirstScreenByString(getCurrentTimeStamp() + ": Ne postoje promjene", "31");
                 } else {
 
@@ -93,9 +101,11 @@ public class DirectoryCheck extends Thread {
                     T2_01_zadaca_3.filesRepository.directoryTree.clear();
                     T2_01_zadaca_3.filesRepository.getIterator(T2_01_zadaca_3.rootDirectory);
                 }
+                
+                duration = System.currentTimeMillis() - startTime;
 
                 try {
-                    Thread.sleep(secondsNum * 1000);
+                    Thread.sleep(secondsNum * 1000 - duration);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                     active = false;
