@@ -14,37 +14,67 @@ import utils.Constants;
  */
 public class View {
 
-    public static int currentRowScreenOne = 1;
-    public static int currentRowScreenTwo = 1;
-    
-    public int rows;
-    public int cols;
-    public String division;
-    public int halfRows;
-    public int halfCols;
+    public int currentRowScreenOne;
+    public int currentRowScreenTwo;
+
+    private int rows, cols, halfRows, halfCols, endOfScreenOne, endOfScreenTwo,
+            length, beginOfScreenOne, beginOfScreenTwo, startColumnScreenOne,
+            startColumnScreenTwo;
+    private String division;
 
     public View(int rows, int cols, String division) {
         this.rows = rows;
         this.cols = cols;
-        this.halfRows = (rows - 1) / 2;
-        this.halfCols = (cols / 2);
         this.division = division;
     }
 
     /**
-     * Method which draws screen on terminal according to type of division
+     * Method which calculates necessary variables for manipulating the screen
+     */
+    private void calculateScreen() {
+        this.halfRows = (rows - 1) / 2;
+        this.halfCols = (cols / 2);
+        currentRowScreenOne = 1;
+        this.beginOfScreenOne = 1;
+        this.endOfScreenTwo = rows - 1;
+        this.startColumnScreenOne = 1;
+        if (division.equalsIgnoreCase("v")) {
+            currentRowScreenTwo = 1;
+            this.length = halfCols;
+            this.endOfScreenOne = rows - 1;
+            this.startColumnScreenTwo = halfCols + 2;
+            this.beginOfScreenTwo = 1;
+        } else if (division.equalsIgnoreCase("o")) {
+            currentRowScreenTwo = halfRows + 2;
+            this.length = cols;
+            this.endOfScreenOne = halfRows;
+            this.beginOfScreenTwo = halfRows + 2;
+            this.startColumnScreenTwo = 1;
+            if (rows % 2 != 0) {
+                this.endOfScreenTwo++;
+            }
+        }
+    }
+
+    /**
+     * Method which first calculates other variables then draws screen on
+     * terminal according to type of screen division
      */
     public void printScreen() {
+        calculateScreen();
         System.out.print(Constants.ERASE_SCREEN);
         if (this.division.equalsIgnoreCase("v")) {
             this.VDivision();
         } else if (this.division.equalsIgnoreCase("o")) {
             this.ODivision();
         }
+        this.printInputScreen();
         //printMenu();
-        System.out.print(Constants.CURSOS_RESTORE);
     }
 
+    /**
+     * Method which draws screen vertically on two equal parts
+     */
     private void VDivision() {
         for (int i = 1; i <= rows - 1; i++) {
             show(i, halfCols + 1, 37, "*");
@@ -53,10 +83,11 @@ public class View {
             show(rows, j, 37, "*");
         }
         this.setCursor(rows + 1, 1);
-        System.out.print("Choose option: ");
-        System.out.print(Constants.CURSOR_SAVE);
     }
 
+    /**
+     * Method which draws screen horizontally on two equal parts
+     */
     private void ODivision() {
         for (int i = 1; i <= cols; i++) {
             show(halfRows + 1, i, 37, "*");
@@ -66,275 +97,160 @@ public class View {
                 show(rows, j, 37, "*");
             }
             this.setCursor(rows + 1, 1);
-
         } else {
             for (int j = 1; j <= cols; j++) {
                 show(rows + 1, j, 37, "*");
             }
             this.setCursor(rows + 2, 1);
-
         }
+    }
+
+    /**
+     * Method which draws screen for user inputs which always has size of one
+     * row
+     */
+    private void printInputScreen() {
         System.out.print("Choose option: ");
         System.out.print(Constants.CURSOR_SAVE);
-
     }
 
+    /**
+     * Method which updates first screen by given list of strings
+     *
+     * @param data
+     */
     public void updateFirstScreen(ArrayList<String> data) {
-        this.eraseFirstScreen();
-        int counter = 0;
-        if (this.division.equalsIgnoreCase("v")) {
-            for (int i = 1; i <= rows - 1; i++) {
-                this.setCursor(i, 1);
-                if (counter < data.size()) {
-                    if (data.get(counter).length() > halfCols) {
-                        System.out.print(data.get(counter).substring(0, halfCols));
-                        for (int k = halfCols; k < data.get(counter).length(); k = k + halfCols) {
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException ex) {
-                            }
-                            if (halfCols < data.get(counter).substring(k).length()) {
-                                System.out.print("\n" + data.get(counter).substring(k, k + halfCols));
-                            } else {
-                                System.out.print("\n" + data.get(counter).substring(k));
-                            }
-
-                            i++;
-                        }
-
-                    } else {
-                        System.out.print(data.get(counter));
-                    }
-
-                    counter++;
-                    if (i == rows - 1) {
-                        this.eraseFirstScreen();
-                        i = 0;
-                    }
-                } else {
-                    i = rows;
-                }
-
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ex) {
-                }
+        //this.eraseFirstScreen();
+        System.out.print(Constants.ANSI_ESC + "37m");
+        for (int counter = 0; counter < data.size(); counter++) {
+            System.out.print(Constants.ANSI_ESC + currentRowScreenOne + ";" + startColumnScreenOne + "f");
+            if (data.get(counter).length() > length) {
+                this.wrapString(data.get(counter), 1, currentRowScreenOne, startColumnScreenOne, endOfScreenOne, beginOfScreenOne);
+            } else {
+                System.out.print(data.get(counter));
             }
-            //this.eraseFirstScreen();
-        } else if (this.division.equalsIgnoreCase("o")) {
-            for (int i = 1; i <= halfRows; i++) {
-                System.out.print(Constants.ANSI_ESC + i + ";1f");
-                if (counter < data.size()) {
-                    if (data.get(counter).length() > cols) {
-                        System.out.print(data.get(counter).substring(0, cols));
-                        for (int k = cols; k < data.get(counter).length(); k = k + cols) {
-                            if (cols < data.get(counter).substring(k).length()) {
-                                System.out.print("\n" + data.get(counter).substring(k, k + cols));
-                            } else {
-                                System.out.print("\n" + data.get(counter).substring(k));
-                            }
-
-                            i++;
-                        }
-
-                    } else {
-                        System.out.print(data.get(counter));
-                    }
-
-                    counter++;
-                    if (i == halfRows) {
-                        this.eraseFirstScreen();
-                        i = 0;
-                    }
-                }
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                }
-            }
-            //this.eraseFirstScreen();
+            this.checkIfEndOfScreen();
+            this.setSleep(500);
         }
-
     }
 
+    /**
+     * Method which updates first screen by given string
+     *
+     * @param text
+     * @param color
+     */
     public void updateFirstScreenByString(String text, String color) {
 
-        if (this.division.equalsIgnoreCase("v")) {
-            System.out.print(Constants.ANSI_ESC + currentRowScreenOne + ";1f");
-            System.out.print(Constants.ANSI_ESC + color + "m");
-            if (text.length() > halfCols) {
-                System.out.print(text.substring(0, halfCols));
-                for (int k = halfCols; k < text.length(); k = k + halfCols) {
-                    if (cols < text.substring(k).length()) {
-                        System.out.print("\n" + text.substring(k, k + halfCols));
-                    } else {
-                        System.out.print("\n" + text.substring(k));
-                    }
-                    currentRowScreenOne++;
-                }
-
-            } else {
-                System.out.print(text);
-            }
-
-            if (currentRowScreenOne == rows - 1) {
-                this.eraseFirstScreen();
-                currentRowScreenOne = 1;
-            } else {
-                currentRowScreenOne++;
-            }
-
-        } else if (this.division.equalsIgnoreCase("o")) {
-            System.out.print(Constants.ANSI_ESC + currentRowScreenOne + ";1f");
-            System.out.print(Constants.ANSI_ESC + color + "m");
-            if (text.length() > cols) {
-                System.out.print(text.substring(0, cols));
-                for (int k = cols; k < text.length(); k = k + cols) {
-                    if (cols < text.substring(k).length()) {
-                        System.out.print("\n" + text.substring(k, k + cols));
-                    } else {
-                        System.out.print("\n" + text.substring(k));
-                    }
-                    currentRowScreenOne++;
-                }
-
-            } else {
-                System.out.print(text);
-            }
-
-            if (currentRowScreenOne == halfRows) {
-                this.eraseFirstScreen();
-                currentRowScreenOne = 1;
-            } else {
-                currentRowScreenOne++;
-            }
+        System.out.print(Constants.ANSI_ESC + currentRowScreenOne + ";" + startColumnScreenOne + "f");
+        System.out.print(Constants.ANSI_ESC + color + "m");
+        if (text.length() > length) {
+            this.wrapString(text, 1, currentRowScreenOne, startColumnScreenOne, endOfScreenOne, beginOfScreenOne);
+        } else {
+            System.out.print(text);
         }
+        this.checkIfEndOfScreen();
+    }
 
+    private void checkIfEndOfScreen() {
+        if (currentRowScreenOne == endOfScreenOne) {
+            this.eraseFirstScreen();
+            currentRowScreenOne = beginOfScreenOne;
+        } else {
+            currentRowScreenOne++;
+        }
+    }
+
+    /**
+     * Method which wraps string into multi lines
+     *
+     * @param data
+     */
+    private void wrapString(String data, int screen, int currentRow, int startColumn, int endOfScreen, int beginOfScreen) {
+        System.out.print(data.substring(0, length));
+        for (int k = length; k < data.length(); k = k + length) {
+
+            System.out.print(Constants.ANSI_ESC + "1B");
+            System.out.print(Constants.ANSI_ESC + (length) + "D");
+
+            if (currentRow == endOfScreen) {
+                if (screen == 1) {
+                    this.eraseFirstScreen();
+                    currentRowScreenOne = beginOfScreen;
+                    System.out.print(Constants.ANSI_ESC + currentRowScreenOne + ";" + startColumn + "f");
+                } else {
+                    this.eraseSecondScreen();
+                    currentRowScreenTwo = beginOfScreen;
+                    System.out.print(Constants.ANSI_ESC + currentRowScreenTwo + ";" + startColumn + "f");
+                }
+
+            }
+            if (length < data.substring(k).length()) {
+                System.out.print(data.substring(k, k + length));
+            } else {
+                System.out.print(data.substring(k));
+            }
+            currentRow++;
+            if (screen == 1) {
+                currentRowScreenOne++;
+            } else {
+                currentRowScreenTwo++;
+            }
+
+            this.setSleep(500);
+        }
     }
 
     public void updateSecondScreenByString(String text, String color, boolean erase) {
-        if (erase && this.division.equalsIgnoreCase("v")) {
-            this.eraseSecondScreen();
-            currentRowScreenTwo = 1;
-        } else if (erase && this.division.equalsIgnoreCase("o")) {
-            this.eraseSecondScreen();
-            currentRowScreenTwo = (halfRows + 2);
+        if (erase) {
+            currentRowScreenTwo = beginOfScreenTwo;
         }
-        if (this.division.equalsIgnoreCase("v")) {
-            System.out.print(Constants.ANSI_ESC + currentRowScreenTwo + ";" + (halfCols + 2) + "f");
-            System.out.print(Constants.ANSI_ESC + color + "m");
+        System.out.print(Constants.ANSI_ESC + currentRowScreenTwo + ";" + startColumnScreenTwo + "f");
+        System.out.print(Constants.ANSI_ESC + color + "m");
 
-            if (text.length() > (cols - halfCols)) {
-                System.out.print(text.substring(0, cols - halfCols));
-
-                for (int k = cols - halfCols; k < text.length(); k = k + cols - halfCols) {
-                    System.out.print(Constants.ANSI_ESC + "1B");
-                    System.out.print(Constants.ANSI_ESC + (halfCols) + "D");
-                    if (currentRowScreenTwo == rows - 1) {
-                        this.eraseSecondScreen();
-                        currentRowScreenTwo = 1;
-                        System.out.print(Constants.ANSI_ESC + currentRowScreenTwo + ";" + (halfCols + 2) + "f");
-                    }
-
-                    if (cols < text.substring(k).length()) {
-                        System.out.print(text.substring(k, k + cols - halfCols));
-                    } else {
-                        System.out.print(text.substring(k));
-                    }
-                    currentRowScreenTwo++;
-                }
-
-            } else {
-                System.out.print(text);
-            }
-
-            if (currentRowScreenTwo == rows - 1) {
-                this.eraseSecondScreen();
-                currentRowScreenTwo = 1;
-            } else {
-                currentRowScreenTwo++;
-            }
-
-        } else if (this.division.equalsIgnoreCase("o")) {
-            System.out.print(Constants.ANSI_ESC + currentRowScreenTwo + ";1f");
-            System.out.print(Constants.ANSI_ESC + color + "m");
-            if (text.length() > cols) {
-                System.out.print(text.substring(0, cols));
-                for (int k = cols; k < text.length(); k = k + cols) {
-                    if (cols < text.substring(k).length()) {
-                        System.out.print("\n" + text.substring(k, k + cols));
-                    } else {
-                        System.out.print("\n" + text.substring(k));
-                    }
-                    currentRowScreenTwo++;
-                }
-
-            } else {
-                System.out.print(text);
-            }
-
-            if (currentRowScreenTwo == rows - 1) {
-                this.eraseFirstScreen();
-                currentRowScreenTwo = (halfCols + 1);
-            } else {
-                currentRowScreenTwo++;
-            }
+        if (text.length() > length) {
+            this.wrapString(text, 2, currentRowScreenTwo, startColumnScreenTwo, endOfScreenTwo, beginOfScreenTwo);
+        } else {
+            System.out.print(text);
         }
+
+        if (currentRowScreenTwo == endOfScreenTwo) {
+            this.eraseSecondScreen();
+            currentRowScreenTwo = beginOfScreenTwo;
+        } else {
+            currentRowScreenTwo++;
+        }
+        this.setSleep(500);
 
     }
 
-    public void updateSecondScreen() {
-        this.eraseSecondScreen();
-        if (this.division.equalsIgnoreCase("v")) {
-            for (int i = 1; i <= rows - 1; i++) {
-                System.out.print(Constants.ANSI_ESC + i + ";" + (halfCols + 2) + "f");
-                System.out.print("Ispis: " + i);
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                }
+    public void updateSecondScreen(ArrayList<String> data) {
+        System.out.print(Constants.ANSI_ESC + "37m");
+        for (int counter = 0; counter < data.size(); counter++) {
+            System.out.print(Constants.ANSI_ESC + currentRowScreenTwo + ";" + startColumnScreenTwo + "f");
+            if (data.get(counter).length() > length) {
+                this.wrapString(data.get(counter), 2, currentRowScreenTwo, startColumnScreenTwo, endOfScreenTwo, beginOfScreenTwo);
+            } else {
+                System.out.print(data.get(counter));
             }
-            this.eraseSecondScreen();
-        } else if (this.division.equalsIgnoreCase("o")) {
-            for (int i = halfRows + 2; i <= (halfRows * 2 + 1); i++) {
-                System.out.print(Constants.ANSI_ESC + i + ";1f");
-                System.out.print("Ispis: " + i);
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                }
+            if (currentRowScreenTwo == endOfScreenTwo) {
+                this.eraseSecondScreen();
+                currentRowScreenTwo = beginOfScreenTwo;
+            } else {
+                currentRowScreenTwo++;
             }
-            this.eraseSecondScreen();
+            this.setSleep(500);
         }
-
     }
 
     /**
      * Method for clearing first screen regardless of V or O division
      */
     private void eraseFirstScreen() {
-        if (this.division.equalsIgnoreCase("v")) {
-            for (int i = 1; i <= rows - 1; i++) {
-                System.out.print(Constants.ANSI_ESC + i + ";" + halfCols + "f");
-                System.out.print(Constants.ERASE_START_OF_LINE);
-                try {
-                    Thread.sleep(80);
-                } catch (InterruptedException ex) {
-                }
-            }
-        } else if (this.division.equalsIgnoreCase("o")) {
-            for (int i = 1; i <= halfRows; i++) {
-                System.out.print(Constants.ANSI_ESC + i + ";" + cols + "f");
-                System.out.print(Constants.ERASE_START_OF_LINE);
-                try {
-                    Thread.sleep(80);
-                } catch (InterruptedException ex) {
-                }
-            }
-
+        for (int i = beginOfScreenOne; i <= endOfScreenOne; i++) {
+            this.setCursor(i, length);
+            System.out.print(Constants.ERASE_START_OF_LINE);
+            this.setSleep(20);
         }
     }
 
@@ -342,30 +258,16 @@ public class View {
      * Method for clearing second screen regardless of V or O division
      */
     private void eraseSecondScreen() {
-        if (this.division.equalsIgnoreCase("v")) {
-            for (int i = 1; i <= rows - 1; i++) {
-                System.out.print(Constants.ANSI_ESC + i + ";" + (halfCols + 2) + "f");
-                System.out.print(Constants.ERASE_END_OF_LINE);
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException ex) {
-                }
-            }
-        } else if (this.division.equalsIgnoreCase("o")) {
-            for (int i = halfRows + 2; i <= (halfRows * 2 + 1); i++) {
-                System.out.print(Constants.ANSI_ESC + i + ";" + cols + "f");
-                System.out.print(Constants.ERASE_START_OF_LINE);
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException ex) {
-                }
-            }
 
+        for (int i = beginOfScreenTwo; i <= endOfScreenTwo; i++) {
+            this.setCursor(i, startColumnScreenTwo);
+            System.out.print(Constants.ERASE_END_OF_LINE);
+            this.setSleep(20);
         }
 
     }
-    
-    public void enterInput() {
+
+    public void restoreInput() {
         System.out.print(Constants.CURSOS_RESTORE);
         System.out.print(Constants.ERASE_END_OF_LINE);
         System.out.print(Constants.ANSI_ESC + "37m");
@@ -405,6 +307,13 @@ public class View {
         System.out.print(text);
         try {
             Thread.sleep(10);
+        } catch (InterruptedException ex) {
+        }
+    }
+
+    private void setSleep(int millis) {
+        try {
+            Thread.sleep(millis);
         } catch (InterruptedException ex) {
         }
     }

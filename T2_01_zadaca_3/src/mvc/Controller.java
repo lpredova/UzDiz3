@@ -55,7 +55,7 @@ public class Controller {
     }
 
     public void setForEntry() {
-        view.enterInput();
+        view.restoreInput();
     }
 
     public void processOption() {
@@ -129,18 +129,15 @@ public class Controller {
 //                    originator.set(T2_01_zadaca_3.root.clone());
 //                    caretaker.addMemento(originator.saveToMemento());
                     //#
-                    int chosenState = Integer.parseInt(in.nextLine());
 
-                    originator.restoreFromMemento(caretaker.getMemento(chosenState));
-                    T2_01_zadaca_3.rootComposite = originator.getState();
 
                     int numberOfPossibleStates = caretaker.getNumberOfPossibleStates() - 1;
 
-                    chosenState = -1;
+                    int chosenState = -1;
                     do {
                         System.out.print(Constants.CURSOS_RESTORE);
                         System.out.print(Constants.ERASE_END_OF_LINE);
-                        System.out.println("Odaberi n(0 - " + numberOfPossibleStates + "):");
+                        System.out.print("Odaberi n(0 - " + numberOfPossibleStates + "):");
                         chosenState = Integer.parseInt(in.nextLine());
                     } while (chosenState < 0 || chosenState > numberOfPossibleStates);
 
