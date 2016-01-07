@@ -83,6 +83,9 @@ public class DirectoryCheck extends Thread {
                 setFileSystemFiles(rootDir);
                 setCompositeFiles(compositeRoot);
 
+//                listfiles();
+//                listComposite();
+
                 if (checkForDelta(rootDir, compositeRoot) == false
                         && checkForAddedFiles(rootDir) == false
                         && checkForDeletedFiles(compositeRoot) == false) {
@@ -135,9 +138,11 @@ public class DirectoryCheck extends Thread {
                         }
                         if (nextElement.getType().equalsIgnoreCase("directory") && files[i].isDirectory()) {
                             if (!nextElement.getFormattedSize().equalsIgnoreCase(formatFolderSize(files[i]))) {
-                                view.updateSecondScreenByString(getCurrentTimeStamp() + " Folder " + files[i].getName() + "ima drugačiju veličinu, "
-                                        + " putanja: " + files[i].getCanonicalPath(), "31", false);
-                                deltaExists = true;
+//                                view.updateSecondScreenByString(nextElement.getName() + nextElement.getFormattedSize() + " nije isto "
+//                                        + formatFolderSize(files[i]) + files[i].getName(), "31", false);
+//                                view.updateSecondScreenByString(getCurrentTimeStamp() + " Folder " + files[i].getName() + "ima drugačiju veličinu, "
+//                                        + " putanja: " + files[i].getCanonicalPath(), "31", false);
+//                                deltaExists = true;
                             }
                         }
                     }
@@ -221,6 +226,18 @@ public class DirectoryCheck extends Thread {
             }
         }
     }
+
+//    private void listfiles() {
+//        for (String file : fileSystemFiles) {
+//            view.updateSecondScreenByString(file, "31", false);
+//        }
+//    }
+//
+//    private void listComposite() {
+//        for (String file : compositeFiles) {
+//            view.updateSecondScreenByString(file, "31", false);
+//        }
+//    }
 
     private void setFileSystemFiles(File parent) {
         for (File file : parent.listFiles()) {
