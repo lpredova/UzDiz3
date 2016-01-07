@@ -16,6 +16,9 @@ public class Parent implements AppFile, TreeElementVisitor {
     private String formattedSize;
     private String fileHash;
     private long rawSize;
+    private boolean isRoot;
+    private String rootAbsoluteAdress;
+    private String parentName;
 
     private final List<AppFile> parentFiles = new ArrayList<>();
     private final List<AppFile> files = new ArrayList<>();
@@ -184,7 +187,7 @@ public class Parent implements AppFile, TreeElementVisitor {
     @Override
     public void increaseSize(long size) {
         this.rawSize += size;
-        this.formattedSize = Helpers.FileHelper.formatSize(this.rawSize);
+        this.formattedSize = utils.FileHelper.formatSize(this.rawSize);
     }
 
     @Override
@@ -205,6 +208,36 @@ public class Parent implements AppFile, TreeElementVisitor {
 
         return clone;
     }
+
+    @Override
+
+    public boolean getIsRoot() {
+        return this.isRoot;
+    }
+
+    @Override
+    public String getRootAbsoluteAddress() {
+        return this.rootAbsoluteAdress;
+    }
+
+    @Override
+    public void setIsRoot(boolean isRoot) {
+        this.isRoot = isRoot;
+    }
+
+    @Override
+    public void setRootAbsouluteAddress(String absAddress) {
+        this.rootAbsoluteAdress = absAddress;
+    }
+
+    @Override
+    public String getParentName() {
+        return this.parentName;
+    }
+
+    @Override
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
 
     @Override
     public void visit(AppFile file) {

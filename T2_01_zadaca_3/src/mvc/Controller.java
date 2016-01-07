@@ -61,7 +61,7 @@ public class Controller {
         Originator originator = new Originator();
 
         // Saving initial state to memento
-        originator.set(T2_01_zadaca_3.root.clone());
+        originator.set(T2_01_zadaca_3.rootComposite.clone());
         caretaker.addMemento(originator.saveToMemento());
 
         String choice = "";
@@ -84,16 +84,16 @@ public class Controller {
                     break;
 
                 case "3":
-                    thread = new DirectoryCheck(seconds, view);
+                    thread = new DirectoryCheck(seconds, view, model);
                     thread.setRunning(true);
                     thread.start();
-                    view.updateFirstScreenByString("Thread is running.\n", "32");
+                    view.updateFirstScreenByString("Dretva se izvršava.", "32");
                     break;
 
                 case "4":
                     thread.setRunning(false);
                     thread.interrupt();
-                    view.updateFirstScreenByString("Thread is stopped.", "33");
+                    view.updateFirstScreenByString("Dretva je stopirana.", "33");
                     break;
 
                 case "5":
@@ -116,34 +116,44 @@ public class Controller {
                     break;
 
                 case "6":
-                    
+
+                    System.out.print(Constants.CURSOS_RESTORE);
+                    System.out.print(Constants.ERASE_END_OF_LINE);
 
                     //SAVING STATE EXAMPLE
 //                    originator.set(T2_01_zadaca_3.root.clone());
 //                    caretaker.addMemento(originator.saveToMemento());
 //                    
+//                    T2_01_zadaca_3.root.setName("NOVO");
+//                    originator.set(T2_01_zadaca_3.root.clone());
+//                    caretaker.addMemento(originator.saveToMemento());
+                    //#
+                    int chosenState = Integer.parseInt(in.nextLine());
+
+                    originator.restoreFromMemento(caretaker.getMemento(chosenState));
+                    T2_01_zadaca_3.rootComposite = originator.getState();
+
                     int numberOfPossibleStates = caretaker.getNumberOfPossibleStates() - 1;
 
-                                                                      
-                    int chosenState = -1;
+                    chosenState = -1;
                     do {
                         System.out.print(Constants.CURSOS_RESTORE);
                         System.out.print(Constants.ERASE_END_OF_LINE);
-                        System.out.print("States(0 - " + numberOfPossibleStates + "): ");  
+                        System.out.println("Odaberi n(0 - " + numberOfPossibleStates + "):");
                         chosenState = Integer.parseInt(in.nextLine());
                     } while (chosenState < 0 || chosenState > numberOfPossibleStates);
 
                     originator.restoreFromMemento(caretaker.getMemento(chosenState).getKey());
-                    T2_01_zadaca_3.root = originator.getState();
+                    T2_01_zadaca_3.rootComposite = originator.getState();
 
                     ArrayList<String> stringOutputOption6 = new ArrayList<>();
-                    
+
                     stringOutputOption6.add("Restored state(" + chosenState + "): " + caretaker.getMemento(chosenState).getKey());
                     stringOutputOption6.add("From: " + caretaker.getMemento(chosenState).getValue());
 
                     model.setData(stringOutputOption6);
                     view.updateFirstScreen(model.getData());
-                    
+
                     break;
 
                 case "7":
@@ -161,11 +171,10 @@ public class Controller {
 
                     T2_01_zadaca_3.filesRepository.directoryTree.clear();
                     T2_01_zadaca_3.filesRepository.getIterator(T2_01_zadaca_3.rootDirectory);
-
                     //Setting the new root element and saving it to memento
-                    T2_01_zadaca_3.root = T2_01_zadaca_3.filesRepository.directoryTree.get(0);
+                    T2_01_zadaca_3.rootComposite = T2_01_zadaca_3.filesRepository.directoryTree.get(0);
 
-                    originator.set(T2_01_zadaca_3.root.clone());
+                    originator.set(T2_01_zadaca_3.rootComposite.clone());
                     caretaker.addMemento(originator.saveToMemento());
 
                     break;
@@ -173,10 +182,15 @@ public class Controller {
                 case "9":
                     LayerStructure ls = new LayerStructure();
                     ls.doActions();
-                    
+
                     break;
             }
             this.setForEntry();
+            if (thread != null && !thread.isActive()) {
+                System.out.print(Constants.ANSI_ESC + "33m");
+            } else if (thread != null && thread.isActive()) {
+                System.out.print(Constants.ANSI_ESC + "32m");
+            }
         } while (!choice.equalsIgnoreCase("Q"));
 
         System.out.print(Constants.ERASE_END_OF_LINE);
@@ -208,9 +222,9 @@ public class Controller {
             view.updateFirstScreenByString(text, "36");
 
         }
-        view.updateSecondScreenByString("Ukupan broj direktorija: " + numDir, "33", true);
-        view.updateSecondScreenByString("Ukupan broj datoteka: " + numFile, "33", false);
-        view.updateSecondScreenByString("Ukupna veličina: " + df.format(overallSize).replace(",", ".") + "B", "33", false);
+        view.updateSecondScreenByString("Ukupan broj direktorija: " + numDir, "37", true);
+        view.updateSecondScreenByString("Ukupan broj datoteka: " + numFile, "37", false);
+        view.updateSecondScreenByString("Ukupna veličina: " + df.format(overallSize).replace(",", ".") + "B", "37", false);
 
         if (file.isDirectory()) {
             File[] files = file.listFiles();

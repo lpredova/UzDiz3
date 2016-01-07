@@ -19,6 +19,9 @@ public interface AppFile extends TreeElementInterface{
     String getFormattedSize();
     String getFileHash();
     long getRawSize();
+    boolean getIsRoot();
+    String getRootAbsoluteAddress();
+    String getParentName();
     
     void setName(String name);
     void setType(String type);
@@ -27,6 +30,9 @@ public interface AppFile extends TreeElementInterface{
     void setFormattedSize(String size);
     void setFileHash(String hash);
     void setRawSize(long rawSize);
+    void setIsRoot(boolean isRoot);
+    void setRootAbsouluteAddress(String absAddress);
+    void setParentName(String parentName);
     
     
     /**
