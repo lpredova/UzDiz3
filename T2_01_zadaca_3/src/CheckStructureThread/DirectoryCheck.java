@@ -7,6 +7,7 @@ package CheckStructureThread;
 
 import CompositeIterator.FileTreeIterator;
 import CompositeIterator.Iterator;
+import FileIterator.InitialStructure.FileRepository;
 import FileStructureComposite.AppFile;
 import java.io.File;
 import java.io.IOException;
@@ -69,7 +70,7 @@ public class DirectoryCheck extends Thread {
     public synchronized void run() {
 
         rootDir = new File(T2_01_zadaca_3.rootDirectory);
-        compositeRoot = T2_01_zadaca_3.rootComposite;
+        compositeRoot = FileRepository.directoryTree.get(0);
         long duration = 0;
         long startTime = System.currentTimeMillis();
 
@@ -86,7 +87,7 @@ public class DirectoryCheck extends Thread {
 //                listfiles();
 //                listComposite();
 
-                if (checkForDelta(rootDir, compositeRoot) == false
+                if (checkForDelta(rootDir, FileRepository.directoryTree.get(0)) == false
                         && checkForAddedFiles(rootDir) == false
                         && checkForDeletedFiles(compositeRoot) == false) {
                     view.updateFirstScreenByString(getCurrentTimeStamp() + ": Ne postoje promjene", "31");
