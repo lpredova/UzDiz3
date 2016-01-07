@@ -1,11 +1,12 @@
 package FileStructureComposite;
 
+import additional.visitor.TreeElementInterface;
 import java.util.List;
 
 /**
  * Created by lovro
  */
-public interface AppFile {
+public interface AppFile extends TreeElementInterface{
       
     /**
      * Getters and setters for file elements
@@ -16,6 +17,7 @@ public interface AppFile {
     String getCreatedAt();
     String getUpdatedAt();
     String getFormattedSize();
+    String getFileHash();
     long getRawSize();
     boolean getIsRoot();
     String getRootAbsoluteAddress();
@@ -26,6 +28,7 @@ public interface AppFile {
     void setCreatedAt(String createdAt);
     void setUpdatedAt(String updatedAt);
     void setFormattedSize(String size);
+    void setFileHash(String hash);
     void setRawSize(long rawSize);
     void setIsRoot(boolean isRoot);
     void setRootAbsouluteAddress(String absAddress);
@@ -56,6 +59,8 @@ public interface AppFile {
      * Helper functions to manipulate structure
      */
     void print();
+    
+    String elementData();
     
     void increaseSize(long size);
     

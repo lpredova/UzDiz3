@@ -8,14 +8,16 @@ package mvc;
 import CheckStructureThread.DirectoryCheck;
 import CompositeIterator.FileTreeIterator;
 import FileIterator.InitialStructure.FileRepository;
-import additional.FileInfo;
 
 import FileStructureMemento.Caretaker;
 import FileStructureMemento.Originator;
+import additional.layers.LayerStructure;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,6 +59,11 @@ public class Controller {
         FileTreeIterator ft = new FileTreeIterator();
         Caretaker caretaker = new Caretaker();
         Originator originator = new Originator();
+
+        // Saving initial state to memento
+        originator.set(T2_01_zadaca_3.rootComposite.clone());
+        caretaker.addMemento(originator.saveToMemento());
+
         String choice = "";
         do {
             System.out.print(Constants.CURSOR_SAVE);
@@ -90,10 +97,26 @@ public class Controller {
                     break;
 
                 case "5":
-                    // TODO
+                    System.out.print(Constants.CURSOS_RESTORE);
+                    System.out.print(Constants.ERASE_END_OF_LINE);
+
+                    HashMap<Object, String> savedStates = caretaker.getSavedStates();
+                    ArrayList<String> stringOutputOption5 = new ArrayList<>();
+
+                    stringOutputOption5.add("Information about all states:");
+                    stringOutputOption5.add("");
+
+                    for (int i = 0; i < savedStates.size(); i++) {
+                        stringOutputOption5.add("State: " + i + " - Saved: " + savedStates.values().toArray()[i]);
+                    }
+
+                    model.setData(stringOutputOption5);
+                    view.updateFirstScreen(model.getData());
+
                     break;
 
                 case "6":
+
                     System.out.print(Constants.CURSOS_RESTORE);
                     System.out.print(Constants.ERASE_END_OF_LINE);
 
@@ -105,19 +128,31 @@ public class Controller {
 //                    originator.set(T2_01_zadaca_3.root.clone());
 //                    caretaker.addMemento(originator.saveToMemento());
                     //#
-                    int numberOfPossibleStates = caretaker.getNumberOfPossibleStates() - 1;
-
-                    if (numberOfPossibleStates < 0) {
-                        System.out.println("Nema spremljenih stanja!");
-                        break;
-                    }
-
-                    System.out.println("Odaberi n(0 - " + numberOfPossibleStates + "):");
-
                     int chosenState = Integer.parseInt(in.nextLine());
 
                     originator.restoreFromMemento(caretaker.getMemento(chosenState));
                     T2_01_zadaca_3.rootComposite = originator.getState();
+
+                    int numberOfPossibleStates = caretaker.getNumberOfPossibleStates() - 1;
+
+                    chosenState = -1;
+                    do {
+                        System.out.print(Constants.CURSOS_RESTORE);
+                        System.out.print(Constants.ERASE_END_OF_LINE);
+                        System.out.println("Odaberi n(0 - " + numberOfPossibleStates + "):");
+                        chosenState = Integer.parseInt(in.nextLine());
+                    } while (chosenState < 0 || chosenState > numberOfPossibleStates);
+
+                    originator.restoreFromMemento(caretaker.getMemento(chosenState).getKey());
+                    T2_01_zadaca_3.rootComposite = originator.getState();
+
+                    ArrayList<String> stringOutputOption6 = new ArrayList<>();
+
+                    stringOutputOption6.add("Restored state(" + chosenState + "): " + caretaker.getMemento(chosenState).getKey());
+                    stringOutputOption6.add("From: " + caretaker.getMemento(chosenState).getValue());
+
+                    model.setData(stringOutputOption6);
+                    view.updateFirstScreen(model.getData());
 
                     break;
 
@@ -136,17 +171,22 @@ public class Controller {
 
                     T2_01_zadaca_3.filesRepository.directoryTree.clear();
                     T2_01_zadaca_3.filesRepository.getIterator(T2_01_zadaca_3.rootDirectory);
+                    //Setting the new root element and saving it to memento
+                    T2_01_zadaca_3.rootComposite = T2_01_zadaca_3.filesRepository.directoryTree.get(0);
+
+                    originator.set(T2_01_zadaca_3.rootComposite.clone());
+                    caretaker.addMemento(originator.saveToMemento());
+
+                    break;
 
                 case "9":
+                    LayerStructure ls = new LayerStructure();
+                    ls.doActions();
 
-                    FileInfo fi = new FileInfo();
-                    fi.printFileInfo();
-
-                    // TODO OWN FUNCIONALITY
                     break;
             }
             this.setForEntry();
-            if(thread != null && !thread.isActive()) {
+            if (thread != null && !thread.isActive()) {
                 System.out.print(Constants.ANSI_ESC + "33m");
             } else if (thread != null && thread.isActive()) {
                 System.out.print(Constants.ANSI_ESC + "32m");

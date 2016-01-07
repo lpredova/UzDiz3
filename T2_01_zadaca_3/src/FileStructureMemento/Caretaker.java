@@ -5,8 +5,12 @@
  */
 package FileStructureMemento;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 /**
  *
@@ -14,14 +18,19 @@ import java.util.List;
  */
 public class Caretaker {
 
-    private List<Object> savedStates = new ArrayList<>();
+    private HashMap<Object, String> savedStates = new HashMap<>();
+    //private List<Object> savedStates = new ArrayList<>();
 
     public void addMemento(Object m) {
-        savedStates.add(m);
+        Date dNow = new Date();
+        SimpleDateFormat ft = new SimpleDateFormat("E dd.MM.yyyy 'at' hh:mm:ss a zzz");
+        
+        savedStates.put(m, ft.format(dNow));
     }
 
-    public Object getMemento(int index) {
-        return savedStates.get(index);
+    public Entry getMemento(int index) {
+        return (Entry) savedStates.entrySet().toArray()[index];
+        //return savedStates.keySet().toArray()[index];
     }
 
     public int getNumberOfPossibleStates(){
@@ -30,5 +39,9 @@ public class Caretaker {
     
     public void clearAllStates(){
         savedStates.clear();
+    }
+    
+    public HashMap<Object, String> getSavedStates(){
+        return savedStates;
     }
 }
