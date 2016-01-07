@@ -95,31 +95,24 @@ public class FileTreeIterator implements Container {
      * @param elem
      * @param extension 
      */
-    public void compareExtensions(AppFile elem,String extension) {
+    public void compareExtensions(AppFile elem, String extension) {
         
-
         FileTreeIterator ft = this;
+
         for (Iterator iter = ft.getIterator(); iter.hasNext(elem);) {
             AppFile nextElement = (AppFile) iter.getNextChild(elem);
             String type = nextElement.getType();
-
             if (extension.equals(type)) {
-                additional.FileInfo.elementCount++;
-                additional.FileInfo.totalFileSize += nextElement.getRawSize();
-                additional.FileInfo.extensionFiles.add(nextElement);
-
-            if(extension.equals(type)){
                 ReportLayer.elementCount++;
                 ReportLayer.totalFileSize += nextElement.getRawSize();
                 ReportLayer.extensionFiles.add(nextElement);
-
             }
 
             if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
-                compareExtensions(nextElement, extension);
+                compareExtensions(nextElement,extension);
             }
         }
-    }
+        
     }
 
     /**

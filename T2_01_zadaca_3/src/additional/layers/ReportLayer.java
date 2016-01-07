@@ -49,6 +49,9 @@ public class ReportLayer implements LayerInterface {
          */
         ft.getFileExtensions(FileRepository.directoryTree.get(0));
         Collections.sort(fileTypes, String.CASE_INSENSITIVE_ORDER);
+        
+        System.out.println(fileTypes);
+        
 
         for (String extension : fileTypes) {
             totalFileSize = 0;

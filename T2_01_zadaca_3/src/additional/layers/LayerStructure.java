@@ -36,7 +36,6 @@ public class LayerStructure {
         this.layer = new ZipLayer();
         this.layer.push(info);
         this.layer.action();
-        info = this.layer.pull();
-        
+        info = this.layer.pull();  
     }  
 }
