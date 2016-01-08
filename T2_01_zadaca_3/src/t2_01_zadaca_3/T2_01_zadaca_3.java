@@ -31,7 +31,7 @@ public class T2_01_zadaca_3 {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         ArgumentValidator av = new ArgumentValidator(args);
         if (!av.Validate()) {
@@ -48,11 +48,7 @@ public class T2_01_zadaca_3 {
         //Reading initial file structure - creational iterator, has only one iteration and creates dir 
 
         filesRepository.getIterator(rootDirectory);
-        rootComposite = FileRepository.directoryTree.get(0);
-
-
-
-        
+        rootComposite = FileRepository.directoryTree.get(0);      
 
         View v = new View(rowNum, colNum, screenDivision);
         Model m = new Model();

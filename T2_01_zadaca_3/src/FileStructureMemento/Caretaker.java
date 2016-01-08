@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -18,7 +19,7 @@ import java.util.Map.Entry;
  */
 public class Caretaker {
 
-    private HashMap<Object, String> savedStates = new HashMap<>();
+    private LinkedHashMap<Object, String> savedStates = new LinkedHashMap<>();
     //private List<Object> savedStates = new ArrayList<>();
 
     public void addMemento(Object m) {

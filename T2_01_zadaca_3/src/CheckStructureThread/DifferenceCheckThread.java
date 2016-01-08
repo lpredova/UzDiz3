@@ -1,0 +1,103 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package CheckStructureThread;
+
+import CompositeIterator.FileTreeIterator;
+import CompositeIterator.Iterator;
+import FileIterator.InitialStructure.FileRepository;
+import FileStructureComposite.AppFile;
+import java.io.File;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import static mvc.Controller.caretaker;
+import static mvc.Controller.originator;
+import mvc.Model;
+import mvc.View;
+import t2_01_zadaca_3.T2_01_zadaca_3;
+
+/**
+ *
+ * @author tonovosel
+ */
+public class DifferenceCheckThread extends Thread {
+
+    private int secondsNum;
+    private View view;
+    private Model model;
+    private volatile boolean running;
+    private volatile boolean active;
+   
+    private File rootDir = null;
+    private AppFile compositeRoot;
+
+    private DifferenceChecker differenceChecker;
+    
+    public DifferenceCheckThread(int secondsNum, View view, Model model) {
+        this.secondsNum = secondsNum;
+        this.view = view;
+        this.model = model;
+        
+        differenceChecker = new DifferenceChecker(view, model, 2);
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    @Override
+    public synchronized void interrupt() {
+        active = false;
+        super.interrupt();
+    }
+
+    @Override
+    public synchronized void start() {
+        super.start();
+    }
+
+    @Override
+    public synchronized void run() {
+        rootDir = new File(T2_01_zadaca_3.rootDirectory);
+        compositeRoot = FileRepository.directoryTree.get(0);
+
+        long duration;
+        long startTime;
+        
+        while (running) {
+            
+            duration = 0;
+            startTime = System.currentTimeMillis();
+
+            try {
+
+                differenceChecker.CheckDifference(new File(T2_01_zadaca_3.rootDirectory), FileRepository.directoryTree.get(0));                           
+                
+                duration = System.currentTimeMillis() - startTime;
+
+                try {
+                    Thread.sleep(secondsNum * 1000 - duration);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                    active = false;
+                }
+
+            } catch (IOException ex) {
+                Logger.getLogger(DifferenceCheckThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }//while
+
+    }  
+}
