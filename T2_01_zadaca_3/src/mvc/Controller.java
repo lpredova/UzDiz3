@@ -1,4 +1,4 @@
-/*
+﻿/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -57,7 +57,7 @@ public class Controller {
     }
 
     public void setForEntry() {
-        view.enterInput();
+        view.restoreInput();
     }
 
     public void processOption() throws IOException {
@@ -138,7 +138,9 @@ public class Controller {
                     do {
                         System.out.print(Constants.CURSOS_RESTORE);
                         System.out.print(Constants.ERASE_END_OF_LINE);
+
                         view.updateFirstScreenByString("Odaberi n(0 - " + numberOfPossibleStates + "):", "31");
+
                         chosenState = Integer.parseInt(in.nextLine());
                     } while (chosenState < 0 || chosenState > numberOfPossibleStates);
 
