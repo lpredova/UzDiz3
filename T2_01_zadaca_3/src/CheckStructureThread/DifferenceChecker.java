@@ -89,8 +89,9 @@ public class DifferenceChecker {
         setFileSystemFiles(rootFile);
         setCompositeFiles(mementoFile);
 
-        //TODO Check the difference, just which files are the delta
-
+        compareComposites(rootFile, compositeFiles);
+        compareComposites(mementoFile, fileSystemFiles);
+        
         if (!changeDetected) {
             view.updateFirstScreenByString(getCurrentTimeStamp() + ": Ne postoje promjene", "31");
         }
@@ -255,5 +256,22 @@ public class DifferenceChecker {
         DecimalFormat myFormatter = new DecimalFormat(pattern);
         formattedSize = myFormatter.format(getFolderSize(folder)).replace(',', '.') + " B";
         return formattedSize;
+    }
+    
+    
+    private void compareComposites(AppFile rootFile, ArrayList<String> compositeFiles) throws IOException{
+        for (Iterator iter = ft.getIterator(); iter.hasNext(rootFile);) {
+            AppFile nextElement = (AppFile) iter.getNextChild(rootFile);
+        
+            if(!compositeFiles.contains(nextElement.getName())){
+                UpdateView("File/folder " + nextElement.getName() + " je razlika, "
+                        + " putanja: " + getFilePath(nextElement.getName()));
+                changeDetected = true;
+            }
+            
+            if (nextElement.getType().equalsIgnoreCase("directory")) {
+                compareComposites(nextElement,compositeFiles);
+            }
+        }
     }
 }
