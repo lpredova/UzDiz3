@@ -19,6 +19,7 @@ import java.util.Date;
 import mvc.Model;
 import mvc.View;
 import t2_01_zadaca_3.T2_01_zadaca_3;
+import utils.Constants;
 
 /**
  *
@@ -68,6 +69,8 @@ public class DifferenceChecker {
 
         if (!changeDetected) {
             view.updateFirstScreenByString(getCurrentTimeStamp() + ": Ne postoje promjene", "31");
+            view.restoreInput();
+            System.out.print(Constants.ANSI_ESC + "32m");
         } else {
 
             T2_01_zadaca_3.filesRepository.directoryTree.clear();
@@ -77,6 +80,8 @@ public class DifferenceChecker {
             originator.set(T2_01_zadaca_3.rootComposite.clone());
             caretaker.addMemento(originator.saveToMemento());
             UpdateView("Saving to Memento.");
+            view.restoreInput();
+            System.out.print(Constants.ANSI_ESC + "32m");
         }
     }
 
@@ -91,7 +96,7 @@ public class DifferenceChecker {
 
         compareComposites(rootFile, compositeFiles);
         compareComposites(mementoFile, fileSystemFiles);
-        
+
         if (!changeDetected) {
             view.updateFirstScreenByString(getCurrentTimeStamp() + ": Ne postoje promjene", "31");
         }
@@ -257,20 +262,19 @@ public class DifferenceChecker {
         formattedSize = myFormatter.format(getFolderSize(folder)).replace(',', '.') + " B";
         return formattedSize;
     }
-    
-    
-    private void compareComposites(AppFile rootFile, ArrayList<String> compositeFiles) throws IOException{
+
+    private void compareComposites(AppFile rootFile, ArrayList<String> compositeFiles) throws IOException {
         for (Iterator iter = ft.getIterator(); iter.hasNext(rootFile);) {
             AppFile nextElement = (AppFile) iter.getNextChild(rootFile);
-        
-            if(!compositeFiles.contains(nextElement.getName())){
+
+            if (!compositeFiles.contains(nextElement.getName())) {
                 UpdateView("File/folder " + nextElement.getName() + " je razlika, "
                         + " putanja: " + getFilePath(nextElement.getName()));
                 changeDetected = true;
             }
-            
+
             if (nextElement.getType().equalsIgnoreCase("directory")) {
-                compareComposites(nextElement,compositeFiles);
+                compareComposites(nextElement, compositeFiles);
             }
         }
     }
