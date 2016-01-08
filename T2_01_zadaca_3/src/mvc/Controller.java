@@ -5,9 +5,11 @@
  */
 package mvc;
 
-import CheckStructureThread.DirectoryCheck;
+import CheckStructureThread.DifferenceCheckThread;
+import CheckStructureThread.DifferenceChecker;
 import CompositeIterator.FileTreeIterator;
 import FileIterator.InitialStructure.FileRepository;
+import FileStructureComposite.AppFile;
 
 import FileStructureMemento.Caretaker;
 import FileStructureMemento.Originator;
@@ -38,8 +40,8 @@ public class Controller {
     public static int numFile = 0;
     public static int overallSize = 0;
 
-    DirectoryCheck thread = null;
-    
+    DifferenceCheckThread thread = null;
+
     public static Caretaker caretaker = new Caretaker();
     public static Originator originator = new Originator();
 
@@ -58,9 +60,9 @@ public class Controller {
         view.enterInput();
     }
 
-    public void processOption() {
+    public void processOption() throws IOException {
         FileTreeIterator ft = new FileTreeIterator();
-        
+
         // Saving initial state to memento
         originator.set(T2_01_zadaca_3.rootComposite.clone());
         caretaker.addMemento(originator.saveToMemento());
@@ -85,7 +87,7 @@ public class Controller {
                     break;
 
                 case "3":
-                    thread = new DirectoryCheck(seconds, view, model);
+                    thread = new DifferenceCheckThread(seconds, view, model);
                     thread.setRunning(true);
                     thread.start();
                     view.updateFirstScreenByString("Dretva se izvršava.", "32");
@@ -140,7 +142,7 @@ public class Controller {
                     do {
                         System.out.print(Constants.CURSOS_RESTORE);
                         System.out.print(Constants.ERASE_END_OF_LINE);
-                        System.out.println("Odaberi n(0 - " + numberOfPossibleStates + "):");
+                        view.updateFirstScreenByString("Odaberi n(0 - " + numberOfPossibleStates + "):", "31");
                         chosenState = Integer.parseInt(in.nextLine());
                     } while (chosenState < 0 || chosenState > numberOfPossibleStates);
 
@@ -160,9 +162,23 @@ public class Controller {
                 case "7":
                     System.out.print(Constants.CURSOS_RESTORE);
                     System.out.print(Constants.ERASE_END_OF_LINE);
-                    System.out.print("Odaberi m: ");
-                    in.nextLine();
-                    // TODO
+                    
+                    int numberOfPossibleStates2 = caretaker.getNumberOfPossibleStates() - 1;
+
+                    chosenState = -1;
+                    do {
+                        System.out.print(Constants.CURSOS_RESTORE);
+                        System.out.print(Constants.ERASE_END_OF_LINE);
+                        view.updateFirstScreenByString("Odaberi m(0 - " + numberOfPossibleStates2 + "):", "31");
+                        chosenState = Integer.parseInt(in.nextLine());
+                    } while (chosenState < 0 || chosenState > numberOfPossibleStates2);                    
+                    
+                    originator.restoreFromMemento(caretaker.getMemento(chosenState).getKey());
+                    AppFile restoredState = originator.getState();
+                    
+                    DifferenceChecker dc = new DifferenceChecker(view, model, 1);
+                    dc.CheckDifference(T2_01_zadaca_3.rootComposite, restoredState);
+                    
                     break;
 
                 case "8":
