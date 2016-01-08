@@ -142,14 +142,30 @@ public class View {
      */
     public void updateFirstScreenByString(String text, String color) {
 
-        System.out.print(Constants.ANSI_ESC + currentRowScreenOne + ";" + startColumnScreenOne + "f");
-        System.out.print(Constants.ANSI_ESC + color + "m");
-        if (text.length() > length) {
-            this.wrapString(text, 1, currentRowScreenOne, startColumnScreenOne, endOfScreenOne, beginOfScreenOne);
+        if (text.split("\n").length > 0) {
+            String[] spplittedData = text.split("\n");
+            for (String s : spplittedData) {
+                System.out.print(Constants.ANSI_ESC + currentRowScreenOne + ";" + startColumnScreenOne + "f");
+                System.out.print(Constants.ANSI_ESC + color + "m");
+                if (s.length() > length) {
+                    this.wrapString(s, 1, currentRowScreenOne, startColumnScreenOne, endOfScreenOne, beginOfScreenOne);
+                } else {
+                    System.out.print(s);
+                }
+                this.checkIfEndOfScreen();
+                this.setSleep(500);
+            }
         } else {
-            System.out.print(text);
+            System.out.print(Constants.ANSI_ESC + currentRowScreenOne + ";" + startColumnScreenOne + "f");
+            System.out.print(Constants.ANSI_ESC + color + "m");
+            if (text.length() > length) {
+                this.wrapString(text, 1, currentRowScreenOne, startColumnScreenOne, endOfScreenOne, beginOfScreenOne);
+            } else {
+                System.out.print(text);
+            }
+            this.checkIfEndOfScreen();
         }
-        this.checkIfEndOfScreen();
+
     }
 
     private void checkIfEndOfScreen() {
@@ -205,22 +221,42 @@ public class View {
         if (erase) {
             currentRowScreenTwo = beginOfScreenTwo;
         }
-        System.out.print(Constants.ANSI_ESC + currentRowScreenTwo + ";" + startColumnScreenTwo + "f");
-        System.out.print(Constants.ANSI_ESC + color + "m");
 
-        if (text.length() > length) {
-            this.wrapString(text, 2, currentRowScreenTwo, startColumnScreenTwo, endOfScreenTwo, beginOfScreenTwo);
+        if (text.split("\n").length > 0) {
+            String[] spplittedData = text.split("\n");
+            for (String s : spplittedData) {
+                System.out.print(Constants.ANSI_ESC + currentRowScreenTwo + ";" + startColumnScreenTwo + "f");
+                System.out.print(Constants.ANSI_ESC + color + "m");
+                if (s.length() > length) {
+                    this.wrapString(s, 2, currentRowScreenTwo, startColumnScreenTwo, endOfScreenTwo, beginOfScreenTwo);
+                } else {
+                    System.out.print(s);
+                }
+                if (currentRowScreenTwo == endOfScreenTwo) {
+                    this.eraseSecondScreen();
+                    currentRowScreenTwo = beginOfScreenTwo;
+                } else {
+                    currentRowScreenTwo++;
+                }
+                this.setSleep(500);
+            }
         } else {
-            System.out.print(text);
-        }
+            System.out.print(Constants.ANSI_ESC + currentRowScreenTwo + ";" + startColumnScreenTwo + "f");
+            System.out.print(Constants.ANSI_ESC + color + "m");
+            if (text.length() > length) {
+                this.wrapString(text, 2, currentRowScreenTwo, startColumnScreenTwo, endOfScreenTwo, beginOfScreenTwo);
+            } else {
+                System.out.print(text);
+            }
 
-        if (currentRowScreenTwo == endOfScreenTwo) {
-            this.eraseSecondScreen();
-            currentRowScreenTwo = beginOfScreenTwo;
-        } else {
-            currentRowScreenTwo++;
+            if (currentRowScreenTwo == endOfScreenTwo) {
+                this.eraseSecondScreen();
+                currentRowScreenTwo = beginOfScreenTwo;
+            } else {
+                currentRowScreenTwo++;
+            }
+            this.setSleep(500);
         }
-        this.setSleep(500);
 
     }
 

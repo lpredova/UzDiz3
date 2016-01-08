@@ -5,6 +5,8 @@
  */
 package additional.layers;
 
+import mvc.View;
+
 /**
  *
  * @author lovro
@@ -13,9 +15,11 @@ public class LayerStructure {
 
     String info;
     LayerInterface layer;
+    private View view;
     
-     public LayerStructure() {
+     public LayerStructure(View view) {
          layer = new ReportLayer();
+         this.view = view;
     }
      
      
@@ -24,13 +28,14 @@ public class LayerStructure {
         //Getting report
         this.layer.action();
         info = this.layer.pull();
-        System.out.println(info);
+        view.updateFirstScreenByString(info, "37");
         
         //Creating file
-        this.layer = new FileLayer();
+        this.layer = new FileLayer(view);
         this.layer.push(info);
         this.layer.action();
         info = this.layer.pull();
+        view.updateFirstScreenByString(info, "37");
 
         //Zipping file
         this.layer = new ZipLayer();

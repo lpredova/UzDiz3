@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mvc.View;
 
 /**
  *
@@ -18,6 +19,10 @@ import java.util.logging.Logger;
 public class FileLayer implements LayerInterface {
 
     String info;
+    private View view;
+    public FileLayer(View view) {
+        this.view = view;
+    }
 
     @Override
     public void action() {
@@ -29,9 +34,9 @@ public class FileLayer implements LayerInterface {
             out = new PrintWriter(filename);
             out.println(info);
             out.close();
-            System.out.println("File saved");
+            view.updateFirstScreenByString("File saved", "37");
             this.info = filename;
-            System.out.println("File created");
+            view.updateFirstScreenByString("File created", "37");
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ReportLayer.class.getName()).log(Level.SEVERE, null, ex);

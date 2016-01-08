@@ -178,7 +178,7 @@ public class Controller {
                     break;
 
                 case "9":
-                    LayerStructure ls = new LayerStructure();
+                    LayerStructure ls = new LayerStructure(view);
                     ls.doActions();
 
                     break;
