@@ -18,6 +18,7 @@ import t2_01_zadaca_3.T2_01_zadaca_3;
  * @author tonovosel
  */
 public class DirectoryCheck extends Thread {
+    
 
     private int secondsNum;
     private View view;
