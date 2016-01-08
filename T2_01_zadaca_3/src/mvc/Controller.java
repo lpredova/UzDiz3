@@ -1,14 +1,8 @@
-﻿/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mvc;
 
 import CheckStructureThread.DifferenceCheckThread;
 import CheckStructureThread.DifferenceChecker;
 import CompositeIterator.FileTreeIterator;
-import FileIterator.InitialStructure.FileRepository;
 import FileStructureComposite.AppFile;
 
 import FileStructureMemento.Caretaker;
@@ -23,6 +17,8 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mvc.Model;
+import mvc.View;
 import t2_01_zadaca_3.T2_01_zadaca_3;
 import utils.Constants;
 
