@@ -75,14 +75,14 @@ public class Controller {
             switch (choice) {
                 case "1":
                     ft.clearData();
-                    ft.calculateNumberOfDirsAndFiles(FileRepository.directoryTree.get(0));
+                    ft.calculateNumberOfDirsAndFiles(T2_01_zadaca_3.rootComposite);
                     model.setData(ft.getNumberDirsAndFiles());
                     view.updateFirstScreen(model.getData());
                     break;
 
                 case "2":
-                    ft.clearData();
-                    model.setData(ft.getElementData(FileRepository.directoryTree.get(0)));
+                    ft.clearData();      
+                    model.setData(ft.getElementData(T2_01_zadaca_3.rootComposite));
                     view.updateFirstScreen(model.getData());
                     break;
 
@@ -131,14 +131,10 @@ public class Controller {
 //                    originator.set(T2_01_zadaca_3.root.clone());
 //                    caretaker.addMemento(originator.saveToMemento());
                     //#
-                    int chosenState = Integer.parseInt(in.nextLine());
-
-                    originator.restoreFromMemento(caretaker.getMemento(chosenState));
-                    T2_01_zadaca_3.rootComposite = originator.getState();
 
                     int numberOfPossibleStates = caretaker.getNumberOfPossibleStates() - 1;
 
-                    chosenState = -1;
+                    int chosenState = -1;
                     do {
                         System.out.print(Constants.CURSOS_RESTORE);
                         System.out.print(Constants.ERASE_END_OF_LINE);

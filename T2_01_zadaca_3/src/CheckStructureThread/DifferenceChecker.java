@@ -7,11 +7,9 @@ package CheckStructureThread;
 
 import CompositeIterator.FileTreeIterator;
 import CompositeIterator.Iterator;
-import FileIterator.InitialStructure.FileRepository;
 import FileStructureComposite.AppFile;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,7 +34,6 @@ public class DifferenceChecker {
     private final ArrayList<String> fileSystemFiles = new ArrayList<String>();
 
     private FileTreeIterator ft = null;
-    private FileTreeIterator ft2 = null;
 
     private boolean changeDetected = false;
 
@@ -58,7 +55,7 @@ public class DifferenceChecker {
 
     public void CheckDifference(File systemFile, AppFile rootFile) throws IOException {
         changeDetected = false;
-        
+
         fileSystemFiles.clear();
         compositeFiles.clear();
 
@@ -69,40 +66,32 @@ public class DifferenceChecker {
         checkForAddedFiles(systemFile);
         checkForDeletedFiles(rootFile);
 
-        if (!changeDetected){
+        if (!changeDetected) {
             view.updateFirstScreenByString(getCurrentTimeStamp() + ": Ne postoje promjene", "31");
         } else {
 
-            
-            //FileRepository fr = new FileRepository();
-            
             T2_01_zadaca_3.filesRepository.directoryTree.clear();
             T2_01_zadaca_3.filesRepository.getIterator(T2_01_zadaca_3.rootDirectory);
             T2_01_zadaca_3.rootComposite = T2_01_zadaca_3.filesRepository.directoryTree.get(0);
-            
+
             originator.set(T2_01_zadaca_3.rootComposite.clone());
             caretaker.addMemento(originator.saveToMemento());
             UpdateView("Saving to Memento.");
-
-//            T2_01_zadaca_3.filesRepository.directoryTree.clear();
-//            T2_01_zadaca_3.filesRepository.getIterator(T2_01_zadaca_3.rootDirectory);
         }
     }
 
-    public void CheckDifference(AppFile rootFileOne, AppFile rootFileTwo) throws IOException {
+    public void CheckDifference(AppFile rootFile, AppFile mementoFile) throws IOException {
         changeDetected = false;
-        
+
         fileSystemFiles.clear();
         compositeFiles.clear();
 
-        setFileSystemFiles(rootFileOne);
-        setCompositeFiles(rootFileTwo);
+        setFileSystemFiles(rootFile);
+        setCompositeFiles(mementoFile);
 
-        //checkForDelta(rootFileOne, rootFileTwo);
-        checkForAddedFiles(rootFileTwo);
-        checkForDeletedFiles2(rootFileTwo);
+        //TODO Check the difference, just which files are the delta
 
-        if (!changeDetected){
+        if (!changeDetected) {
             view.updateFirstScreenByString(getCurrentTimeStamp() + ": Ne postoje promjene", "31");
         }
     }
@@ -186,53 +175,6 @@ public class DifferenceChecker {
         }
     }
 
-    private boolean checkForDelta(AppFile rootFileOne, AppFile rootFileTwo) throws IOException {
-
-        boolean deltaExists = false;
-
-        for (Iterator iter = ft.getIterator(); iter.hasNext(rootFileOne);) {
-            AppFile FileOneElement = (AppFile) iter.getNextChild(rootFileOne);
-
-//            if(FileOneElement == null)
-//                    break;
-            for (Iterator iterTwo = ft2.getIterator(); iter.hasNext(rootFileTwo);) {
-                AppFile FileTwoElement = (AppFile) iterTwo.getNextChild(rootFileTwo);
-
-//                if(FileTwoElement == null)
-//                    break;
-                if (FileOneElement.getName().equalsIgnoreCase(FileTwoElement.getName())) {
-                    if (!FileOneElement.getUpdatedAt().equalsIgnoreCase(FileTwoElement.getUpdatedAt())) {
-
-                        UpdateView(getCurrentTimeStamp() + " File/folder " + FileTwoElement.getName() + "je ažuriran, "
-                                + " putanja: "/* + FileTwoElement.getAbsoluteAdress()*/);
-                        deltaExists = true;
-                    }
-                    if (!FileOneElement.getType().equalsIgnoreCase("directory") && !FileTwoElement.getType().equalsIgnoreCase("directory")) {
-                        if (!FileOneElement.getFormattedSize().equalsIgnoreCase(FileTwoElement.getFormattedSize())) {
-
-                            UpdateView(getCurrentTimeStamp() + " File " + FileTwoElement.getName() + "ima drugačiju veličinu, "
-                                    + " putanja: " /* + FileTwoElement.getAbsoluteAdress()*/);
-                            deltaExists = true;
-                        }
-                    }
-                    if (FileOneElement.getType().equalsIgnoreCase("directory") && FileTwoElement.getType().equalsIgnoreCase("directory")) {
-                        if (!FileOneElement.getFormattedSize().equalsIgnoreCase(FileTwoElement.getFormattedSize())) {
-
-                            UpdateView(getCurrentTimeStamp() + " Folder " + FileTwoElement.getName() + "ima drugačiju veličinu, "
-                                    + " putanja: "/* + FileTwoElement.getAbsoluteAdress()*/);
-                            deltaExists = true;
-                        }
-                    }
-                }
-                if (FileTwoElement.getType().equalsIgnoreCase("directory") && FileOneElement.getType().equalsIgnoreCase("directory")) {
-                    checkForDelta(FileTwoElement, FileOneElement);
-                }
-            }
-        }
-
-        return deltaExists;
-    }
-
     private void checkForAddedFiles(File parent) throws IOException {
 
         for (File file : parent.listFiles()) {
@@ -247,28 +189,13 @@ public class DifferenceChecker {
         }
 
     }
-    
-    private void checkForAddedFiles(AppFile rootFileTwo) throws IOException {
-
-        for (Iterator iter = ft.getIterator(); iter.hasNext(rootFileTwo);) {
-            AppFile nextElement = (AppFile) iter.getNextChild(rootFileTwo);
-            if (!fileSystemFiles.contains(nextElement.getName())) {
-                UpdateView(getCurrentTimeStamp() + " File/folder " + nextElement.getName() + " je dodan, "
-                        + " putanja: " + getFilePath(nextElement.getName()));
-                changeDetected = true;
-            }
-            if (nextElement.getType().equalsIgnoreCase("directory")) {
-                checkForDeletedFiles(nextElement);
-            }
-        }    
-    }
 
     private void checkForDeletedFiles(AppFile parent) throws IOException {
 
         for (Iterator iter = ft.getIterator(); iter.hasNext(parent);) {
             AppFile nextElement = (AppFile) iter.getNextChild(parent);
             if (!fileSystemFiles.contains(nextElement.getName())) {
-                UpdateView(getCurrentTimeStamp() + " File/folder " + nextElement.getName() + " je obrisan, "
+                UpdateView("File/folder " + nextElement.getName() + " je obrisan, "
                         + " putanja: " + getFilePath(nextElement.getName()));
                 changeDetected = true;
             }
@@ -276,23 +203,7 @@ public class DifferenceChecker {
                 checkForDeletedFiles(nextElement);
             }
         }
-     
-    }
-    
-    private void checkForDeletedFiles2(AppFile rootFileOne) throws IOException {
 
-        for (Iterator iter = ft.getIterator(); iter.hasNext(rootFileOne);) {
-            AppFile nextElement = (AppFile) iter.getNextChild(rootFileOne);
-            if (!compositeFiles.contains(nextElement.getName())) {
-                UpdateView(getCurrentTimeStamp() + " File/folder " + nextElement.getName() + " je obrisan, "
-                        + " putanja: " + getFilePath(nextElement.getName()));
-                changeDetected = true;
-            }
-            if (nextElement.getType().equalsIgnoreCase("directory")) {
-                checkForDeletedFiles(nextElement);
-            }
-        }
-     
     }
 
     private String getFilePath(String fileName) throws IOException {
