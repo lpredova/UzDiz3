@@ -135,7 +135,7 @@ public class Controller {
                         System.out.print(Constants.CURSOS_RESTORE);
                         System.out.print(Constants.ERASE_END_OF_LINE);
 
-                        view.updateFirstScreenByString("Odaberi n(0 - " + numberOfPossibleStates + "):", "31");
+                        System.out.print("Odaberi n(0 - " + numberOfPossibleStates + "):");
 
                         chosenState = Integer.parseInt(in.nextLine());
                     } while (chosenState < 0 || chosenState > numberOfPossibleStates);
@@ -163,7 +163,7 @@ public class Controller {
                     do {
                         System.out.print(Constants.CURSOS_RESTORE);
                         System.out.print(Constants.ERASE_END_OF_LINE);
-                        view.updateFirstScreenByString("Odaberi m(0 - " + numberOfPossibleStates2 + "):", "31");
+                        System.out.print("Odaberi n(0 - " + numberOfPossibleStates2 + "):");
                         chosenState = Integer.parseInt(in.nextLine());
                     } while (chosenState < 0 || chosenState > numberOfPossibleStates2);                    
                     
@@ -187,6 +187,8 @@ public class Controller {
 
                     originator.set(T2_01_zadaca_3.rootComposite.clone());
                     caretaker.addMemento(originator.saveToMemento());
+                    
+                    showDir(0, new File(T2_01_zadaca_3.rootDirectory));
 
                     break;
 
