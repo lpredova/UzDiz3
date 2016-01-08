@@ -6,7 +6,6 @@
 package CheckStructureThread;
 
 import FileIterator.InitialStructure.FileRepository;
-import FileStructureComposite.AppFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -26,9 +25,6 @@ public class DifferenceCheckThread extends Thread {
     private Model model;
     private volatile boolean running;
     private volatile boolean active;
-   
-    private File rootDir = null;
-    private AppFile compositeRoot;
 
     private DifferenceChecker differenceChecker;
     
@@ -61,8 +57,6 @@ public class DifferenceCheckThread extends Thread {
 
     @Override
     public synchronized void run() {
-        rootDir = new File(T2_01_zadaca_3.rootDirectory);
-        compositeRoot = FileRepository.directoryTree.get(0);
 
         long duration;
         long startTime;
