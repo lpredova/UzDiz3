@@ -48,24 +48,6 @@ public class FileTreeIterator implements Container {
 
     }//inner class
 
-    /**
-     * Recursion for printing out file tree composite
-     *
-     * @param elem
-     */
-    public void printStructure(AppFile elem) {
-
-        FileTreeIterator ft = this;
-        elem.print();
-        for (Iterator iter = ft.getIterator(); iter.hasNext(elem);) {
-            AppFile nextElement = (AppFile) iter.getNextChild(elem);
-            nextElement.print();
-            if (nextElement.getType().equals("directory") && !nextElement.getChildren().isEmpty()) {
-                printStructure(nextElement);
-            }
-        }
-    }
-
     
     /**
      * Method that gets different extensions from file tree and saves them to array
